@@ -1,0 +1,25 @@
+<ehcache>
+	<diskStore path="java.io.tmpdir" />
+	<defaultCache maxElementsInMemory="10000" eternal="false" timeToIdleSeconds="120" timeToLiveSeconds="120" overflowToDisk="true" />
+	<!--<cache
+		name="com.mta.car.po.base.Insurer"
+		maxElementsInMemory="1000"
+		eternal="false"
+		timeToIdleSeconds="300"
+		timeToLiveSeconds="600"
+		overflowToDisk="true" />
+		
+	--><!-- 设置时间戳缓存的数据过期策略 -->
+	<cache name="org.hibernate.cache.UpdateTimestampsCache" maxElementsInMemory="5000" eternal="true" overflowToDisk="true" /><!--
+		
+		设置自定义命名查询缓存customerQueries的数据过期策略 
+		<cache
+		name="myCacheRegion"
+		maxElementsInMemory="1000"
+		eternal="false"
+		timeToIdleSeconds="300"
+		timeToLiveSeconds="600"
+		overflowToDisk="true" />
+		
+	-->
+</ehcache>

@@ -1,0 +1,56 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE hibernate-configuration PUBLIC
+          "-//Hibernate/Hibernate Configuration DTD 3.0//EN"
+          "http://hibernate.sourceforge.net/hibernate-configuration-3.0.dtd">
+
+<hibernate-configuration>
+
+<session-factory>
+	<!--  MYSQL -->
+	
+	<!--<property name="dialect">org.hibernate.dialect.MySQLDialect</property>
+	<property name="myeclipse.connection.profile">mysql</property>
+	<property name="connection.url">jdbc:mysql://localhost:3306/npbps</property>
+	<property name="connection.username">root</property>
+	<property name="connection.password">yourgame</property>
+	<property name="connection.driver_class">com.mysql.jdbc.Driver</property>
+	-->
+	<!-- ORACLE -->	
+	<property name="dialect">org.hibernate.dialect.OracleDialect</property>
+	<property name="myeclipse.connection.profile">oracle</property>
+	<property name="connection.url">jdbc:oracle:thin:@localhost:1521:orcl</property>
+	<property name="connection.username">system</property>
+	<property name="connection.password">yourgame</property>
+	<property name="connection.driver_class">oracle.jdbc.driver.OracleDriver</property>
+	
+	
+	<!-- <property name="myeclipse.connection.profile">Microsoft SQL Server (jTDS driver)</property>
+		<property name="dialect">org.hibernate.dialect.SQLServerDialect</property>
+		<property name="myeclipse.connection.profile">jtds</property>
+		<property name="connection.url">jdbc:jtds:sqlserver://localhost:1433/topneedle</property>
+		<property name="connection.username">sa</property>
+		<property name="connection.password">yourgame</property>
+		<property name="connection.driver_class">net.sourceforge.jtds.jdbc.Driver</property> -->
+
+	<property name="hibernate.show_sql">true</property>
+	<property name="hibernate.jdbc.fetch_size">50</property>
+	<property name="hibernate.jdbc.batch_size">30</property>
+	<property name="hibernate.max_fetch_depth">1</property>
+	<property name="hibernate.cache.use_query_cache">true</property>
+	<property name="hibernate.cache.use_second_level_cache">true</property>
+	<property name="hibernate.cache.provider_class">org.hibernate.cache.EhCacheProvider</property>
+	<mapping resource="com/lhq/po/User.hbm.xml" />
+	<mapping resource="com/lhq/po/Dept.hbm.xml" />
+	<mapping resource="com/lhq/po/Dispense.hbm.xml" />
+	<mapping resource="com/lhq/po/GetData.hbm.xml" />
+	<mapping resource="com/lhq/po/Grid.hbm.xml" />
+	<mapping resource="com/lhq/po/Log.hbm.xml" />
+	<mapping resource="com/lhq/po/Lreceive.hbm.xml" />
+	<mapping resource="com/lhq/po/Preceive.hbm.xml" />
+	<mapping resource="com/lhq/po/Seat.hbm.xml" />
+	<mapping resource="com/lhq/po/Station.hbm.xml" />
+	<mapping resource="com/lhq/po/Verification.hbm.xml" />
+	<mapping resource="com/lhq/po/Permissions.hbm.xml" />
+</session-factory>
+
+</hibernate-configuration>
