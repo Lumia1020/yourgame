@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC 
+	"-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+	"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<class name="com.lhq.po.Station" table="T_ZH_STATION" lazy="true" batch-size="10" dynamic-update="true">
+		<id name="uuid" unsaved-value="null">
+			<generator class="uuid.hex" />
+		</id>
+		<property name="stationName" column="STATION_NAME" length="20" />
+		<property name="sectionName" column="SECTION_NAME" length="20" />
+		<property name="stationId" column="STATION_ID" length="2" />
+		<property name="sectionId" column="SECTION_ID" length="2" />
+	</class>
+</hibernate-mapping>

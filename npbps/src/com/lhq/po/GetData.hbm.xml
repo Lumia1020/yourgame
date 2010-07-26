@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC 
+	"-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+	"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<class name="com.lhq.po.GetData" table="T_ZH_GETDATA" lazy="true" batch-size="10" dynamic-update="true">
+		<id name="uuid" unsaved-value="null">
+			<generator class="uuid.hex" />
+		</id>
+		<property name="stationName" column="STATION_NAME" length="20" />
+		<property name="sectionName" column="SECTION_NAME" length="20" />
+		<property name="pressCode" column="PRESS_CODE" length="12" />
+		<property name="pressName" column="PRESS_NAME" length="50" />
+		<property name="pressInfo" column="PRESS_INFO" length="10" />
+		<property name="outNumber" column="OUT_NUMBER"/>
+		<property name="outDepart" column="OUT_DEPART" length="200" />
+		<property name="outAddress" column="OUT_ADDRESS" length="500" />
+		<property name="outPostCode" column="OUT_POSTCODE" length="6" />
+		<property name="startDate" column="START_DATE" type="date" />
+		<property name="endDate" column="END_DATE" type="date" />
+		<property name="publishAddress" column="PUBLISH_ADDRESS" length="50" />
+		<property name="checkYearPrice" column="CHECK_YEAR_PRICE" length="50" />
+		<property name="checkPrice" column="CHECK_PRICE" length="50" />
+		<property name="discountPrice" column="DISCOUNT_PRICE" length="50" />
+		<property name="receiveTell" column="RECEIVE_TELL" length="50" />
+		<property name="receiveName" column="RECEIVE_NAME" length="50" />
+	</class>
+</hibernate-mapping>

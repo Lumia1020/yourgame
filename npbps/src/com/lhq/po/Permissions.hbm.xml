@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC 
+	"-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+	"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<class name="com.lhq.po.Permissions" table="T_ZH_PERMISSIONS" lazy="true" batch-size="10" dynamic-update="true">
+		<id name="pid" column="uuid"  unsaved-value="null">
+			<generator class="uuid.hex" />
+		</id>
+		<property name="seat" length="50" />
+		<property name="grid" length="50" />
+		<property name="station" length="50" />
+		<property name="user" column="USERS" length="50" />
+		<property name="dept" length="50" />
+		<property name="role" column="ROLES" length="50" />
+		<property name="verification" length="50" />
+		<property name="delivery" length="50" />
+		<property name="roleName" length="50" />
+		<property name="parentId" length="50"/>
+	</class>
+</hibernate-mapping>
