@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:tx="http://www.springframework.org/schema/tx"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.0.xsd
+           http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-2.0.xsd
+           http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-2.0.xsd">
+	<bean id="userDao" class="com.lhq.dao.impl.UserDao">
+		<property name="sessionFactory" ref="sessionFactory" />
+	</bean>
+	<bean id="deptDao" class="com.lhq.dao.impl.DeptDao">
+		<property name="sessionFactory" ref="sessionFactory" />
+	</bean>
+	<bean id="permissionsDao" class="com.lhq.dao.impl.PermissionsDao">
+		<property name="sessionFactory" ref="sessionFactory" />
+	</bean>
+	<bean id="stationDao" class="com.lhq.dao.impl.StationDao">
+		<property name="sessionFactory" ref="sessionFactory" />
+	</bean>
+	<bean id="seatDao" class="com.lhq.dao.impl.SeatDao">
+		<property name="sessionFactory" ref="sessionFactory" />
+	</bean>
+	<bean id="gridDao" class="com.lhq.dao.impl.GridDao">
+		<property name="sessionFactory" ref="sessionFactory" />
+	</bean>
+	<bean id="dispenseDao" class="com.lhq.dao.impl.DispenseDao">
+		<property name="sessionFactory" ref="sessionFactory" />
+	</bean>
+	<bean id="getDataDao" class="com.lhq.dao.impl.GetDataDao">
+		<property name="sessionFactory" ref="sessionFactory" />
+	</bean>
+</beans>
