@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC 
+	"-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+	"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<class name="com.lhq.po.User" table="T_ZH_LOGIN" lazy="true" batch-size="10" dynamic-update="true">
+		<id name="uuid" unsaved-value="null">
+			<generator class="uuid.hex" />
+		</id>
+		<property name="userId" column="USER_ID" length="50" />
+		<property name="userName" column="USER_NAME" length="50" />
+		<property name="password" column="PASSWORD" length="50" />
+		<property name="deptId" column="DEPART_ID" length="50"/>
+		<property name="pid" column="PERMISSIONS_ID" length="50"/>
+		<property name="seatId" column="SEAT_ID" />
+		<property name="role" column="ROLE" />
+	</class>
+</hibernate-mapping>

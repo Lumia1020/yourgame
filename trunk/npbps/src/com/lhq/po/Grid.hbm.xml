@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC 
+	"-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+	"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<class name="com.lhq.po.Grid" table="T_ZH_GRID" lazy="true" batch-size="10" dynamic-update="true">
+		<id name="uuid" unsaved-value="null">
+			<generator class="uuid.hex" />
+		</id>
+		<property name="stationId" column="STATION_ID" length="2" />
+		<property name="sectionId" column="SECTION_ID" length="2" />
+		<property name="seatId" column="SEAT_ID" length="2" />
+		<property name="id" column="ID" length="4" />
+		<property name="area" column="AREA" length="4" />
+	</class>
+</hibernate-mapping>

@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC 
+	"-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+	"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<class name="com.lhq.po.Lreceive" table="T_ZH_LRECEIVE" lazy="true" batch-size="10" dynamic-update="true">
+		<id name="uuid" unsaved-value="null">
+			<generator class="uuid.hex" />
+		</id>
+		<property name="packageCode" column="PACKAGE_CODE" length="100" />
+		<property name="listPressCode" column="LIST_PRESS_CODE" length="100" />
+		<property name="listPressName" column="LIST_PRESS_NAME" length="100" />
+		<property name="listNumber" column="LIST_NUMBER" type="double" />
+		<property name="revTime" column="REV_TIME" type="date" />
+		<property name="revPreson" column="REV_PERSON" length="100" />
+		<property name="revTimeStep" column="REV_TIMESTEP" length="100" />
+	</class>
+</hibernate-mapping>

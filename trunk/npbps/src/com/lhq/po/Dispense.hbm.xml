@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC 
+	"-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+	"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<class name="com.lhq.po.Dispense" table="T_ZH_DISPENSE" lazy="true" batch-size="10" dynamic-update="true">
+		<id name="uuid" unsaved-value="null">
+			<generator class="uuid.hex" />
+		</id>
+		<property name="stationName" column="STATION_NAME" length="100" />
+		<property name="sectionName" column="SECTION_NAME" length="100" />
+		<property name="initNumber" column="INIT_NUMBER" type="double"/>
+		<property name="actNumber" column="ACT_NUMBER" type="double"/>
+		<property name="pressCode" column="PRESS_CODE" length="100" />
+		<property name="pressName" column="PRESS_NAME" length="100" />
+		<property name="pressTimeStep" column="PRESS_TIMESTEP" length="100" />
+		<property name="seatId" column="SEAT_ID" length="100" />
+		<property name="rflag" column="R_FLAG" length="100" />
+		<property name="rtime" column="R_TIME" type="date" />
+	</class>
+</hibernate-mapping>

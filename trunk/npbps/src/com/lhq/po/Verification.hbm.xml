@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC 
+	"-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+	"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<class name="com.lhq.po.Verification" table="T_ZH_VERIFICATION" lazy="true" batch-size="10" dynamic-update="true">
+		<id name="uuid" unsaved-value="null">
+			<generator class="uuid.hex" />
+		</id>
+		<property name="veriType" column="VERI_TYPE" length="100" />
+		<property name="veriCode" column="VERI_CODE" length="100" />
+		<property name="toOffice" column="TO_OFFICE" length="100" />
+		<property name="pressCode" column="PRESS_CODE" length="100" />
+		<property name="pressName" column="PRESS_NAME" length="100" />
+		<property name="pressTimeStep" column="PRESS_TIMESTEP" length="100" />
+		<property name="pressAlias" column="PRESS_ALIAS" length="100" />
+		<property name="publishDate" column="PUBLISH_DATE" type="date" />
+		<property name="autoNumber" column="AUTO_NUMBER" type="double" />
+		<property name="signNumber" column="SIGN_NUMBER" type="double" />
+		<property name="lessNumber" column="LESS_NUMBER" type="double" />
+		<property name="lessType" column="LESS_TYPE" length="200" />
+		<property name="urgentSign" column="URGENT_SIGN" length="100" />
+		<property name="conTel" column="CON_TEL" length="100" />
+		<property name="conNum" column="CON_NUM" length="100" />
+		<property name="conManager" column="CON_MANAGER" length="100" />
+		<property name="mark" column="MARK" length="2000" />
+		<property name="checked" column="CHECKED" length="100" />
+		<property name="checkedDate" column="CHECKED_DATE" type="date" />
+		<property name="checkedUser" column="CHECKED_USER" length="100" />
+	</class>
+</hibernate-mapping>
