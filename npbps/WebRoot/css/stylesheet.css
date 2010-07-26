@@ -1,0 +1,827 @@
+/*
+ * IMPORTANT NOTE: This file is licensed only for use in providing the MobileMe service,
+ * or any part thereof, and is subject to the MobileMe Terms and Conditions. You may not
+ * port this file to another platform without Apple's written consent.
+ */
+
+/* Start ----------------------------------------------------- form_fields.css*/
+
+body.login input {
+	font-family: Helvetica;
+	background: #fff url('../images/login.png') repeat-x scroll 0 -430px;
+	border-top: 1px solid #707070;
+	border-bottom: 1px solid #cecece;
+	border-left: 1px solid #ababab;
+	border-right: 1px solid #ababab;
+ 	font-size: 13px;
+ 	padding: 4px 3px 1px;
+	-webkit-box-shadow: rgba(255,255,255,.65) 0px 1px 1px;
+
+}
+
+body.login input.title {
+	font-size: 17px;
+    padding: 5px 3px 2px;
+}
+
+body.login input.small {
+/*	font-size: 11px;*/
+	padding: 3px 3px 1px;
+}
+
+body.login.firefox input{
+	margin-top: -2px;
+	padding: 4px 3px 2px;
+	border-bottom-width: 2px;
+	border-right-width: 2px;
+	border-left-width: 2px;
+	border-top-width: 2px;
+	-moz-border-top-colors: #f9f9f9 #707070 ;
+	-moz-border-bottom-colors: #f9f9f9 #cecece ;
+	-moz-border-left-colors: #f9f9f9 #ababab ;
+	-moz-border-right-colors: #f9f9f9 #ababab ;
+}
+
+body.login input[disabled=disabled], body.login input.disabled {
+  color: #666 ! important;
+	background-color: #f9f9f9;
+	border-top: 1px solid #b1b1b1;
+	border-bottom: 1px solid #e0e0e0;
+	border-left: 1px solid #cecece;
+	border-right: 1px solid #cecece;
+	background-image: none;
+	
+}
+
+body.login.firefox input[disabled=disabled], body.login.firefox input.disabled{
+  color: #bababa ! important;
+	border-bottom-width: 2px;
+	border-right-width: 2px;
+	border-left-width: 2px;
+	border-top-width: 2px;
+	-moz-border-top-colors: #f9f9f9 #b1b1b1 ;
+	-moz-border-bottom-colors: #f9f9f9 #e0e0e0 ;
+	-moz-border-left-colors: #f9f9f9 #cecece ;
+	-moz-border-right-colors: #f9f9f9 #cecece ;
+}
+
+body.login input:focus, body.login textarea:focus, body.login input.focus, body.login textarea.focus
+/*,
+body.contacts textarea:focus, body.contacts textarea.focus,
+body.calendar input:focus, body.calendar textarea:focus, body.calendar input.focus, body.calendar textarea.focus*/ {
+	background-color: #fefeee;
+	outline-color: #87929e;	
+}
+
+body.login.firefox input:focus, body.login.firefox textarea:focus
+{
+  outline-color: #ced2d5;
+	outline-style: solid;
+	outline-width: 1px;
+	-moz-outline-radius: 2px;
+	-moz-outline-offset: 0px;
+	-moz-border-top-colors: #9ca5ae #7c8288 ;
+	-moz-border-bottom-colors: #b8bec4 #a8aeb4 ;
+	-moz-border-left-colors: #b8bec4 #989ea4;
+	-moz-border-right-colors: #b8bec4 #989ea4 ;
+}
+
+body.login input.invalid, body.login input.invalid:focus, body.login input.invalid:focus{
+	background-color: #fee5e5;	
+}
+
+body.login textarea{
+		font-family: Helvetica;
+		border-top: 1px solid #707070;
+		border-bottom: 1px solid #cecece;
+		border-left: 1px solid #ababab;
+		border-right: 1px solid #ababab;
+	
+/*		font-size: 13px;*/
+		line-height: 18px;
+		padding: 0px 0px 0px 1px;
+		background:white url('') repeat-x scroll top left;
+		-webkit-box-shadow: rgba(255,255,255,.65) 0px 1px 1px;
+	
+}
+
+body.login textarea.small{
+/*	font-size: 11px;*/
+	line-height: 15px;
+}
+
+body.login.firefox textarea {
+	padding: 0px 0px 0px 3px ! important;
+	border-bottom-width: 2px;
+	border-right-width: 2px;
+	border-left-width: 2px;
+	border-top-width: 2px;
+	-moz-border-top-colors: #f9f9f9 #707070 ;
+	-moz-border-bottom-colors: #f9f9f9 #cecece ;
+	-moz-border-left-colors: #f9f9f9 #ababab ;
+	-moz-border-right-colors: #f9f9f9 #ababab ;
+}
+
+body.login textarea.disabled {
+	color: #666;
+	background-color: #f9f9f9;
+	border-top: 1px solid #b1b1b1;
+	border-bottom: 1px solid #e0e0e0;
+	border-left: 1px solid #cecece;
+	border-right: 1px solid #cecece;
+	background-image: none;
+}
+
+body.login.firefox textarea.disabled{
+		color: #bababa;
+		border-bottom-width: 2px;
+		border-right-width: 2px;
+		border-left-width: 2px;
+		border-top-width: 2px;
+		-moz-border-top-colors: #f9f9f9 #b1b1b1 ;
+		-moz-border-bottom-colors: #f9f9f9 #e0e0e0 ;
+		-moz-border-left-colors: #f9f9f9 #cecece ;
+		-moz-border-right-colors: #f9f9f9 #cecece ;
+}
+
+body.login .inline_editor_field  {
+	-webkit-box-shadow: none;
+}
+
+/* =V2 */
+body.login .v2 input {
+  background: #fff url('../images/login-v2.png') 0 -296px repeat-x;
+}
+
+
+
+/* End ------------------------------------------------------- form_fields.css*/
+
+/* Start ----------------------------------------------------- login.css*/
+
+/* =INITIALIZE */
+html, body, form, fieldset {
+  margin: 0;
+  padding: 0;
+  font: 100%/120% Helvetica, Arial, sans-serif;
+  border: none;
+}
+h1, h2, h3, h4, h5, h6, p, pre,
+blockquote, ul, ol, dl, address {
+  margin: 0;
+  padding: 0;
+}
+
+/* =GENERAL */
+html {
+	height: 100%;
+}
+body {
+	background-color: rgb(73, 80, 85);
+	font: 11px Helvetica, Arial, Sans-Serif;
+	height: 100%;
+	margin: 0;
+}
+#wrapper {
+  width: 100%;
+  height: 100%;
+}
+a:link,
+a:visited {
+  text-decoration: none;
+}
+a:focus,
+a:hover,
+a:active {
+  text-decoration: underline;
+}
+
+/* =CORNERS */
+#mmlogo,
+#applelogo,
+#copyright,
+#footer {
+  position: absolute;
+  z-index: 99;
+}
+#mmlogo {
+  top: 27px;
+  left: 29px;
+  width: 140px;
+  height: 30px;
+  background: url('../images/login.png') 0 0 no-repeat;
+  text-indent: -9999px;
+}
+#applelogo {
+  top: 27px;
+  right: 29px;
+  width: 26px;
+  height: 26px;
+  overflow: hidden;
+  background: url('../images/login.png') 0 -30px no-repeat;
+}
+#applelogo a {
+  display: block;
+  overflow: hidden;
+  text-indent: -999em;
+  width: 26px;
+  height: 26px;
+}
+#footer {
+  right: 35px;
+  bottom: 23px;
+  list-style: none;
+}
+#footer li {
+  display: block;
+  float: left;
+  margin-left: 17px;
+}
+#footer a:link,
+#footer a:visited {
+  color: #eee;
+  text-shadow: #000 0 1px 0;
+  text-shadow: rgba(0,0,0,.4) 0 1px 0;
+}
+#footer a:focus,
+#footer a:hover,
+#footer a:active {
+  color: #fff;
+}
+#copyright {
+  bottom: 23px;
+  left: 35px;
+  color: #95989b;
+  text-shadow: #000 0 1px 0;
+  text-shadow: rgba(0,0,0,.4) 0 1px 0;
+}
+
+#loading {
+/*  background: url('../images/spinner_16px_ffffff_50pct.gif') 0 0 no-repeat;*/
+  float: right;
+  height: 16px;
+  margin: 12px 0 0;
+  overflow: hidden;
+  text-indent: 32px;
+  width: 16px;
+}
+
+/* =DEFAULT */
+#wrapper {
+  background: transparent url('../images/background.jpg') 50% 50% repeat-x scroll;
+  display: block;
+  height: 100%;
+  margin: 0px;
+  min-height: 592px;
+  min-width: 914px;
+  padding: 0px;
+  position: absolute;
+  width: 100%;
+}
+.container {
+  font-size: 13px;
+  display: none;
+  height: 100%;
+  position: absolute;
+  width: 100%;
+}
+.container div.inner {
+  left: 50%;
+  position: absolute;
+  top: 50%;
+}
+.container a:link,
+.container a:visited {
+  color: rgb(28, 79, 173);
+
+}
+.container input.text {
+  font-size: 13px;
+  position: relative;
+  width: 217px;
+  z-index: 2;
+}
+fieldset.upper {
+  padding-left: 65px;
+  position: relative;
+}
+
+/* =OWNER */
+#owner {
+  background: transparent url('../images/all_in_one.jpg') 50% 50% no-repeat scroll;
+  display: block;
+  min-height: 592px;
+  min-width: 914px;
+  position: absolute;
+}
+#owner div.inner {
+  background: transparent url('../images/center.png') 0 0 no-repeat;
+  height: 387px;
+  margin: -198px 0 0 -150px;
+  padding: 37px 40px;
+  width: 223px;
+
+  -webkit-transition: margin-left 0.05s ease-out;
+}
+#owner h2 {
+  font-size: 15px;
+  font-weight: bold;
+  line-height: 18px;
+  margin: 0;
+}
+#LoginForm div {
+  margin-top: 8px;
+}
+
+/* =LABELS */
+div.row {
+  position: relative;
+}
+label.placeholder span {
+  color: #808080;
+  font-size: 13px;
+  line-height: 16px;
+  opacity: 1;
+  padding: 5px;
+  position: absolute;
+  z-index: 5;
+  -webkit-transition: opacity 0.2s ease-out;
+}
+.firefox label.placeholder {
+  line-height: 12px;
+}
+label.placeholder.hidden span {
+  opacity: 0;
+  z-index: 0;
+}
+label.placeholder.partial span {
+  opacity: 0.42;
+}
+.ie label.placeholder.partial span {
+  color: #cacaca;
+  opacity: 1;
+}
+.ie label.placeholder.hidden {
+  visibility: hidden;
+}
+/* =CHECKBOX */
+.keeploggedin {
+  padding-top: 9px;
+  position: relative;
+}
+#keepLoggedIn {
+  position: absolute;
+  left: -9999px;
+}
+#keepLoggedInLabel {
+  padding: 1px 0 0 20px;
+  position: relative;
+}
+.firefox #keepLoggedInLabel {
+  padding: 2px 0 0 20px;
+}
+#keepLoggedInLabel span {
+  background: url('../images/login.png') -28px -36px no-repeat;
+  height: 16px;
+  left: -1px;
+  position: absolute;
+  top: 0;
+  width: 16px;
+}
+#keepLoggedInLabel.checked span { background-position: -44px -36px; }
+/* Focus */
+#keepLoggedInLabel.focus span { background-position: -67px -36px; }
+#keepLoggedInLabel.checked.focus span { background-position: -83px -36px; }
+/* Disabled */
+#keepLoggedInLabel.disabled span { background-position: -106px -36px; }
+#keepLoggedInLabel.checked.disabled span { background-position: -122px -36px; }
+
+
+/* =SMALLPANEL */
+.smallpanel form {
+  background: url('../images/login_multipanel.png') 0 0 no-repeat;
+  padding: 24px 17px 0;
+}
+.smallpanel div.buttons {
+  background: transparent url('../images/login.png') 0 -480px repeat-x;
+  float: left;
+  margin-top: 30px;
+  padding-top: 5px;
+  width:100%;
+}
+.smallpanel h2 {
+  font-size: 15px;
+  line-height: 16px;
+  margin-bottom: 2px;
+}
+.smallpanel input.text {
+  width: 290px;
+}
+
+
+
+
+
+
+/* =ERROR */
+#error {
+	color: rgb(173, 0, 0);
+	font-size: 11px;
+	font-weight: bold;
+	margin-left: -5px;
+	position: absolute;
+	top: 26px;
+	width: 217px;
+}
+#errorString {
+  color: #ba0000;
+  font-size: 11px;
+  font-weight: bold;
+  opacity: 0;
+  position: absolute;
+  top: -8px;
+  -webkit-transition: opacity .42s ease-out;
+}
+#errorString.show {
+  opacity: 1;
+}
+
+/* =BUTTONS */
+a.button,
+a.button:link,
+a.button:visited {
+  background: transparent url('../images/login.png') -121px -224px no-repeat scroll;
+  color: #000;
+  cursor: default;
+  float: right;
+  height: 28px;
+  line-height: 28px;
+  margin: 0px 4px 0;
+  padding-left: 19px;
+  text-shadow: rgb(206, 214, 221) 0 1px 0;
+  text-shadow: rgba(206, 214, 221, 0.65) 0 1px 0;
+  white-space: nowrap;
+}
+
+a.button.continue {
+  background: transparent url('../images/login.png') -121px -280px no-repeat scroll;
+}
+
+a.button.continue strong {
+  background: transparent url('../images/login.png') right -112px no-repeat;
+}
+
+.ie a.button,
+.ie a.button:link 
+.ie a.button:visited {
+  padding-left: 19px;
+}
+
+a.button strong,
+a.button span {
+  background: transparent url('../images/login.png') right -56px no-repeat;
+  display: block;
+  font-weight: normal;
+  height: 28px;
+  min-width: 48px;
+  padding-top: 1px;
+  padding-right: 19px;
+  text-align: center;
+}
+a.button:hover,
+a.button:focus {
+  text-decoration: none;
+  outline: none;
+}
+a.button.disabled {
+  text-shadow: rgb(99, 102, 104) 0 1px 0;
+  text-shadow: rgba(206, 214, 221, 0.2) 0 1px 0;
+}
+a.button:active {
+  text-decoration: none;
+}
+
+
+
+/* =SUBMIT */
+#row-continue {
+  line-height: 33px;
+  position: relative;
+}
+a.submit,
+a.submit:link,
+a.submit:visited {
+  background-position: -121px -280px;
+  margin-top: 3px;
+}
+a.submit strong {
+  background-position: right -112px;
+}
+a.submit:focus {
+  background-position: -121px -364px;
+}
+a.submit:active {
+  background-position: -121px -308px;
+}
+a.submit:focus strong {
+  background-position: right -196px;
+}
+a.submit:active strong {
+  background-position: right -140px;
+}
+a.submit.disabled {
+  background-position: -121px -336px;
+}
+a.submit.disabled strong {
+  background-position: right -168px;
+}
+
+
+#notamember {
+  background: transparent url('../images/login.png') 0 -480px repeat-x;
+  clear: both;
+  line-height: 18px;
+  margin-top: 10px;
+  padding-top: 15px;
+}
+#notamember strong {
+  display: block;
+}
+#readtheblog {
+  display: none;
+}
+
+
+
+
+/* =MAIN-V2 */
+#wrapper.v2 {
+  background: #31373c url('../images/default_bg.jpg') 0 50% repeat-x;
+  min-width: 982px;
+}
+#wrapper.v2 #mmlogo.v2 {
+  background: url('../images/login-v2.png') 0 0 no-repeat;
+  height: 36px;
+  margin: 0 0 23px -3px;
+  position: static;
+  width: 175px;
+}
+#owner-v2 {
+  background: url('../images/tiles_left.jpg') -55px 50% no-repeat;
+  color: #f3f3f3;
+  display: block;
+  height: 100%;
+  width: 100%;
+  position: static;
+  top: 0;
+  left: 0;
+}
+#owner-v2 div.inner {
+  height: 426px;
+  left: 50%;
+  margin-top: -213px;
+  position: absolute;
+  text-shadow: #000 0px 1px 1px;
+  text-shadow: rgba(0,0,0, .4) 0px 1px 1px;
+  top: 50%;
+  width: 480px;
+}
+#owner-v2 div.inner .placeholder {
+  text-shadow: none;
+}
+#owner-v2 div.inner .placeholder span {
+  padding-top: 4px;
+}
+#owner-v2 a:link,
+#owner-v2 a:visited,
+#owner-v2 a:focus {
+  color: #a7bad4;
+}
+#owner-v2 a:hover,
+#owner-v2 a:active {
+  text-decoration: underline;
+}
+#owner-v2 h2 {
+  font: bold 15px/20px Helvetica, sans-serif;
+  margin-bottom: 3px;
+}
+#owner-v2 div.row {
+  float: left;
+}
+#owner-v2 div.row.username {
+  margin-left: -1px;
+}
+#owner-v2 .row input.text,
+body.login.firefox #owner-v2 input.text {
+  border: 1px solid #1e1f21;
+  height: 1.35em;
+  line-height: 17px;
+  margin: 0 6px 0 0;
+  width: 185px;
+  -webkit-box-shadow: rgba(255,255,255, 0.12) 0 1px 1px;
+}
+body.login.firefox #owner-v2 input.text:focus {
+  -moz-outline: 2px solid #7b8aac;
+  -moz-outline-radius-bottomleft: 5px;
+  -moz-outline-radius-topleft: 5px;
+  -moz-outline-radius-bottomright: 5px;
+  -moz-outline-radius-topright: 5px;
+/*  -moz-outline-top-color: #3d4347;*/
+}
+body.login.ie #owner-v2 input.text {
+  line-height: 17px;
+  padding: 1px 3px 4px 4px;
+}
+#owner-v2 .row input.text.disabled {
+  opacity: .5;
+}
+#owner-v2 #error {
+  color: #C80000;
+  font-size: 12px;
+  font-weight: bold;
+  position: absolute;
+  top: -26px;
+  width: 300px;
+  margin-left: 2px;
+  text-shadow: 0px 0px 3px rgba(0,0,0,.1);
+}
+#owner-v2 #loading {
+  visibility: hidden;
+  background: url('../images/spinner_16px_31373c.gif') 0 0 no-repeat;
+}
+
+#owner-v2 #loading.visible {
+  background: url('../images/spinner_16px_31373c.gif') 0 0 no-repeat;
+  float: none;
+  margin: 7px 0 0;
+  padding: 0;
+  position: absolute;
+  right: -19px;
+  text-indent: 32px;
+}
+#owner-v2 .iforgot {
+  position: absolute;
+}
+#owner-v2 #notamember {
+  background: none;
+  font-size: 11px;
+  font-weight: bold;
+  margin: 0;
+  padding: 0;
+}
+#owner-v2 #notamember strong {
+  display: inline;
+}
+#owner-v2 .keeploggedin,
+#owner-v2 #iforgot {
+  font-size: 11px;
+  left: -3px;
+  margin-top: 8px;
+  padding: 0;
+  top: 33px;
+  position: absolute;
+}
+#owner-v2 #iforgot {
+  left: 198px;
+}
+#owner-v2 fieldset {
+  position: relative;
+  height: 82px;
+}
+#owner-v2 #row-continue {
+  margin: 0;
+  position: absolute;
+  right: 0;
+  top: 5px;
+  width: 86px;
+}
+/* v2 button */
+#owner-v2 #row-continue a.button {
+  background: url('../images/login-v2.png') -156px -176px no-repeat;
+  color: #000;
+  margin: 0;
+  padding: 0 0 0 10px;
+}
+.firefox #row-continue a.button {
+
+}
+#owner-v2 #row-continue a.button:hover {
+  text-decoration: none;
+}
+#owner-v2 #row-continue a.button strong {
+  background: url('../images/login-v2.png') 100% -56px no-repeat;
+  padding-right: 10px;
+  width: 66px;
+}
+#owner-v2 #row-continue a.button:focus { background-position: -156px -206px; }
+#owner-v2 #row-continue a.button:focus strong { background-position: 100% -86px; }
+#owner-v2 #row-continue a.button:active { background-position: -156px -236px; }
+#owner-v2 #row-continue a.button:active strong { background-position: 100% -116px; }
+#owner-v2 #row-continue a.button.disabled { background-position: -156px -266px; }
+#owner-v2 #row-continue a.button.disabled strong { background-position: 100% -146px; }
+
+/* v2 checkbox */
+#owner-v2 #keepLoggedInLabel {
+  display: block;
+  padding: 0 0 0 18px;
+  width: 173px;
+}
+#owner-v2 #keepLoggedInLabel span {
+  background: url('../images/login-v2.png') -83px -36px no-repeat;
+  height: 16px;
+  position: absolute;
+  top: -1px;
+  width: 16px;
+}
+/* Unchecked */
+#owner-v2 #keepLoggedInLabel span { background-position: -83px -36px; }
+#owner-v2 #keepLoggedInLabel.disabled span { background-position: -99px -36px; }
+#owner-v2 #keepLoggedInLabel.active span { background-position: -115px -36px; }
+#owner-v2 #keepLoggedInLabel.focus span { background-position: -131px -36px; }
+/* Checked */
+#owner-v2 #keepLoggedInLabel.checked span { background-position: -19px -36px; }
+#owner-v2 #keepLoggedInLabel.checked.disabled span { background-position: -35px -36px; }
+#owner-v2 #keepLoggedInLabel.checked.active span { background-position: -51px -36px; }
+#owner-v2 #keepLoggedInLabel.checked.focus span { background-position: -67px -36px; }
+
+
+/* MOTD container */
+#motd-container {
+ margin-top: 30px;
+  padding-top: 38px; 
+}
+#motd-container h2 {
+  margin-bottom: 13px;
+}
+#motd-container h3 {
+  color: #f7f7f7;
+  font-size: 13px;
+}
+#motd-container #dateline {
+  color: ##e5e5e5;
+  font-size: 11px;
+  line-height: 15px;
+  margin: 2px 0 10px;
+}
+#motd-container table {
+  margin: -2px 0 0 -2px;
+}
+#motd-container table td {
+  padding: 0;
+  vertical-align: middle;
+}
+#motd-container .visitor img {
+  padding: 2px 9px 0 0;
+  vertical-align: bottom;
+}
+
+#motd-container .user {
+}
+#motd-container .user img {
+  float: left;
+  margin: 2px 14px 5em -2px;
+}
+#motd-container .user p {
+  line-height: 18px;
+}
+
+#wrapper.v2 .footer #applelogo {
+  width: 19px;
+  height: 18px;
+  background: url('../images/login-v2.png') 0 -36px no-repeat;
+}
+#wrapper.v2 .footer #applelogo a {
+  height: 18px;
+  width: 19px;
+}
+#wrapper.v2 .footer {
+  bottom: 20px;
+  height: 20px;
+  left: 20px;
+  line-height: 22px;
+  position: absolute;
+  vertical-align: baseline;
+  width: 80%;
+}
+#wrapper.v2 .footer li {
+  margin: 0 21px 0 0;
+}
+#wrapper.v2 #copyright,
+#wrapper.v2 .footer #footer,
+#wrapper.v2 .footer #applelogo {
+  float: left;
+  margin: 0;
+  position: static;
+}
+#wrapper.v2 .footer #footer {
+  margin-left: 21px;
+}
+
+
+
+body.login form.error input.text {
+  background-color: #fee5e5;
+}
+
+/* End ------------------------------------------------------- login.css*/
+

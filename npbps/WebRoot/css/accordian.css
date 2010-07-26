@@ -1,0 +1,10 @@
+body{font-family:"微软雅黑","宋体",Arial, Helvetica, sans-serif;font-size:12px; background-color: #F4F1EA;}
+#basic-accordian{border-right: 1px solid #a7b0bf;width:189px;height:100%;position:absolute;top: 0px;left: 0px;background-color: #F4F1EA;}
+.accordion_headings{background:#566d00;color:#FFF;border:1px solid #EAE6DB;cursor:pointer;font-weight:700;padding:5px 5px 5px 10px;}
+.accordion_child{background:#F4F1EA;padding:5px 0 5px 20px;}
+.accordion_headings:hover,.header_highlight{color:#000000;background:#7EAA01;}
+a{text-decoration: none;color:#000}
+a:hover{color:#9c0;}
+.accordian_border{
+	border: #EAE6DB  solid 5px;
+}
