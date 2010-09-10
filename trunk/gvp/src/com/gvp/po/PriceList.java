@@ -18,19 +18,18 @@ public class PriceList implements Serializable {
 
 	/** 规格id */
 	private Integer specid;
-	
+
 	/** 规格名称 */
 	private String specName;
 
 	/** 供应商材料单价 */
 	private String price;
-	
-	/**说明*/
+
+	/** 说明 */
 	private String remark;
 
 	/** 记录时间 */
 	private Date recordTime;
-
 
 	public PriceList(Integer listid, Integer specid, String specName, String price, String remark, Date recordTime) {
 		super();
