@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC 
+	"-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+	"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<class name="com.gvp.po.Foundry" table="t_foundry" lazy="true" batch-size="10" dynamic-update="true">
+		<id name="fid" column="fid">
+			<generator class="native" />
+		</id>
+		<property name="plateMerchant" length="300" />
+		<property name="attritionRate" length="300" />
+		<property name="processPrice" length="200" />
+		<property name="remark" length="1000" />
+		<property name="qid" />
+	</class>
+</hibernate-mapping>

@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC 
+	"-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+	"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<class name="com.gvp.po.ReferenceInfo" table="t_reference_info" lazy="true" batch-size="10" dynamic-update="true">
+		<id name="rid" column="rid">
+			<generator class="native" />
+		</id>
+		<property name="cardKnife" length="1000" />
+		<property name="residualMaterial" length="100" />
+		<property name="general" length="100" />
+		<property name="output" length="100" />
+		<property name="finishedWeight" length="100" />
+		<property name="machineModel" length="1000" />
+		<property name="materialSupplier" length="100" />
+		<property name="moq" length="100" />
+		<property name="freight" length="100" />
+		<property name="qid" unique="true"/>
+	</class>
+</hibernate-mapping>

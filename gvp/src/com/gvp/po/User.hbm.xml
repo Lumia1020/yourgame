@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC 
+	"-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+	"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<class name="com.gvp.po.User" table="t_user" lazy="true" batch-size="10" dynamic-update="true">
+		<id name="userid" column="userid">
+			<generator class="native" />
+		</id>
+		<property name="username" length="50" unique="true"/>
+		<property name="password" length="50" />
+		<property name="name" length="50" />
+		<property name="rid" />
+	</class>
+</hibernate-mapping>

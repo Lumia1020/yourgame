@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC 
+	"-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+	"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<class name="com.gvp.po.Role" table="t_role" lazy="true" batch-size="10" dynamic-update="true">
+		<id name="rid" column="rid">
+			<generator class="native" />
+		</id>
+		<property name="r01"/>
+		<property name="r02"/>
+		<property name="r03"/>
+		<property name="r04"/>
+		<property name="r05"/>
+		<property name="r06"/>
+		<property name="r07"/>
+		<property name="r08"/>
+		<property name="r09"/>
+		<property name="r10"/>
+		<property name="r11"/>
+		<property name="r12"/>
+		<property name="r13"/>
+		<property name="r14"/>
+		<property name="r15"/>
+		<property name="r16"/>
+		<property name="r17"/>
+		<property name="r18"/>
+		<property name="r19"/>
+		<property name="r20"/>
+		<property name="r21"/>
+	</class>
+</hibernate-mapping>
