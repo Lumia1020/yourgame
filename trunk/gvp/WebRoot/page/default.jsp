@@ -13,7 +13,7 @@
 	
 		<script type="text/javascript" src="../js/ext-base.js"></script>
 		<script type="text/javascript" src="../js/ext-all.js"></script>
-		<script type="text/javascript">
+		<script type="text/javascript"> 
 			Ext.USER_ID = '<s:property value="#session.user.userid"/>';
 			Ext.CURRENT_USER = '<s:property value="#session.user.name"/>';
 			Ext.ROLE_R01 = '<s:property value="#session.role.r01"/>' == 'true' ? true:false;
