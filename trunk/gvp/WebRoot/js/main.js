@@ -200,7 +200,7 @@ Ext.onReady(function() {
 							    	var obj = Ext.decode(response.responseText);
 							    	if(obj.success){
 							    		record.beginEdit();
-							    		record.data = obj.infos.foundry;
+							    		record.data = obj.infos.otherPrice;
 							    		record.commit();
 							    		grid.getSelectionModel().selectRow(0);
 							    		Ext.get(grid.getView().getRow(0)).frame('green',2,{duration: .3});
@@ -256,9 +256,7 @@ Ext.onReady(function() {
 				defaultSortable:true,
 				defaultWidth:60,
 				columns: [sm,
-			        {header: '外发加工类别',dataIndex:'plateMerchant',id:expandId,editor:{xtype : 'textfield',maxLength:200,name:'plateMerchant'}},
-			        {header: '损耗率',dataIndex: 'attritionRate',renderer:function(v){return v + ' %';},editor:{xtype : 'textfield',maxLength:50,allowBlank:false,name:'attritionRate'}},
-			        {header: '加工单价',dataIndex: 'processPrice',editor:{xtype : 'numberfield',decimalPrecision:6,maxLength:20,allowBlank:false,name:'processPrice'}},
+			        {header: '单价',dataIndex: 'price',editor:{xtype : 'numberfield',decimalPrecision:6,maxLength:20,allowBlank:false,name:'price'}},
 			        {header: '备注',dataIndex: 'remark',editor:{xtype:'textfield',maxLength:400,name:'remark'}}
 			    ]
 			}),
@@ -266,13 +264,11 @@ Ext.onReady(function() {
 	    		,iconCls:'silk-add'
 	    		,ref:'../addButton'
 	    		,handler:function(){
-	    			var foundry = new grid.store.recordType({
-	    				plateMerchant:'',		
-						attritionRate:'',	
+	    			var otherPrice = new grid.store.recordType({
 						remark:''
 			        });
 			        editor.stopEditing();
-			        grid.store.insert(0, foundry);
+			        grid.store.insert(0, otherPrice);
 			        editor.startEditing(0);
 	    		}
 	    	},{
@@ -282,7 +278,7 @@ Ext.onReady(function() {
 				disabled:true,
 				handler : function(){
 					editor.stopEditing(false);
-					deleteRecords('deleteFoundry.action','page.params.ids','fid',grid,store,null,quoteInfo.qid,quoteInfoRecord);
+					deleteRecords('deleteOtherPrice.action','page.params.ids','oid',grid,store,null,quoteInfo.qid,quoteInfoRecord);
 				}
 			},'-',{
 				text	: '刷新',
