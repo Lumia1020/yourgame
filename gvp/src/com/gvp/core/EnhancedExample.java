@@ -243,7 +243,6 @@ public class EnhancedExample implements Criterion {
 		EntityPersister meta = criteriaQuery.getFactory().getEntityPersister(criteriaQuery.getEntityName(criteria));
 		String[] propertyNames = meta.getPropertyNames();
 		Type[] propertyTypes = meta.getPropertyTypes();
-		// TODO: get all properties, not just the fetched ones!
 		Object[] propertyValues = meta.getPropertyValues(entity, getEntityMode(criteria, criteriaQuery));
 		for (int i = 0; i < propertyNames.length; i++) {
 			Object propertyValue = propertyValues[i];
@@ -272,7 +271,6 @@ public class EnhancedExample implements Criterion {
 		EntityPersister meta = criteriaQuery.getFactory().getEntityPersister(criteriaQuery.getEntityName(criteria));
 		String[] propertyNames = meta.getPropertyNames();
 		Type[] propertyTypes = meta.getPropertyTypes();
-		// TODO: get all properties, not just the fetched ones!
 		Object[] values = meta.getPropertyValues(entity, getEntityMode(criteria, criteriaQuery));
 		List list = new ArrayList();
 		for (int i = 0; i < propertyNames.length; i++) {

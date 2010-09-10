@@ -33,7 +33,6 @@ public class Species implements Serializable {
 
 	public Species() {
 		super();
-		// TODO Auto-generated constructor stub
 	}
 
 	public Integer getSpeciesid() {
