@@ -94,6 +94,11 @@
 				<param name="includeProperties">success,infos.*</param>
 			</result>
 		</action>
+		<action name="saveOtherPrice" class="publicAction" method="saveOtherPrice">
+			<result type="json">
+				<param name="includeProperties">success,infos.*</param>
+			</result>
+		</action>
 		<action name="saveProcessInfo" class="publicAction" method="saveProcessInfo">
 			<result type="json">
 				<param name="includeProperties">success,infos.*</param>
@@ -187,6 +192,13 @@
 			</result>
 		</action>
 		<action name="findFoundryList" class="publicAction" method="findFoundryList">
+			<result type="json">
+				<param name="root">page</param>
+				<param name="excludeNullProperties">true</param>
+				<param name="includeProperties">root.*,totalProperty</param>
+			</result>
+		</action>
+		<action name="findOtherPriceList" class="publicAction" method="findOtherPriceList">
 			<result type="json">
 				<param name="root">page</param>
 				<param name="excludeNullProperties">true</param>
@@ -362,6 +374,11 @@
 			</result>
 		</action>
 		<action name="updateFoundry" class="publicAction" method="updateFoundry">
+			<result type="json">
+				<param name="includeProperties">success,infos.*</param>
+			</result>
+		</action>
+		<action name="updateOtherPrice" class="publicAction" method="updateOtherPrice">
 			<result type="json">
 				<param name="includeProperties">success,infos.*</param>
 			</result>
