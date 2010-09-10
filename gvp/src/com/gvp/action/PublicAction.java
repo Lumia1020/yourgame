@@ -132,6 +132,18 @@ public class PublicAction extends BaseAction {
 	 * @return
 	 */
 	@Action(description = "删除外发加工信息")
+	public String deleteOtherPrice() {
+		final String hql = "delete OtherQuoteInfo where oid in (" + page.getParams().get("ids") + ")";
+		this.success = publicService.deleteEntities(hql,null);
+		return SUCCESS;
+	}
+	
+	/**
+	 * 删除外发加工信息
+	 * 
+	 * @return
+	 */
+	@Action(description = "删除外发加工信息")
 	public String deleteFoundry() {
 		final String hql = "delete Foundry where fid in (" + page.getParams().get("ids") + ")";
 		this.success = publicService.deleteEntities(hql, Integer.valueOf(page.getParams().get("qid")));
