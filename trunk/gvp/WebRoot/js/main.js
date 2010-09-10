@@ -144,6 +144,160 @@ Ext.onReady(function() {
 	}
 	
 	/**
+	 * 初始化报时单其他报价grid
+	 */
+	function initOtherPriceGrid(quoteInfoRecord,height,flag){
+		var quoteInfo = quoteInfoRecord.data;
+		var store = new Ext.data.Store({
+			url: 'findOtherPriceList.action',
+			paramNames:{start:'page.start',limit:'page.limit'},
+			baseParams:{'page.start':0,'page.limit':0,'otherPrice.qid':quoteInfo.qid},
+			autoLoad:flag,
+			reader: new Ext.data.JsonReader({totalProperty: 'totalProperty',root: 'root'},
+			[
+				{name: 'oid'},
+				{name: 'price',allowBlank:false,type:'float'},
+				{name: 'remark'},
+				{name: 'qid'}
+			]),
+			listeners:{
+				'update': function(thiz, record, operation){
+					if(operation == Ext.data.Record.EDIT){
+						if(record.data.fid){
+							Ext.Ajax.request({
+							    url: 'updateFoundry.action',
+							    params: {
+									'otherPrice.fid': record.data.fid,		
+									'otherPrice.price': record.data.price,
+									'otherPrice.remark': record.data.remark,
+									'otherPrice.qid':quoteInfo.qid
+								},
+							    success: function(response) {
+							    	var obj = Ext.decode(response.responseText);
+							    	if(obj.success){
+							    		record.beginEdit();
+							    		record.data = obj.infos.foundry;
+							    		record.commit();
+							    		thiz.commitChanges();
+							    	}else{
+							    		thiz.rejectChanges();
+							    	}
+							    },
+							    failure: function(response) {
+							    	Ext.Msg.alert('错误','server-side failure with status code ' + response.status);
+							    	thiz.rejectChanges();
+							    }
+						    });
+						}else{
+							Ext.Ajax.request({
+							    url: 'saveOtherPrice.action',
+							    params: {
+							    	'otherPrice.qid':quoteInfo.qid,
+									'otherPrice.price': record.data.price,
+									'otherPrice.remark': record.data.remark
+								},
+							    success: function(response) {
+							    	var obj = Ext.decode(response.responseText);
+							    	if(obj.success){
+							    		record.beginEdit();
+							    		record.data = obj.infos.foundry;
+							    		record.commit();
+							    		grid.getSelectionModel().selectRow(0);
+							    		Ext.get(grid.getView().getRow(0)).frame('green',2,{duration: .3});
+							    	}
+							    },
+							    failure: function(response) {
+							    	Ext.Msg.alert('错误','server-side failure with status code ' + response.status);
+							    	thiz.rejectChanges();
+							    }
+						    });
+						}
+					}
+				}
+			}
+		});
+	    
+	    var editor = initEditor(null,null,2);
+	    editor.on('invalid',function(record,sd){
+	    	Ext.get(grid.getView().getRow(0)).fadeOut({
+			    endOpacity: 0, 
+			    easing: 'easeOut',
+			    duration: .5,
+			    remove: false,
+			    useDisplay: false,
+			    callback:function(){
+			    	sd.remove(record);
+			    }
+			});
+	    });
+	    
+	    var sm = new Ext.grid.CheckboxSelectionModel({
+	        listeners: {
+	            selectionchange: function(sm) {
+	                if (sm.getCount()) {
+	                    grid.removeButton.enable();
+	                } else {
+	                    grid.removeButton.disable();
+	                }
+	            }
+	        }
+	    });
+	    
+	    var expandId = Ext.id();
+	     
+		var grid = new Ext.grid.GridPanel({
+			height : height,
+			store: store,
+		    plugins : editor,
+		    autoExpandColumn: expandId,
+			sm: sm,
+			border:false,
+			colModel:new Ext.grid.ColumnModel({
+				defaultSortable:true,
+				defaultWidth:60,
+				columns: [sm,
+			        {header: '外发加工类别',dataIndex:'plateMerchant',id:expandId,editor:{xtype : 'textfield',maxLength:200,name:'plateMerchant'}},
+			        {header: '损耗率',dataIndex: 'attritionRate',renderer:function(v){return v + ' %';},editor:{xtype : 'textfield',maxLength:50,allowBlank:false,name:'attritionRate'}},
+			        {header: '加工单价',dataIndex: 'processPrice',editor:{xtype : 'numberfield',decimalPrecision:6,maxLength:20,allowBlank:false,name:'processPrice'}},
+			        {header: '备注',dataIndex: 'remark',editor:{xtype:'textfield',maxLength:400,name:'remark'}}
+			    ]
+			}),
+		    tbar : [{text :'添加'
+	    		,iconCls:'silk-add'
+	    		,ref:'../addButton'
+	    		,handler:function(){
+	    			var foundry = new grid.store.recordType({
+	    				plateMerchant:'',		
+						attritionRate:'',	
+						remark:''
+			        });
+			        editor.stopEditing();
+			        grid.store.insert(0, foundry);
+			        editor.startEditing(0);
+	    		}
+	    	},{
+				text	: '删除',
+				iconCls : 'silk-delete',
+				ref : '../removeButton',
+				disabled:true,
+				handler : function(){
+					editor.stopEditing(false);
+					deleteRecords('deleteFoundry.action','page.params.ids','fid',grid,store,null,quoteInfo.qid,quoteInfoRecord);
+				}
+			},'-',{
+				text	: '刷新',
+				iconCls : 'x-tbar-loading',
+				handler : function(){
+					editor.stopEditing(false);
+					store.reload();
+				}
+			}]
+		});
+		
+		return grid;
+	}
+	
+	/**
 	 * 初始化外发加工信息grid
 	 * @param quoteInfoRecord 报时表对象
 	 * @param height GridPanel高度
@@ -2184,6 +2338,31 @@ Ext.onReady(function() {
 		innerWin.show();
 	}
 	
+	
+	/**
+	 * 其他报价管理
+	 */
+	function showOtherPriceWinManage(grid){
+		var quoteInfoRecord = grid.getSelectionModel().getSelected();
+		var innerWin = new Ext.Window({
+			title:'其他报价管理',
+			width:650,
+			modal:true,
+			resizable:false,
+			height:270,
+			autoScroll:true,
+			bodyStyle:'overflow-x:hidden',
+			items:[initOtherPriceGrid(quoteInfoRecord,200,true)],
+			fbar:[{
+				text:'关闭',
+				handler:function(){
+					innerWin.close();
+				}
+			}]
+		});
+		innerWin.show();
+	}
+	
 	/***
 	 * 外发加工管理
 	 */
@@ -3200,6 +3379,18 @@ Ext.onReady(function() {
 						deleteRecords('deleteQuoteInfo.action','page.params.ids','qid',grid,store);
 					}
 				},{xtype: 'tbseparator',hidden:!Ext.ROLE_R05},{
+					text:'其他报价管理',
+					ref:'../addOtherPriceButton',
+					disabled:true,
+					handler:function(){
+		    			var record = grid.getSelectionModel().getSelected();
+		    			if(record){
+		    				showOtherPriceWinManage(grid);
+		    			}else{
+		    				Ext.Msg.alert('操作提示','请先选择要操作的行.');
+		    			}
+		    		}
+				},{
 		    		text:'生产材料信息',
 		    		iconCls:'silk-cog',
 		    		ref:'../addMaterialsButton',
