@@ -1,0 +1,446 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE struts PUBLIC
+    "-//Apache Software Foundation//DTD Struts Configuration 2.0//EN"
+    "http://struts.apache.org/dtds/struts-2.0.dtd">
+
+<struts>
+	<include file="struts-default.xml" />
+	<package name="simple" extends="struts-default"></package>
+	<package name="login" extends="json-default">
+		<interceptors>
+			<interceptor name="systemLog" class="com.gvp.core.SystemLogInterceptor" />
+			<interceptor-stack name="mydefault">
+				<interceptor-ref name="defaultStack" />
+				<interceptor-ref name="systemLog" />
+			</interceptor-stack>
+		</interceptors>
+		<default-interceptor-ref name="mydefault" />
+		<global-results>
+			<result type="json" name="login">
+				<param name="excludeNullProperties">true</param>
+				<param name="includeProperties">success,infos.*</param>
+			</result>
+		</global-results>
+
+		<action name="logout" class="publicAction" method="logout">
+			<result type="json">
+				<param name="excludeNullProperties">true</param>
+				<param name="includeProperties">success,infos.*</param>
+			</result>
+		</action>
+		<action name="login" class="publicAction" method="login">
+			<result type="json">
+				<param name="excludeNullProperties">true</param>
+				<param name="includeProperties">success,infos.*</param>
+			</result>
+		</action>
+		<action name="changePassword" class="publicAction" method="changePassword">
+			<result type="json">
+				<param name="excludeNullProperties">true</param>
+				<param name="includeProperties">success,infos.*</param>
+			</result>
+		</action>
+	</package>
+
+	<package name="json" extends="json-default">
+		<interceptors>
+			<interceptor name="systemLog" class="com.gvp.core.SystemLogInterceptor" />
+			<interceptor-stack name="mydefault">
+				<interceptor-ref name="defaultStack" />
+				<interceptor-ref name="systemLog" />
+			</interceptor-stack>
+		</interceptors>
+		<default-interceptor-ref name="mydefault" />
+		<global-results>
+			<result type="json" name="login">
+				<param name="excludeNullProperties">true</param>
+				<param name="includeProperties">success,infos.*</param>
+			</result>
+		</global-results>
+
+		<action name="completeQuoteInfo" class="publicAction" method="completeQuoteInfo">
+			<result type="json">
+				<param name="includeProperties">success,infos.*</param>
+			</result>
+		</action>
+		
+		<action name="saveSpecification" class="publicAction" method="saveSpecification">
+			<result type="json">
+				<param name="includeProperties">success,infos.*</param>
+			</result>
+		</action>
+		<action name="saveRefFiles" class="publicAction" method="saveRefFiles">
+			<result type="json">
+				<param name="includeProperties">success,infos.*</param>
+			</result>
+		</action>
+		<action name="saveMaterials" class="publicAction" method="saveMaterials">
+			<result type="json">
+				<param name="includeProperties">success,infos.*</param>
+			</result>
+		</action>
+		<action name="saveReferenceInfo" class="publicAction" method="saveReferenceInfo">
+			<result type="json">
+				<param name="includeProperties">success,infos.*</param>
+			</result>
+		</action>
+		<action name="saveAids" class="publicAction" method="saveAids">
+			<result type="json">
+				<param name="includeProperties">success,infos.*</param>
+			</result>
+		</action>
+		<action name="saveFoundry" class="publicAction" method="saveFoundry">
+			<result type="json">
+				<param name="includeProperties">success,infos.*</param>
+			</result>
+		</action>
+		<action name="saveProcessInfo" class="publicAction" method="saveProcessInfo">
+			<result type="json">
+				<param name="includeProperties">success,infos.*</param>
+			</result>
+		</action>
+		<action name="saveWorkflowLog" class="publicAction" method="saveWorkflowLog">
+			<result type="json">
+				<param name="includeProperties">success,infos.*</param>
+			</result>
+		</action>
+		<action name="saveStuff" class="publicAction" method="saveStuff">
+			<result type="json">
+				<param name="includeProperties">success,infos.*</param>
+			</result>
+		</action>
+		<action name="saveCustomer" class="publicAction" method="saveCustomer">
+			<result type="json">
+				<param name="includeProperties">success,infos.*</param>
+			</result>
+		</action>
+		<action name="saveUser" class="publicAction" method="saveUser">
+			<result type="json">
+				<param name="includeProperties">success,infos.*</param>
+			</result>
+		</action>
+		<action name="saveQuoteInfo" class="publicAction" method="saveQuoteInfo">
+			<result type="json">
+				<param name="includeProperties">success,infos.*</param>
+			</result>
+		</action>
+		<action name="saveSpecies" class="publicAction" method="saveSpecies">
+			<result type="json">
+				<param name="includeProperties">success,infos.*</param>
+			</result>
+		</action>
+		
+		
+		<action name="adjustQuoteInfos" class="publicAction" method="adjustQuoteInfos">
+			<result type="json">
+				<param name="includeProperties">success,infos.*</param>
+			</result>
+		</action>
+		
+		
+		<action name="findWorkflowByQid" class="publicAction" method="findWorkflowByQid">
+			<result type="json">
+				<param name="includeProperties">success,infos.*</param>
+			</result>
+		</action>
+		<action name="findQuoteInfoById" class="publicAction" method="findQuoteInfoById">
+			<result type="json">
+				<param name="includeProperties">success,infos.*</param>
+			</result>
+		</action>
+		<action name="findReferenceInfoById" class="publicAction" method="findReferenceInfoById">
+			<result type="json">
+				<param name="includeProperties">success,infos.*</param>
+			</result>
+		</action>
+		<action name="findRoleById" class="publicAction" method="findRoleById">
+			<result type="json">
+				<param name="includeProperties">success,infos.*</param>
+			</result>
+		</action>
+		<action name="findMaterialsById" class="publicAction" method="findMaterialsById">
+			<result type="json">
+				<param name="includeProperties">success,infos.*</param>
+			</result>
+		</action>
+		
+		
+		<action name="findSpecificationList" class="publicAction" method="findSpecificationList">
+			<result type="json">
+				<param name="root">page</param>
+				<param name="excludeNullProperties">true</param>
+				<param name="includeProperties">root.*,totalProperty</param>
+			</result>
+		</action>
+		<action name="findRefFilesList" class="publicAction" method="findRefFilesList">
+			<result type="json">
+				<param name="root">page</param>
+				<param name="excludeNullProperties">true</param>
+				<param name="includeProperties">root.*,totalProperty</param>
+			</result>
+		</action>
+		<action name="findAidsList" class="publicAction" method="findAidsList">
+			<result type="json">
+				<param name="root">page</param>
+				<param name="excludeNullProperties">true</param>
+				<param name="includeProperties">root.*,totalProperty</param>
+			</result>
+		</action>
+		<action name="findFoundryList" class="publicAction" method="findFoundryList">
+			<result type="json">
+				<param name="root">page</param>
+				<param name="excludeNullProperties">true</param>
+				<param name="includeProperties">root.*,totalProperty</param>
+			</result>
+		</action>
+		<action name="findUnCheckedQuoteInfoList" class="publicAction" method="findUnCheckedQuoteInfoList">
+			<result type="json">
+				<param name="root">page</param>
+				<param name="excludeNullProperties">true</param>
+				<param name="includeProperties">root.*,totalProperty</param>
+			</result>
+		</action>
+		<action name="findQuoteInfoList" class="publicAction" method="findQuoteInfoList">
+			<result type="json">
+				<param name="root">page</param>
+				<param name="excludeNullProperties">true</param>
+				<param name="includeProperties">root.*,totalProperty</param>
+			</result>
+		</action>
+		<action name="findProcessInfoList" class="publicAction" method="findProcessInfoList">
+			<result type="json">
+				<param name="root">page</param>
+				<param name="excludeNullProperties">true</param>
+				<param name="includeProperties">root.*,totalProperty</param>
+			</result>
+		</action>
+		<action name="findUserList" class="publicAction" method="findUserList">
+			<result type="json">
+				<param name="root">page</param>
+				<param name="excludeNullProperties">true</param>
+				<param name="includeProperties">root.*,totalProperty</param>
+			</result>
+		</action>
+		<action name="findStuffList" class="publicAction" method="findStuffList">
+			<result type="json">
+				<param name="root">page</param>
+				<param name="excludeNullProperties">true</param>
+				<param name="includeProperties">root.*,totalProperty</param>
+			</result>
+		</action>
+		<action name="findSpeciesList" class="publicAction" method="findSpeciesList">
+			<result type="json">
+				<param name="root">page</param>
+				<param name="excludeNullProperties">true</param>
+				<param name="includeProperties">root.*,totalProperty</param>
+			</result>
+		</action>
+		<action name="findSystemLogList" class="publicAction" method="findSystemLogList">
+			<result type="json">
+				<param name="root">page</param>
+				<param name="excludeNullProperties">true</param>
+				<param name="includeProperties">root.*,totalProperty</param>
+			</result>
+		</action>
+		<action name="findPriceList" class="publicAction" method="findPriceList">
+			<result type="json">
+				<param name="root">page</param>
+				<param name="excludeNullProperties">true</param>
+				<param name="includeProperties">root.*,totalProperty</param>
+			</result>
+		</action>
+		<action name="findCustomerList" class="publicAction" method="findCustomerList">
+			<result type="json">
+				<param name="root">page</param>
+				<param name="excludeNullProperties">true</param>
+				<param name="includeProperties">root.*,totalProperty</param>
+			</result>
+		</action>
+		<action name="findRelationQuoteInfoList" class="publicAction" method="findRelationQuoteInfoList">
+			<result type="json">
+				<param name="root">page</param>
+				<param name="excludeNullProperties">true</param>
+				<param name="includeProperties">root.*,totalProperty</param>
+			</result>
+		</action>
+		
+		
+		<action name="findTreeData" class="publicAction" method="findTreeData">
+			<result type="json">
+				<param name="root">page</param>
+				<param name="excludeNullProperties">true</param>
+				<param name="includeProperties">root.*</param>
+			</result>
+		</action>
+		
+		
+		<action name="deleteSpecification" class="publicAction" method="deleteSpecification">
+			<result type="json">
+				<param name="includeProperties">success</param>
+			</result>
+		</action>
+		<action name="deleteRefFiles" class="publicAction" method="deleteRefFiles">
+			<result type="json">
+				<param name="includeProperties">success</param>
+			</result>
+		</action>
+		<action name="deleteAids" class="publicAction" method="deleteAids">
+			<result type="json">
+				<param name="includeProperties">success,infos.*</param>
+			</result>
+		</action>
+		<action name="deleteFoundry" class="publicAction" method="deleteFoundry">
+			<result type="json">
+				<param name="includeProperties">success,infos.*</param>
+			</result>
+		</action>
+		<action name="deleteProcessInfo" class="publicAction" method="deleteProcessInfo">
+			<result type="json">
+				<param name="includeProperties">success,infos.*</param>
+			</result>
+		</action>
+		<action name="deleteQuoteInfo" class="publicAction" method="deleteQuoteInfo">
+			<result type="json">
+				<param name="includeProperties">success</param>
+			</result>
+		</action>
+		<action name="deleteQuoteInfo" class="publicAction" method="deleteQuoteInfo">
+			<result type="json">
+				<param name="includeProperties">success</param>
+			</result>
+		</action>
+		<action name="deleteStuff" class="publicAction" method="deleteStuff">
+			<result type="json">
+				<param name="includeProperties">success</param>
+			</result>
+		</action>
+		<action name="deleteSpecies" class="publicAction" method="deleteSpecies">
+			<result type="json">
+				<param name="includeProperties">success</param>
+			</result>
+		</action>
+		<action name="deleteCustomer" class="publicAction" method="deleteCustomer">
+			<result type="json">
+				<param name="includeProperties">success</param>
+			</result>
+		</action>
+		<action name="deleteUser" class="publicAction" method="deleteUser">
+			<result type="json">
+				<param name="includeProperties">success</param>
+			</result>
+		</action>
+		
+		
+		<action name="updateSpecification" class="publicAction" method="updateSpecification">
+			<result type="json">
+				<param name="includeProperties">success,infos.*</param>
+			</result>
+		</action>
+		<action name="updateRefFiles" class="publicAction" method="updateRefFiles">
+			<result type="json">
+				<param name="includeProperties">success,infos.*</param>
+			</result>
+		</action>
+		<action name="updateMaterials" class="publicAction" method="updateMaterials">
+			<result type="json">
+				<param name="includeProperties">success,infos.*</param>
+			</result>
+		</action>
+		<action name="updateReferenceInfo" class="publicAction" method="updateReferenceInfo">
+			<result type="json">
+				<param name="includeProperties">success,infos.*</param>
+			</result>
+		</action>
+		<action name="updateQuoteInfo" class="publicAction" method="updateQuoteInfo">
+			<result type="json">
+				<param name="includeProperties">success,infos.*</param>
+			</result>
+		</action>
+		<action name="updateAids" class="publicAction" method="updateAids">
+			<result type="json">
+				<param name="includeProperties">success,infos.*</param>
+			</result>
+		</action>
+		<action name="updateFoundry" class="publicAction" method="updateFoundry">
+			<result type="json">
+				<param name="includeProperties">success,infos.*</param>
+			</result>
+		</action>
+		<action name="updateRole" class="publicAction" method="updateRole">
+			<result type="json">
+				<param name="includeProperties">success,infos.*</param>
+			</result>
+		</action>
+		<action name="updateProcessInfo" class="publicAction" method="updateProcessInfo">
+			<result type="json">
+				<param name="includeProperties">success,infos.*</param>
+			</result>
+		</action>
+		<action name="updateUser" class="publicAction" method="updateUser">
+			<result type="json">
+				<param name="includeProperties">success,infos.*</param>
+			</result>
+		</action>
+		<action name="updateStuff" class="publicAction" method="updateStuff">
+			<result type="json">
+				<param name="includeProperties">success,infos.*</param>
+			</result>
+		</action>
+		<action name="updateSpecies" class="publicAction" method="updateSpecies">
+			<result type="json">
+				<param name="includeProperties">success,infos.*</param>
+			</result>
+		</action>
+		<action name="updateCustomer" class="publicAction" method="updateCustomer">
+			<result type="json">
+				<param name="includeProperties">success,infos.*</param>
+			</result>
+		</action>
+		
+		
+		<action name="copyQuoteInfos" class="publicAction" method="copyQuoteInfos">
+			<result type="json">
+				<param name="includeProperties">success,infos.*</param>
+			</result>
+		</action>
+		
+		
+	</package>
+	
+	
+
+
+	<package name="json-file" extends="json-default">
+		<action name="getDirectories" class="fileAction" method="getDirectories">
+			<result type="json">
+				<param name="root">nodes</param>
+				<param name="excludeNullProperties">true</param>
+			</result>
+		</action>
+		<action name="getFiles" class="fileAction" method="getFiles">
+			<result type="json">
+				<param name="root">page</param>
+				<param name="excludeNullProperties">true</param>
+				<param name="includeProperties">root.*</param>
+			</result>
+		</action>
+		<action name="uploadFiles" class="fileAction" method="uploadFiles">
+			<result name="success" type="json">
+				<param name="includeProperties">success</param>
+			</result>
+			<result name="input" type="json">
+				<param name="includeProperties">success</param>
+			</result>
+		</action>
+		<action name="createFolder" class="fileAction" method="createFolder">
+			<result type="json">
+				<param name="includeProperties">success</param>
+			</result>
+		</action>
+		<action name="deleteFiles" class="fileAction" method="deleteFiles">
+			<result type="json">
+				<param name="includeProperties">success</param>
+			</result>
+		</action>
+	</package>
+</struts>
