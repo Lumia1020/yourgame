@@ -26,6 +26,7 @@ import com.gvp.po.Aids;
 import com.gvp.po.Customer;
 import com.gvp.po.Foundry;
 import com.gvp.po.Materials;
+import com.gvp.po.OtherQuotePrice;
 import com.gvp.po.PriceList;
 import com.gvp.po.ProcessInfo;
 import com.gvp.po.QuoteInfo;
@@ -48,7 +49,7 @@ public class PublicAction extends BaseAction {
 	private User user;
 
 	private Customer customer;
-	
+
 	private Stuff stuff;
 
 	private QuoteInfo quoteInfo;
@@ -74,14 +75,24 @@ public class PublicAction extends BaseAction {
 	private Map<String, Object> infos = new HashMap<String, Object>();
 
 	private Species species;
-	
+
 	private Specification specification;
-	
+
 	private PriceList priceList;
-	
+
 	private SystemLog log;
-	
+
 	private WorkflowLog workflow;
+
+	private OtherQuotePrice otherPrice;
+
+	public OtherQuotePrice getOtherPrice() {
+		return otherPrice;
+	}
+
+	public void setOtherPrice(OtherQuotePrice otherPrice) {
+		this.otherPrice = otherPrice;
+	}
 
 	public WorkflowLog getWorkflow() {
 		return workflow;
@@ -120,10 +131,10 @@ public class PublicAction extends BaseAction {
 	 * 
 	 * @return
 	 */
-	@Action(description="删除外发加工信息")
+	@Action(description = "删除外发加工信息")
 	public String deleteFoundry() {
 		final String hql = "delete Foundry where fid in (" + page.getParams().get("ids") + ")";
-		this.success = publicService.deleteEntities(hql,Integer.valueOf(page.getParams().get("qid")));
+		this.success = publicService.deleteEntities(hql, Integer.valueOf(page.getParams().get("qid")));
 		this.infos.put("quoteInfo", publicService.findQuoteInfoById(Integer.valueOf(page.getParams().get("qid")), false).get("quoteInfo"));
 		return SUCCESS;
 	}
@@ -133,10 +144,10 @@ public class PublicAction extends BaseAction {
 	 * 
 	 * @return
 	 */
-	@Action(description="删除加工信息")
+	@Action(description = "删除加工信息")
 	public String deleteProcessInfo() {
 		final String hql = "delete ProcessInfo where pid in (" + page.getParams().get("ids") + ")";
-		this.success = publicService.deleteEntities(hql,Integer.valueOf(page.getParams().get("qid")));
+		this.success = publicService.deleteEntities(hql, Integer.valueOf(page.getParams().get("qid")));
 		this.infos.put("quoteInfo", publicService.findQuoteInfoById(Integer.valueOf(page.getParams().get("qid")), false).get("quoteInfo"));
 		return SUCCESS;
 	}
@@ -146,22 +157,22 @@ public class PublicAction extends BaseAction {
 	 * 
 	 * @return
 	 */
-	@Action(description="删除用户信息")
+	@Action(description = "删除用户信息")
 	public String deleteUser() {
 		final String hql = "delete User where userid in (" + page.getParams().get("ids") + ")";
-		this.success = publicService.deleteEntities(hql,null);
+		this.success = publicService.deleteEntities(hql, null);
 		return SUCCESS;
 	}
-	
+
 	/**
 	 * 删除种类信息
 	 * 
 	 * @return
 	 */
-	@Action(description="删除种类信息")
+	@Action(description = "删除种类信息")
 	public String deleteSpecies() {
 		final String hql = "delete Species where speciesid in (" + page.getParams().get("ids") + ")";
-		this.success = publicService.deleteEntities(hql,null);
+		this.success = publicService.deleteEntities(hql, null);
 		return SUCCESS;
 	}
 
@@ -170,22 +181,22 @@ public class PublicAction extends BaseAction {
 	 * 
 	 * @return
 	 */
-	@Action(description="删除材质信息")
+	@Action(description = "删除材质信息")
 	public String deleteStuff() {
 		final String hql = "delete Stuff where stuffid in (" + page.getParams().get("ids") + ")";
-		this.success = publicService.deleteEntities(hql,null);
+		this.success = publicService.deleteEntities(hql, null);
 		return SUCCESS;
 	}
-	
+
 	/**
 	 * 删除规格信息
 	 * 
 	 * @return
 	 */
-	@Action(description="删除规格信息")
+	@Action(description = "删除规格信息")
 	public String deleteSpecification() {
 		final String hql = "delete Specification where specid in (" + page.getParams().get("ids") + ")";
-		this.success = publicService.deleteEntities(hql,null);
+		this.success = publicService.deleteEntities(hql, null);
 		return SUCCESS;
 	}
 
@@ -194,10 +205,10 @@ public class PublicAction extends BaseAction {
 	 * 
 	 * @return
 	 */
-	@Action(description="删除客户信息")
+	@Action(description = "删除客户信息")
 	public String deleteCustomer() {
 		final String hql = "delete Customer where cid in (" + page.getParams().get("ids") + ")";
-		this.success = publicService.deleteEntities(hql,null);
+		this.success = publicService.deleteEntities(hql, null);
 		return SUCCESS;
 	}
 
@@ -206,10 +217,10 @@ public class PublicAction extends BaseAction {
 	 * 
 	 * @return
 	 */
-	@Action(description="删除辅助信息")
+	@Action(description = "删除辅助信息")
 	public String deleteAids() {
 		final String hql = "delete Aids where aid in (" + page.getParams().get("ids") + ")";
-		this.success = publicService.deleteEntities(hql,Integer.valueOf(page.getParams().get("qid")));
+		this.success = publicService.deleteEntities(hql, Integer.valueOf(page.getParams().get("qid")));
 		this.infos.put("quoteInfo", publicService.findQuoteInfoById(Integer.valueOf(page.getParams().get("qid")), false).get("quoteInfo"));
 		return SUCCESS;
 	}
@@ -220,15 +231,15 @@ public class PublicAction extends BaseAction {
 	 * @return
 	 */
 	@SuppressWarnings("unchecked")
-	@Action(description="删除参考文件信息")
+	@Action(description = "删除参考文件信息")
 	public String deleteRefFiles() {
 		final String hql = "delete RefFiles where fid in (" + page.getParams().get("ids") + ")";
-		
+
 		List<RefFiles> list = publicService.getList("from RefFiles where fid in (" + page.getParams().get("ids") + ")");
-		this.success = publicService.deleteEntities(hql,null);
-		if(success){
+		this.success = publicService.deleteEntities(hql, null);
+		if (success) {
 			String rootPath = getSession().getServletContext().getRealPath("/");
-			for(Iterator<RefFiles> it = list.iterator(); it.hasNext();){
+			for (Iterator<RefFiles> it = list.iterator(); it.hasNext();) {
 				MyUtils.delFile(rootPath + it.next().getUrl());
 			}
 		}
@@ -240,7 +251,7 @@ public class PublicAction extends BaseAction {
 	 * 
 	 * @return
 	 */
-	@Action(description="删除报时单")
+	@Action(description = "删除报时单")
 	public String deleteQuoteInfo() {
 		this.success = publicService.deleteQuoteInfo(page.getParams().get("ids"));
 		return SUCCESS;
@@ -254,10 +265,36 @@ public class PublicAction extends BaseAction {
 	 * @throws InvocationTargetException
 	 * @throws NoSuchMethodException
 	 */
-	@Action(description="修改外发加工信息")
+	@Action(description = "修改报时单其他报价")
+	public String updateOtherPrice() throws IllegalAccessException, InvocationTargetException, NoSuchMethodException {
+		try {
+			OtherQuotePrice p = (OtherQuotePrice) publicService.updateEntity(otherPrice, otherPrice.getOid(), null);
+			if (p != null) {
+				this.infos.put("otherPrice", p);
+				// this.infos.put("quoteInfo",
+				// publicService.findQuoteInfoById(otherPrice.getOid(),
+				// false).get("quoteInfo"));
+				this.success = true;
+			}
+		} catch (RuntimeException e) {
+			this.infos.put("msg", MyUtils.getExceptionMessages(e));
+			e.printStackTrace();
+		}
+		return SUCCESS;
+	}
+
+	/**
+	 * 更新外发加工信息
+	 * 
+	 * @return
+	 * @throws IllegalAccessException
+	 * @throws InvocationTargetException
+	 * @throws NoSuchMethodException
+	 */
+	@Action(description = "修改外发加工信息")
 	public String updateFoundry() throws IllegalAccessException, InvocationTargetException, NoSuchMethodException {
 		try {
-			Foundry p = (Foundry) publicService.updateEntity(foundry, foundry.getFid(),foundry.getQid());
+			Foundry p = (Foundry) publicService.updateEntity(foundry, foundry.getFid(), foundry.getQid());
 			if (p != null) {
 				this.infos.put("foundry", p);
 				this.infos.put("quoteInfo", publicService.findQuoteInfoById(foundry.getQid(), false).get("quoteInfo"));
@@ -278,10 +315,10 @@ public class PublicAction extends BaseAction {
 	 * @throws InvocationTargetException
 	 * @throws NoSuchMethodException
 	 */
-	@Action(description="修改加工信息")
+	@Action(description = "修改加工信息")
 	public String updateProcessInfo() throws IllegalAccessException, InvocationTargetException, NoSuchMethodException {
 		try {
-			ProcessInfo p = (ProcessInfo) publicService.updateEntity(process, process.getPid(),process.getQid());
+			ProcessInfo p = (ProcessInfo) publicService.updateEntity(process, process.getPid(), process.getQid());
 			if (p != null) {
 				this.infos.put("process", p);
 				this.infos.put("quoteInfo", publicService.findQuoteInfoById(this.process.getQid(), false).get("quoteInfo"));
@@ -302,10 +339,10 @@ public class PublicAction extends BaseAction {
 	 * @throws InvocationTargetException
 	 * @throws NoSuchMethodException
 	 */
-	@Action(description="修改用户信息")
+	@Action(description = "修改用户信息")
 	public String updateUser() throws IllegalAccessException, InvocationTargetException, NoSuchMethodException {
 		try {
-			User u = (User) publicService.updateEntity(user, user.getUserid(),null);
+			User u = (User) publicService.updateEntity(user, user.getUserid(), null);
 			if (u != null) {
 				this.infos.put("user", u);
 				this.success = true;
@@ -316,7 +353,7 @@ public class PublicAction extends BaseAction {
 		}
 		return SUCCESS;
 	}
-	
+
 	/**
 	 * 更新用户权限
 	 * 
@@ -325,10 +362,10 @@ public class PublicAction extends BaseAction {
 	 * @throws InvocationTargetException
 	 * @throws NoSuchMethodException
 	 */
-	@Action(description="修改用户权限")
+	@Action(description = "修改用户权限")
 	public String updateRole() throws IllegalAccessException, InvocationTargetException, NoSuchMethodException {
 		try {
-			Role u = (Role) publicService.updateEntity(role, role.getRid(),null);
+			Role u = (Role) publicService.updateEntity(role, role.getRid(), null);
 			if (u != null) {
 				this.infos.put("role", u);
 				this.success = true;
@@ -348,10 +385,10 @@ public class PublicAction extends BaseAction {
 	 * @throws InvocationTargetException
 	 * @throws NoSuchMethodException
 	 */
-	@Action(description="修改辅助信息")
+	@Action(description = "修改辅助信息")
 	public String updateAids() throws IllegalAccessException, InvocationTargetException, NoSuchMethodException {
 		try {
-			Aids c = (Aids) publicService.updateEntity(aids, aids.getAid(),aids.getQid());
+			Aids c = (Aids) publicService.updateEntity(aids, aids.getAid(), aids.getQid());
 			if (c != null) {
 				this.infos.put("aids", c);
 				this.infos.put("quoteInfo", publicService.findQuoteInfoById(aids.getQid(), false).get("quoteInfo"));
@@ -363,7 +400,7 @@ public class PublicAction extends BaseAction {
 		}
 		return SUCCESS;
 	}
-	
+
 	/**
 	 * 更新种类信息
 	 * 
@@ -372,10 +409,10 @@ public class PublicAction extends BaseAction {
 	 * @throws InvocationTargetException
 	 * @throws NoSuchMethodException
 	 */
-	@Action(description="修改种类信息")
+	@Action(description = "修改种类信息")
 	public String updateSpecies() throws IllegalAccessException, InvocationTargetException, NoSuchMethodException {
 		try {
-			Species c = (Species) publicService.updateEntity(species, species.getSpeciesid(),null);
+			Species c = (Species) publicService.updateEntity(species, species.getSpeciesid(), null);
 			if (c != null) {
 				this.infos.put("species", c);
 				this.success = true;
@@ -386,7 +423,7 @@ public class PublicAction extends BaseAction {
 		}
 		return SUCCESS;
 	}
-	
+
 	/**
 	 * 更新规格信息
 	 * 
@@ -395,10 +432,10 @@ public class PublicAction extends BaseAction {
 	 * @throws InvocationTargetException
 	 * @throws NoSuchMethodException
 	 */
-	@Action(description="修改规格信息")
+	@Action(description = "修改规格信息")
 	public String updateSpecification() throws IllegalAccessException, InvocationTargetException, NoSuchMethodException {
 		try {
-			Specification c = (Specification) publicService.updateEntity(specification, specification.getSpecid(),null);
+			Specification c = (Specification) publicService.updateEntity(specification, specification.getSpecid(), null);
 			if (c != null) {
 				this.infos.put("specification", c);
 				this.success = true;
@@ -409,7 +446,7 @@ public class PublicAction extends BaseAction {
 		}
 		return SUCCESS;
 	}
-	
+
 	/**
 	 * 更新材质信息
 	 * 
@@ -418,10 +455,10 @@ public class PublicAction extends BaseAction {
 	 * @throws InvocationTargetException
 	 * @throws NoSuchMethodException
 	 */
-	@Action(description="修改材质信息")
+	@Action(description = "修改材质信息")
 	public String updateStuff() throws IllegalAccessException, InvocationTargetException, NoSuchMethodException {
 		try {
-			Stuff c = (Stuff) publicService.updateEntity(stuff, stuff.getStuffid(),null);
+			Stuff c = (Stuff) publicService.updateEntity(stuff, stuff.getStuffid(), null);
 			if (c != null) {
 				this.infos.put("stuff", c);
 				this.success = true;
@@ -441,10 +478,10 @@ public class PublicAction extends BaseAction {
 	 * @throws InvocationTargetException
 	 * @throws NoSuchMethodException
 	 */
-	@Action(description="修改客户信息")
+	@Action(description = "修改客户信息")
 	public String updateCustomer() throws IllegalAccessException, InvocationTargetException, NoSuchMethodException {
 		try {
-			Customer c = (Customer) publicService.updateEntity(customer, customer.getCid(),null);
+			Customer c = (Customer) publicService.updateEntity(customer, customer.getCid(), null);
 			if (c != null) {
 				this.infos.put("customer", c);
 				this.success = true;
@@ -464,10 +501,10 @@ public class PublicAction extends BaseAction {
 	 * @throws InvocationTargetException
 	 * @throws IllegalAccessException
 	 */
-	@Action(description="修改参考文件信息")
+	@Action(description = "修改参考文件信息")
 	public String updateRefFiles() throws IllegalAccessException, InvocationTargetException, NoSuchMethodException {
 		try {
-			RefFiles c = (RefFiles) publicService.updateEntity(refFiles, refFiles.getFid(),null);
+			RefFiles c = (RefFiles) publicService.updateEntity(refFiles, refFiles.getFid(), null);
 			if (c != null) {
 				this.infos.put("refFiles", c);
 				this.success = true;
@@ -478,19 +515,20 @@ public class PublicAction extends BaseAction {
 		}
 		return SUCCESS;
 	}
-	
+
 	/**
 	 * 更新生产材料信息
+	 * 
 	 * @return
 	 * @throws IllegalAccessException
 	 * @throws InvocationTargetException
 	 * @throws NoSuchMethodException
 	 */
-	@Action(description="修改生成材料信息")
-	public String updateMaterials() throws IllegalAccessException, InvocationTargetException, NoSuchMethodException{
+	@Action(description = "修改生成材料信息")
+	public String updateMaterials() throws IllegalAccessException, InvocationTargetException, NoSuchMethodException {
 		try {
 			this.materials.adjust();
-			Materials c = (Materials) publicService.updateEntity(materials, materials.getMid(),materials.getQid());
+			Materials c = (Materials) publicService.updateEntity(materials, materials.getMid(), materials.getQid());
 			if (c != null) {
 				this.infos.put("materials", c);
 				this.infos.put("quoteInfo", publicService.findQuoteInfoById(materials.getQid(), false).get("quoteInfo"));
@@ -502,18 +540,19 @@ public class PublicAction extends BaseAction {
 		}
 		return SUCCESS;
 	}
-	
+
 	/**
 	 * 更新参考信息
+	 * 
 	 * @return
 	 * @throws IllegalAccessException
 	 * @throws InvocationTargetException
 	 * @throws NoSuchMethodException
 	 */
-	@Action(description="修改参考信息")
-	public String updateReferenceInfo() throws IllegalAccessException, InvocationTargetException, NoSuchMethodException{
+	@Action(description = "修改参考信息")
+	public String updateReferenceInfo() throws IllegalAccessException, InvocationTargetException, NoSuchMethodException {
 		try {
-			ReferenceInfo c = (ReferenceInfo) publicService.updateEntity(reference, reference.getRid(),reference.getQid());
+			ReferenceInfo c = (ReferenceInfo) publicService.updateEntity(reference, reference.getRid(), reference.getQid());
 			if (c != null) {
 				this.infos.put("reference", c);
 				this.infos.put("quoteInfo", publicService.findQuoteInfoById(reference.getQid(), false).get("quoteInfo"));
@@ -534,7 +573,7 @@ public class PublicAction extends BaseAction {
 	 * @throws InvocationTargetException
 	 * @throws IllegalAccessException
 	 */
-	@Action(description="修改报时单信息")
+	@Action(description = "修改报时单信息")
 	@SuppressWarnings("unchecked")
 	public String updateQuoteInfo() throws IllegalAccessException, InvocationTargetException, NoSuchMethodException {
 		try {
@@ -553,7 +592,7 @@ public class PublicAction extends BaseAction {
 	 * 
 	 * @return
 	 */
-	@Action(description="新增客户信息")
+	@Action(description = "新增客户信息")
 	public String saveCustomer() {
 		Page p = new Page();
 		DetachedCriteria dc = DetachedCriteria.forClass(Customer.class);
@@ -582,11 +621,28 @@ public class PublicAction extends BaseAction {
 	 * 
 	 * @return
 	 */
-	@Action(description="新增外发加工信息")
+	@Action(description = "新增外发加工信息")
 	public String saveFoundry() {
 		try {
-			this.infos.put("foundry", publicService.saveEntity(this.foundry,this.foundry.getQid()));
+			this.infos.put("foundry", publicService.saveEntity(this.foundry, this.foundry.getQid()));
 			this.infos.put("quoteInfo", publicService.findQuoteInfoById(foundry.getQid(), false).get("quoteInfo"));
+			this.success = true;
+		} catch (RuntimeException e) {
+			this.success = false;
+			e.printStackTrace();
+		}
+		return SUCCESS;
+	}
+
+	/**
+	 * 保存报时单其他报价信息
+	 * 
+	 * @return
+	 */
+	@Action(description = "新增报时单其他报价")
+	public String saveOtherPrice() {
+		try {
+			this.infos.put("otherPrice", publicService.saveEntity(this.otherPrice, null));
 			this.success = true;
 		} catch (RuntimeException e) {
 			this.success = false;
@@ -600,10 +656,10 @@ public class PublicAction extends BaseAction {
 	 * 
 	 * @return
 	 */
-	@Action(description="新增加工信息")
+	@Action(description = "新增加工信息")
 	public String saveProcessInfo() {
 		try {
-			this.infos.put("process", publicService.saveEntity(this.process,this.process.getQid()));
+			this.infos.put("process", publicService.saveEntity(this.process, this.process.getQid()));
 			this.infos.put("quoteInfo", publicService.findQuoteInfoById(this.process.getQid(), false).get("quoteInfo"));
 			this.success = true;
 		} catch (RuntimeException e) {
@@ -618,10 +674,10 @@ public class PublicAction extends BaseAction {
 	 * 
 	 * @return
 	 */
-	@Action(description="新增辅助信息")
+	@Action(description = "新增辅助信息")
 	public String saveAids() {
 		try {
-			this.infos.put("aids", publicService.saveEntity(this.aids,this.aids.getQid()));
+			this.infos.put("aids", publicService.saveEntity(this.aids, this.aids.getQid()));
 			this.infos.put("quoteInfo", publicService.findQuoteInfoById(aids.getQid(), false).get("quoteInfo"));
 			this.success = true;
 		} catch (RuntimeException e) {
@@ -639,7 +695,7 @@ public class PublicAction extends BaseAction {
 	 * @throws InvocationTargetException
 	 * @throws NoSuchMethodException
 	 */
-	@Action(description="完善报时单信息")
+	@Action(description = "完善报时单信息")
 	public String completeQuoteInfo() throws IllegalAccessException, InvocationTargetException, NoSuchMethodException {
 		Map<String, Object> map = new HashMap<String, Object>();
 		map.put("quoteInfo", quoteInfo);
@@ -657,16 +713,17 @@ public class PublicAction extends BaseAction {
 		}
 		return SUCCESS;
 	}
-	
+
 	/**
 	 * 添加生产材料信息
+	 * 
 	 * @return
 	 */
-	@Action(description="新增生成材料信息")
-	public String saveMaterials(){
+	@Action(description = "新增生成材料信息")
+	public String saveMaterials() {
 		try {
 			this.materials.adjust();
-			this.infos.put("materials", publicService.saveEntity(this.materials,this.materials.getQid()));
+			this.infos.put("materials", publicService.saveEntity(this.materials, this.materials.getQid()));
 			this.infos.put("quoteInfo", publicService.findQuoteInfoById(materials.getQid(), false).get("quoteInfo"));
 			this.success = true;
 		} catch (RuntimeException e) {
@@ -675,15 +732,16 @@ public class PublicAction extends BaseAction {
 		}
 		return SUCCESS;
 	}
-	
+
 	/**
 	 * 保存参考信息
+	 * 
 	 * @return
 	 */
-	@Action(description="新增参考信息")
-	public String saveReferenceInfo(){
+	@Action(description = "新增参考信息")
+	public String saveReferenceInfo() {
 		try {
-			this.infos.put("reference", publicService.saveEntity(this.reference,this.reference.getQid()));
+			this.infos.put("reference", publicService.saveEntity(this.reference, this.reference.getQid()));
 			this.infos.put("quoteInfo", publicService.findQuoteInfoById(reference.getQid(), false).get("quoteInfo"));
 			this.success = true;
 		} catch (RuntimeException e) {
@@ -692,16 +750,16 @@ public class PublicAction extends BaseAction {
 		}
 		return SUCCESS;
 	}
-	
-	
+
 	/**
 	 * 新增供应商材料单价调节记录
 	 */
-	@Action(description="新增供应商材料单价调节记录")
-	public String adjustQuoteInfos(){
+	@Action(description = "新增供应商材料单价调节记录")
+	public String adjustQuoteInfos() {
 		try {
 			this.priceList.setRecordTime(new Date());
-			//this.infos.put("priceList", publicService.saveEntity(this.priceList,null));
+			// this.infos.put("priceList",
+			// publicService.saveEntity(this.priceList,null));
 			this.infos.put("priceList", publicService.adjustQuoteInfos(priceList));
 			this.success = true;
 		} catch (RuntimeException e) {
@@ -710,13 +768,13 @@ public class PublicAction extends BaseAction {
 		}
 		return SUCCESS;
 	}
-	
+
 	/**
 	 * 新增规格信息
 	 * 
 	 * @return
 	 */
-	@Action(description="新增规格信息")
+	@Action(description = "新增规格信息")
 	public String saveSpecification() {
 		try {
 			this.infos.put("specification", publicService.saveEntity(this.specification));
@@ -727,13 +785,13 @@ public class PublicAction extends BaseAction {
 		}
 		return SUCCESS;
 	}
-	
+
 	/**
 	 * 新增种类信息
 	 * 
 	 * @return
 	 */
-	@Action(description="新增种类信息")
+	@Action(description = "新增种类信息")
 	public String saveSpecies() {
 		try {
 			this.infos.put("species", publicService.saveEntity(this.species));
@@ -744,13 +802,13 @@ public class PublicAction extends BaseAction {
 		}
 		return SUCCESS;
 	}
-	
+
 	/**
 	 * 新增材质信息
 	 * 
 	 * @return
 	 */
-	@Action(description="新增材质信息")
+	@Action(description = "新增材质信息")
 	public String saveStuff() {
 		try {
 			this.infos.put("stuff", publicService.saveEntity(this.stuff));
@@ -761,18 +819,19 @@ public class PublicAction extends BaseAction {
 		}
 		return SUCCESS;
 	}
-	
+
 	/**
 	 * 新增报时单审核操作流程
+	 * 
 	 * @return
 	 */
-	public String saveWorkflowLog(){
+	public String saveWorkflowLog() {
 		try {
 			User user = (User) getSession().getAttribute("user");
 			this.workflow.setRecordTime(new Date());
 			this.workflow.setUserid(user.getUserid());
 			this.workflow.setUsername(user.getUsername());
-			
+
 			this.infos.put("workflow", publicService.saveWorkflowLog(this.workflow));
 			this.success = true;
 		} catch (RuntimeException e) {
@@ -782,14 +841,13 @@ public class PublicAction extends BaseAction {
 		}
 		return SUCCESS;
 	}
-	
 
 	/**
 	 * 新增报时单
 	 * 
 	 * @return
 	 */
-	@Action(description="新增报时单")
+	@Action(description = "新增报时单")
 	public String saveQuoteInfo() {
 		try {
 			this.infos.put("quoteInfo", publicService.saveEntity(this.quoteInfo));
@@ -806,7 +864,7 @@ public class PublicAction extends BaseAction {
 	 * 
 	 * @return
 	 */
-	@Action(description="新增帐号信息")
+	@Action(description = "新增帐号信息")
 	public String saveUser() {
 		User u = null;
 		try {
@@ -829,7 +887,7 @@ public class PublicAction extends BaseAction {
 	/**
 	 * 获得辅助信息参考文件集合
 	 */
-	@Action(description="查询辅助信息的文件列表")
+	@Action(description = "查询辅助信息的文件列表")
 	public String findRefFilesList() {
 		DetachedCriteria dc = DetachedCriteria.forClass(RefFiles.class);
 		if (refFiles != null) {
@@ -843,7 +901,7 @@ public class PublicAction extends BaseAction {
 	/**
 	 * 获得辅助信息集合
 	 */
-	@Action(description="查询辅助信息")
+	@Action(description = "查询辅助信息")
 	public String findAidsList() {
 		DetachedCriteria dc = DetachedCriteria.forClass(Aids.class);
 		if (aids != null) {
@@ -855,9 +913,23 @@ public class PublicAction extends BaseAction {
 	}
 
 	/**
+	 * 获得报时单其他报价信息
+	 */
+	@Action(description = "查询报时表其他报价")
+	public String findOtherPriceList() {
+		DetachedCriteria dc = DetachedCriteria.forClass(OtherQuotePrice.class);
+		if (otherPrice != null) {
+			dc.add(Example.create(otherPrice));
+		}
+		this.page.setResult(dc);
+		this.page = publicService.getResultList(page);
+		return SUCCESS;
+	}
+
+	/**
 	 * 获得外发加工信息集合
 	 */
-	@Action(description="查询外发加工信息")
+	@Action(description = "查询外发加工信息")
 	public String findFoundryList() {
 		DetachedCriteria dc = DetachedCriteria.forClass(Foundry.class);
 		if (foundry != null) {
@@ -871,7 +943,7 @@ public class PublicAction extends BaseAction {
 	/**
 	 * 获得加工信息集合
 	 */
-	@Action(description="查询加工信息")
+	@Action(description = "查询加工信息")
 	public String findProcessInfoList() {
 		DetachedCriteria dc = DetachedCriteria.forClass(com.gvp.po.ProcessInfo.class);
 		if (process != null) {
@@ -885,7 +957,7 @@ public class PublicAction extends BaseAction {
 	/**
 	 * 用户分页
 	 */
-	@Action(description="查询用户列表")
+	@Action(description = "查询用户列表")
 	public String findUserList() {
 		DetachedCriteria dc = DetachedCriteria.forClass(User.class);
 		if (user != null) {
@@ -895,7 +967,7 @@ public class PublicAction extends BaseAction {
 		this.page = publicService.getResultList(page);
 		return SUCCESS;
 	}
-	
+
 	/**
 	 * 根据id查找角色
 	 */
@@ -906,21 +978,22 @@ public class PublicAction extends BaseAction {
 			this.page.setResult(dc);
 			this.page = publicService.getResultList(page);
 			Iterator it = page.getRoot().iterator();
-			if(it.hasNext()){
+			if (it.hasNext()) {
 				this.infos.put("role", it.next());
 				this.success = true;
 			}
 		}
 		return SUCCESS;
 	}
-	
+
 	/**
 	 * 根据报时单id查找审核流程信息
+	 * 
 	 * @return
 	 */
-	public String findWorkflowByQid(){
-		if(workflow != null){
-			List list = publicService.getList(WorkflowLog.class,workflow.getQid());
+	public String findWorkflowByQid() {
+		if (workflow != null) {
+			List list = publicService.getList(WorkflowLog.class, workflow.getQid());
 			this.infos.put("workflowList", list);
 			this.success = true;
 		}
@@ -935,7 +1008,7 @@ public class PublicAction extends BaseAction {
 	 * @throws InvocationTargetException
 	 * @throws IllegalAccessException
 	 */
-	@Action(description="复制报时单")
+	@Action(description = "复制报时单")
 	public String copyQuoteInfos() throws IllegalAccessException, InvocationTargetException, NoSuchMethodException {
 		Map<String, Object> map = new HashMap<String, Object>();
 		map.put("quoteInfo", quoteInfo);
@@ -955,7 +1028,7 @@ public class PublicAction extends BaseAction {
 	 * 
 	 * @return
 	 */
-	@Action(description="查找与报时单关联的所有副本")
+	@Action(description = "查找与报时单关联的所有副本")
 	@SuppressWarnings("unchecked")
 	public String findRelationQuoteInfoList() {
 		if (quoteInfo != null) {
@@ -983,23 +1056,23 @@ public class PublicAction extends BaseAction {
 		}
 		return SUCCESS;
 	}
-	
-	
+
 	/**
 	 * 客户类型分组类型
+	 * 
 	 * @return
-	 * @throws ParseException 
+	 * @throws ParseException
 	 */
-	@SuppressWarnings({ "unchecked", "static-access" })
-	public String findTreeData() throws ParseException{
+	@SuppressWarnings( { "unchecked", "static-access" })
+	public String findTreeData() throws ParseException {
 		DetachedCriteria dc = DetachedCriteria.forClass(QuoteInfo.class);
 		String method = this.page.getParams().get("method");
 		String field = this.page.getParams().get("field");
 		List<TreeNode> list = new ArrayList();
-		
-		if("findCustomerList".equals(method)){
-			List l = this.publicService.getList("SELECT cid,customerName from QuoteInfo WHERE customerType = ? GROUP BY cid,customerName",new String[]{field});
-			for(Iterator<Object[]> it = l.iterator();it.hasNext();){
+
+		if ("findCustomerList".equals(method)) {
+			List l = this.publicService.getList("SELECT cid,customerName from QuoteInfo WHERE customerType = ? GROUP BY cid,customerName", new String[] { field });
+			for (Iterator<Object[]> it = l.iterator(); it.hasNext();) {
 				Object[] o = it.next();
 				TreeNode tn = new TreeNode();
 				tn.setField(o[0].toString());
@@ -1008,10 +1081,10 @@ public class PublicAction extends BaseAction {
 				list.add(tn);
 			}
 		}
-		if("getYears".equals(method)){
-			List<QuoteInfo> years = this.publicService.getList("FROM QuoteInfo WHERE customerName = ? GROUP BY YEAR(recordTime)",new Object[]{field});
+		if ("getYears".equals(method)) {
+			List<QuoteInfo> years = this.publicService.getList("FROM QuoteInfo WHERE customerName = ? GROUP BY YEAR(recordTime)", new Object[] { field });
 			Calendar date = Calendar.getInstance();
-			for(Iterator<QuoteInfo> it = years.iterator(); it.hasNext();){
+			for (Iterator<QuoteInfo> it = years.iterator(); it.hasNext();) {
 				QuoteInfo qi = it.next();
 				TreeNode tn = new TreeNode();
 				date.setTime(qi.getRecordTime());
@@ -1021,29 +1094,30 @@ public class PublicAction extends BaseAction {
 				list.add(tn);
 			}
 		}
-		if("getProductType".equals(method)){
-			List tlist = this.publicService.getList("FROM Customer WHERE customerName = ? ", new Object[]{field});
+		if ("getProductType".equals(method)) {
+			List tlist = this.publicService.getList("FROM Customer WHERE customerName = ? ", new Object[] { field });
 			Customer c = (Customer) tlist.iterator().next();
 			String[] p = StringUtils.split(c.getProductCode(), ", ;");
-			
+
 			String year = this.page.getParams().get("year");
 			String cid = this.page.getParams().get("cid");
 			String startDate = year + "-01-01";
 			String endDate = year + "-12-31";
 			SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd");
-			
+
 			Integer iCid = Integer.valueOf(cid);
 			Date dStartDate = df.parse(startDate);
 			Date dEndDate = df.parse(endDate);
-			for(String productCode:p){
+			for (String productCode : p) {
 				DetachedCriteria d = DetachedCriteria.forClass(QuoteInfo.class);
-				d.add(Restrictions.eq("cid",iCid));
+				d.add(Restrictions.eq("cid", iCid));
 				d.add(Restrictions.between("recordTime", dStartDate, dEndDate));
 				d.add(Restrictions.like("productCode", "%" + productCode + "%"));
 				Page dp = new Page();
 				dp.setResult(d);
 				List _l = this.publicService.getResultList(dp).getRoot();
-				if(_l.isEmpty())continue;
+				if (_l.isEmpty())
+					continue;
 				TreeNode tn = new TreeNode();
 				tn.setText(productCode);
 				tn.setField(productCode);
@@ -1051,18 +1125,18 @@ public class PublicAction extends BaseAction {
 				list.add(tn);
 			}
 		}
-		if("findQuoteInfoList".equals(method)){
+		if ("findQuoteInfoList".equals(method)) {
 			String year = this.page.getParams().get("year");
 			String cid = this.page.getParams().get("cid");
 			String startDate = year + "-01-01";
 			String endDate = year + "-12-31";
 			SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd");
-			dc.add(Restrictions.eq("cid",Integer.valueOf(cid)));
-			dc.add(Restrictions.like("productCode", "%" +field + "%"));
-			dc.add(Restrictions.between("recordTime", df.parse(startDate),df.parse(endDate)));
+			dc.add(Restrictions.eq("cid", Integer.valueOf(cid)));
+			dc.add(Restrictions.like("productCode", "%" + field + "%"));
+			dc.add(Restrictions.between("recordTime", df.parse(startDate), df.parse(endDate)));
 			this.page.setResult(dc);
 			this.page = this.publicService.getResultList(this.page);
-			for(Iterator<QuoteInfo> it = this.page.getRoot().iterator();it.hasNext();){
+			for (Iterator<QuoteInfo> it = this.page.getRoot().iterator(); it.hasNext();) {
 				TreeNode tn = new TreeNode();
 				QuoteInfo qi = it.next();
 				tn.setText(qi.getProductCode());
@@ -1071,20 +1145,20 @@ public class PublicAction extends BaseAction {
 				list.add(tn);
 			}
 		}
-		
+
 		this.page.setRoot(list);
 		return SUCCESS;
 	}
-	
-	
+
 	/**
 	 * 查找未审核的报时表
+	 * 
 	 * @return
 	 */
-	@Action(description="查找未审核的报时表")
-	public String findUnCheckedQuoteInfoList(){
+	@Action(description = "查找未审核的报时表")
+	public String findUnCheckedQuoteInfoList() {
 		DetachedCriteria dc = DetachedCriteria.forClass(QuoteInfo.class);
-		dc.add(Restrictions.eq("state","已提交审核申请"));
+		dc.add(Restrictions.eq("state", "已提交审核申请"));
 		this.page.setResult(dc);
 		this.page = publicService.getResultList(page);
 		return SUCCESS;
@@ -1096,44 +1170,44 @@ public class PublicAction extends BaseAction {
 	 * @return
 	 */
 	@SuppressWarnings("unchecked")
-	@Action(description="查询报时单")
+	@Action(description = "查询报时单")
 	public String findQuoteInfoList() {
 		DetachedCriteria dc = DetachedCriteria.forClass(QuoteInfo.class);
 		String condition = page.getParams().get("condition");
 		String queryLevel = page.getParams().get("queryLevel");
 		String queryValue = page.getParams().get("queryValue");
-		
-		if("customerType".equals(queryLevel)){
+
+		if ("customerType".equals(queryLevel)) {
 			dc.add(Restrictions.eq("customerType", queryValue));
 		}
-		if("quoteInfo".equals(queryLevel)){
+		if ("quoteInfo".equals(queryLevel)) {
 			dc.add(Restrictions.eq("cid", Integer.parseInt(queryValue)));
 		}
-		
+
 		if (!MyUtils.isEmpty(condition)) {
 			if (quoteInfo != null) {
-				if(quoteInfo.getQid() != null){
+				if (quoteInfo.getQid() != null) {
 					dc.add(Restrictions.eq("qid", quoteInfo.getQid()));
-				}else{
+				} else {
 					dc.add(EnhancedExample.createDefault(quoteInfo));
 				}
 				this.page.setResult(dc);
 				this.page = publicService.getResultList(page);
 			}
-			if (materials != null){
+			if (materials != null) {
 				DetachedCriteria dMaterials = DetachedCriteria.forClass(Materials.class);
 				Page p = new Page();
 				dMaterials.add(EnhancedExample.createDefault(materials));
 				p.setResult(dMaterials);
 				p = publicService.getResultList(p);
 				Iterator<Materials> it = p.getRoot().iterator();
-				if(it.hasNext()){
+				if (it.hasNext()) {
 					StringBuffer hql = new StringBuffer("FROM QuoteInfo WHERE qid IN(");
-					while(it.hasNext()){
+					while (it.hasNext()) {
 						Materials m = it.next();
 						hql.append(m.getQid());
-						if(it.hasNext()){
-							hql.append(",");			
+						if (it.hasNext()) {
+							hql.append(",");
 						}
 					}
 					hql.append(")");
@@ -1164,8 +1238,8 @@ public class PublicAction extends BaseAction {
 					this.page.getRoot().addAll(results);
 				}
 			}
-		}else{
-			if(null != quoteInfo.getQid()){
+		} else {
+			if (null != quoteInfo.getQid()) {
 				dc.add(Restrictions.eq("qid", quoteInfo.getQid()));
 			}
 			this.page.setResult(dc);
@@ -1173,16 +1247,17 @@ public class PublicAction extends BaseAction {
 		}
 		return SUCCESS;
 	}
-	
+
 	/**
 	 * 根据id找生产材料信息
+	 * 
 	 * @return
 	 */
-	public String findMaterialsById(){
+	public String findMaterialsById() {
 		Integer qid = quoteInfo.getQid();
 		try {
 			List list = publicService.getList(Materials.class, qid);
-			if(list != null && !list.isEmpty()){
+			if (list != null && !list.isEmpty()) {
 				this.infos.put("materials", list.get(0));
 			}
 			this.success = true;
@@ -1192,17 +1267,17 @@ public class PublicAction extends BaseAction {
 		}
 		return SUCCESS;
 	}
-	
+
 	/**
 	 * 根据id找参考信息
-	 *
+	 * 
 	 * @return
 	 */
-	public String findReferenceInfoById(){
+	public String findReferenceInfoById() {
 		Integer qid = quoteInfo.getQid();
 		try {
 			List list = publicService.getList(ReferenceInfo.class, qid);
-			if(list != null && !list.isEmpty()){
+			if (list != null && !list.isEmpty()) {
 				this.infos.put("reference", list.get(0));
 			}
 			this.success = true;
@@ -1220,9 +1295,9 @@ public class PublicAction extends BaseAction {
 	 */
 	public String findQuoteInfoById() {
 		Integer qid = quoteInfo.getQid();
-		Boolean relation =Boolean.valueOf(page.getParams().get("relation"));
+		Boolean relation = Boolean.valueOf(page.getParams().get("relation"));
 		try {
-			this.infos = publicService.findQuoteInfoById(qid,relation);
+			this.infos = publicService.findQuoteInfoById(qid, relation);
 			this.success = true;
 		} catch (RuntimeException e) {
 			this.success = false;
@@ -1236,7 +1311,7 @@ public class PublicAction extends BaseAction {
 	 * 
 	 * @return
 	 */
-	@Action(description="查找客户信息")
+	@Action(description = "查找客户信息")
 	public String findCustomerList() {
 		DetachedCriteria dc = DetachedCriteria.forClass(Customer.class);
 		if (customer != null) {
@@ -1246,59 +1321,62 @@ public class PublicAction extends BaseAction {
 		this.page = publicService.getResultList(page);
 		return SUCCESS;
 	}
-	
-	
+
 	/**
 	 * 查找系统日志
+	 * 
 	 * @return
 	 */
-	@Action(description="查找系统日志")
-	public String findSystemLogList(){
+	@Action(description = "查找系统日志")
+	public String findSystemLogList() {
 		DetachedCriteria dc = DetachedCriteria.forClass(SystemLog.class);
 		if (log != null) {
-			dc.add(EnhancedExample.createDefault(log,false));
+			dc.add(EnhancedExample.createDefault(log, false));
 		}
 		this.page.setResult(dc);
 		this.page = publicService.getResultList(page);
 		return SUCCESS;
 	}
-	
+
 	/**
 	 * 查找供应商材料单价调整信息
+	 * 
 	 * @return
 	 */
-	@Action(description="查找供应商材料单价修改信息")
-	public String findPriceList(){
+	@Action(description = "查找供应商材料单价修改信息")
+	public String findPriceList() {
 		DetachedCriteria dc = DetachedCriteria.forClass(PriceList.class);
 		if (priceList != null) {
-			dc.add(EnhancedExample.createDefault(priceList,false));
+			dc.add(EnhancedExample.createDefault(priceList, false));
 		}
 		this.page.setResult(dc);
 		this.page = publicService.getResultList(page);
 		return SUCCESS;
 	}
-	
+
 	/**
 	 * 查找种类信息
+	 * 
 	 * @return
 	 */
-	@Action(description="查找种类信息")
-	public String findSpeciesList(){
+	@Action(description = "查找种类信息")
+	public String findSpeciesList() {
 		DetachedCriteria dc = DetachedCriteria.forClass(Species.class);
 		if (species != null) {
-			dc.add(EnhancedExample.createDefault(species,true));
+			dc.add(EnhancedExample.createDefault(species, true));
 		}
 		this.page.setResult(dc);
 		this.page = publicService.getResultList(page);
 		return SUCCESS;
 	}
-	
+
 	/**
 	 * 查找材质信息
+	 * 
 	 * @return
 	 */
-	@Action(description="查找材质信息")
-	public String findStuffList(){
+	@Action(description = "查找材质信息")
+	public String findStuffList() {
 		DetachedCriteria dc = DetachedCriteria.forClass(Stuff.class);
 		if (stuff != null) {
 			dc.add(EnhancedExample.createDefault(stuff));
@@ -1307,23 +1385,22 @@ public class PublicAction extends BaseAction {
 		this.page = publicService.getResultList(page);
 		return SUCCESS;
 	}
-	
+
 	/**
 	 * 查找规格信息
+	 * 
 	 * @return
 	 */
-	@Action(description="查找规格信息")
-	public String findSpecificationList(){
+	@Action(description = "查找规格信息")
+	public String findSpecificationList() {
 		DetachedCriteria dc = DetachedCriteria.forClass(Specification.class);
 		if (specification != null) {
-			dc.add(EnhancedExample.createDefault(specification,true));
+			dc.add(EnhancedExample.createDefault(specification, true));
 		}
 		this.page.setResult(dc);
 		this.page = publicService.getResultList(page);
 		return SUCCESS;
 	}
-	
-	
 
 	/**
 	 * 修改密码
@@ -1331,7 +1408,7 @@ public class PublicAction extends BaseAction {
 	 * @return
 	 * @throws Exception
 	 */
-	@Action(description="修改密码")
+	@Action(description = "修改密码")
 	public String changePassword() throws Exception {
 		String old = this.page.getParams().get("pwd_old");
 		String pwd1 = this.page.getParams().get("pwd1");
@@ -1340,7 +1417,7 @@ public class PublicAction extends BaseAction {
 		if (u.getPassword().equals(old)) {
 			if (pwd1.equals(pwd2)) {
 				u.setPassword(pwd1);
-				u = (User) publicService.updateEntity(u, u.getUserid(),null);
+				u = (User) publicService.updateEntity(u, u.getUserid(), null);
 				getSession().setAttribute("user", u);
 				this.success = true;
 			} else {
@@ -1357,7 +1434,7 @@ public class PublicAction extends BaseAction {
 	 * 
 	 * @return
 	 */
-	@Action(description="退出系统")
+	@Action(description = "退出系统")
 	public String logout() {
 		getSession().removeAttribute("user");
 		success = true;
@@ -1369,7 +1446,7 @@ public class PublicAction extends BaseAction {
 	 * 
 	 * @return
 	 */
-	@Action(description="登录系统")
+	@Action(description = "登录系统")
 	public String login() {
 		DetachedCriteria dc = DetachedCriteria.forClass(User.class);
 		dc.add(Example.create(user));
