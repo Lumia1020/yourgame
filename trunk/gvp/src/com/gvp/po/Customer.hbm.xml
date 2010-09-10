@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC 
+	"-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+	"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<class name="com.gvp.po.Customer" table="t_customer" lazy="true" batch-size="10" dynamic-update="true">
+		<id name="cid" column="cid">
+			<generator class="native" />
+		</id>
+		<property name="customerName" length="100" unique="true"/>
+		<property name="customerType" length="100" />
+		<property name="productCode" length="2000" />
+		<property name="address" length="100" />
+		<property name="tell" length="100" />
+		<property name="fax" length="100" />
+		<property name="email" length="200" />
+	</class>
+</hibernate-mapping>

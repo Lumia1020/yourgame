@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC 
+	"-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+	"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<class name="com.gvp.po.SystemLog" table="t_system_log" lazy="true" batch-size="10" dynamic-update="true">
+		<id name="logid" column="logid">
+			<generator class="native" />
+		</id>
+		<property name="userid" />
+		<property name="username" length="50"/>
+		<property name="exeOperation" length="50" />
+		<property name="recordTime" />
+	</class>
+</hibernate-mapping>

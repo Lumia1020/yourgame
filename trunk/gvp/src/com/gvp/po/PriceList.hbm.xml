@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC 
+	"-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+	"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<class name="com.gvp.po.PriceList" table="t_price_list" lazy="true" batch-size="10" dynamic-update="true">
+		<id name="listid" column="listid">
+			<generator class="native" />
+		</id>
+		<property name="specid" />
+		<property name="specName" length="50" />
+		<property name="price" length="50" />
+		<property name="remark" length="200"/>
+		<property name="recordTime" />
+	</class>
+</hibernate-mapping>

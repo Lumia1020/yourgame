@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC 
+	"-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+	"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<class name="com.gvp.po.Species" table="t_species" lazy="true" batch-size="10" dynamic-update="true">
+		<id name="speciesid" column="speciesid">
+			<generator class="native" />
+		</id>
+		<property name="stuffid" />
+		<property name="stuffName" length="200" />
+		<property name="speciesName" length="200" />
+	</class>
+</hibernate-mapping>
