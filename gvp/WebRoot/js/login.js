@@ -1,6 +1,29 @@
 Ext.onReady(function() {
 	Ext.EventManager.onWindowResize(centerPanel);
-
+	
+	var u = new Ext.form.TextField({
+		applyTo:'username',
+		listeners: {
+            specialkey: function(field, e){
+                if (e.getKey() == e.ENTER) {
+                   login()
+                }
+            }
+        }
+	});
+	u.focus();
+	
+	new Ext.form.TextField({
+		applyTo:'password',
+		listeners: {
+            specialkey: function(field, e){
+                if (e.getKey() == e.ENTER) {
+                   login()
+                }
+            }
+        }
+	});
+	
 	var loginPanel = Ext.get("qo-login-panel");
 
 	var loginBtn = Ext.get("submitBtn");

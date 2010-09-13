@@ -48,6 +48,16 @@ public class Role implements Serializable {
 	private Boolean r20; // 原材料价格调节
 
 	private Boolean r21; // 系统日志查看
+	
+	private Boolean r22; // 其他报价管理
+
+	public Boolean getR22() {
+		return r22;
+	}
+
+	public void setR22(Boolean r22) {
+		this.r22 = r22;
+	}
 
 	public Boolean getR09() {
 		return r09;

@@ -127,13 +127,13 @@ public class PublicAction extends BaseAction {
 	}
 
 	/**
-	 * 删除外发加工信息
+	 * 删除报时单的其他报价信息
 	 * 
 	 * @return
 	 */
-	@Action(description = "删除外发加工信息")
+	@Action(description = "删除报时单的其他报价信息")
 	public String deleteOtherPrice() {
-		final String hql = "delete OtherQuoteInfo where oid in (" + page.getParams().get("ids") + ")";
+		final String hql = "delete OtherQuotePrice where oid in (" + page.getParams().get("ids") + ")";
 		this.success = publicService.deleteEntities(hql,null);
 		return SUCCESS;
 	}
