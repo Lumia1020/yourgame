@@ -28,5 +28,6 @@
 		<property name="r19"/>
 		<property name="r20"/>
 		<property name="r21"/>
+		<property name="r22"/>
 	</class>
 </hibernate-mapping>

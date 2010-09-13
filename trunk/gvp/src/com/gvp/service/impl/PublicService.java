@@ -19,6 +19,7 @@ import com.gvp.dao.IPublicDao;
 import com.gvp.po.Aids;
 import com.gvp.po.Foundry;
 import com.gvp.po.Materials;
+import com.gvp.po.OtherQuotePrice;
 import com.gvp.po.PriceList;
 import com.gvp.po.ProcessInfo;
 import com.gvp.po.QuoteInfo;
@@ -84,7 +85,7 @@ public class PublicService implements IPublicService {
 	 */
 	private void process(Integer qid) {
 		QuoteInfo qi = (QuoteInfo) publicDao.findEntityById(new QuoteInfo(), qid);
-
+		
 		Double price = 0d;
 
 		List mlist = publicDao.findByHQL("from Materials where qid=" + qid);
@@ -113,9 +114,21 @@ public class PublicService implements IPublicService {
 		}
 
 		List rlist = publicDao.findByHQL("from ReferenceInfo where qid=" + qid);
-		for (Iterator it = rlist.iterator(); it.hasNext();) {
-			ReferenceInfo ri = (ReferenceInfo) it.next();
+		Iterator rlistIt = rlist.iterator();
+		if(rlistIt.hasNext()){
+			ReferenceInfo ri = (ReferenceInfo) rlistIt.next();
 			price += Double.valueOf(ri.getFreight());
+		}
+		
+		//计算其他价格
+		List olist = publicDao.findByHQL("from OtherQuotePrice where qid=" + qid);
+		if(!olist.isEmpty() && olist.size() > 0){
+			Double ov = price - Double.parseDouble(qi.getPrice());
+			for(Iterator it = olist.iterator(); it.hasNext();){
+				OtherQuotePrice p = (OtherQuotePrice) it.next();
+				p.setPrice(Double.toString(Double.parseDouble(p.getPrice()) + ov));
+				this.publicDao.update(p);
+			}
 		}
 
 		qi.setPrice(price.toString());
@@ -312,6 +325,7 @@ public class PublicService implements IPublicService {
 		if (relation) {
 			infos.put("aids", this.getList(Aids.class, qid));
 			infos.put("foundry", this.getList(Foundry.class, qid));
+			infos.put("otherPrice", this.getList(OtherQuotePrice.class, qid));
 			infos.put("materials", this.getList(Materials.class, qid));
 			infos.put("process", this.getList(ProcessInfo.class, qid));
 			infos.put("reference", this.getList(ReferenceInfo.class, qid));
@@ -350,7 +364,6 @@ public class PublicService implements IPublicService {
 			this.publicDao.update(m);
 			this.process(m.getQid());
 		}
-
 		return priceList;
 	}
 }

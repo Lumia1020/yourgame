@@ -306,6 +306,11 @@
 				<param name="includeProperties">success,infos.*</param>
 			</result>
 		</action>
+		<action name="deleteOtherPrice" class="publicAction" method="deleteOtherPrice">
+			<result type="json">
+				<param name="includeProperties">success,infos.*</param>
+			</result>
+		</action>
 		<action name="deleteProcessInfo" class="publicAction" method="deleteProcessInfo">
 			<result type="json">
 				<param name="includeProperties">success,infos.*</param>

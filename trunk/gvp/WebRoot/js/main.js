@@ -163,11 +163,11 @@ Ext.onReady(function() {
 			listeners:{
 				'update': function(thiz, record, operation){
 					if(operation == Ext.data.Record.EDIT){
-						if(record.data.fid){
+						if(record.data.oid){
 							Ext.Ajax.request({
-							    url: 'updateFoundry.action',
+							    url: 'updateOtherPrice.action',
 							    params: {
-									'otherPrice.fid': record.data.fid,		
+									'otherPrice.oid': record.data.oid,		
 									'otherPrice.price': record.data.price,
 									'otherPrice.remark': record.data.remark,
 									'otherPrice.qid':quoteInfo.qid
@@ -176,7 +176,7 @@ Ext.onReady(function() {
 							    	var obj = Ext.decode(response.responseText);
 							    	if(obj.success){
 							    		record.beginEdit();
-							    		record.data = obj.infos.foundry;
+							    		record.data = obj.infos.otherPrice;
 							    		record.commit();
 							    		thiz.commitChanges();
 							    	}else{
@@ -257,7 +257,7 @@ Ext.onReady(function() {
 				defaultWidth:60,
 				columns: [sm,
 			        {header: '单价',dataIndex: 'price',editor:{xtype : 'numberfield',decimalPrecision:6,maxLength:20,allowBlank:false,name:'price'}},
-			        {header: '备注',dataIndex: 'remark',editor:{xtype:'textfield',maxLength:400,name:'remark'}}
+			        {header: '备注',dataIndex: 'remark',editor:{xtype:'textfield',maxLength:400,name:'remark'},id:expandId}
 			    ]
 			}),
 		    tbar : [{text :'添加'
@@ -464,6 +464,55 @@ Ext.onReady(function() {
 	 * @param height GridPanel高度
 	 * @param hide 是否影藏单价
 	 */
+	function showOtherPriceGrid(quoteInfo,height,flag){
+		var store = new Ext.data.Store({
+			url: 'findOtherPriceList.action',
+			paramNames:{start:'page.start',limit:'page.limit'},
+			baseParams:{'page.start':0,'page.limit':0,'otherPrice.qid':quoteInfo.qid},
+			autoLoad:flag,
+			reader: new Ext.data.JsonReader({totalProperty: 'totalProperty',root: 'root'},
+			[
+				{name: 'oid'},
+				{name: 'price',allowBlank:false,type:'float'},
+				{name: 'remark'},
+				{name: 'qid'}
+			])
+		});
+	    
+	    
+	    var expandId = Ext.id();
+	     
+		var grid = new Ext.grid.GridPanel({
+			hideLabel:true,
+			title : '其他报价信息',
+			isFormField : true,
+			store: store,
+			height:height,
+			autoScroll:true,
+		    autoExpandColumn: expandId,
+			sm: new Ext.grid.RowSelectionModel(),
+			colModel:new Ext.grid.ColumnModel({
+				defaults:{
+					sortable:true,
+					width:150,
+					menuDisabled:true
+				},
+				columns: [
+			        {header: '单价',hidden:!Ext.ROLE_R08,dataIndex: 'price'},
+			        {header: '备注',dataIndex: 'remark',id:expandId}
+			    ]
+			})
+		});
+		
+		return grid;
+	}
+	
+	/**
+	 * 初始化外发加工信息grid仅用于展示
+	 * @param quoteInfo 报时表对象
+	 * @param height GridPanel高度
+	 * @param hide 是否影藏单价
+	 */
 	function showFoundryGrid(quoteInfo,height,flag){
 		var store = new Ext.data.Store({
 			url: 'findFoundryList.action',
@@ -509,7 +558,6 @@ Ext.onReady(function() {
 		});
 		
 		return grid;
-		
 	}
 	
 	/**
@@ -2789,6 +2837,7 @@ Ext.onReady(function() {
 					
 					var aidsList = obj.infos.aids;
 					var foundryList = obj.infos.foundry;
+					var otherPriceList = obj.infos.otherPrice;
 					var processList = obj.infos.process;
 					var materials = obj.infos.materials[0] || {};
 					var reference = obj.infos.reference[0] || {};
@@ -2809,13 +2858,15 @@ Ext.onReady(function() {
 											store.add([new store.recordType(data)]);
 										});
 									}
-									var processStore = innerWin.get(0).get(4).getStore();
+									var otherPriceStore = innerWin.get(0).get(2).getStore();
+									addData(otherPriceStore,otherPriceList);
+									var processStore = innerWin.get(0).get(5).getStore();
 									addData(processStore,processList);
-									var foundryStore = innerWin.get(0).get(5).getStore();
+									var foundryStore = innerWin.get(0).get(6).getStore();
 									addData(foundryStore,foundryList);
-									var aidsStore = innerWin.get(0).get(6).getStore();
+									var aidsStore = innerWin.get(0).get(7).getStore();
 									addData(aidsStore,aidsList);
-									var refFilesStore = innerWin.get(0).get(11).getStore();
+									var refFilesStore = innerWin.get(0).get(12).getStore();
 									addData(refFilesStore,refFilesList);
 									innerWin.enable();
 								},
@@ -2907,7 +2958,7 @@ Ext.onReady(function() {
 					                    value: recordTime
 					                }]
 					            }]
-					        },{
+					        },showOtherPriceGrid(quoteInfo,150,false),{
 					       	 	html:'<br><b>生产材料信息</b><br><hr><br>',
 								border:false 
 					        },{
@@ -3219,6 +3270,7 @@ Ext.onReady(function() {
 		            		grid.editButton.enable();
 		            		grid.removeButton.enable();
 		            		grid.addMaterialsButton.enable();
+		            		grid.addOtherPriceButton.enable();
 		                    grid.addProcessInfoButton.enable();
 		                    grid.addFoundryButton.enable();
 		                    grid.addAidsButton.enable();
@@ -3231,6 +3283,7 @@ Ext.onReady(function() {
 		                    grid.editButton.disable();
 		                    grid.copyButton.disable();
 		                    grid.addMaterialsButton.disable();
+		                    grid.addOtherPriceButton.disable();
 		                    grid.addProcessInfoButton.disable();
 		                    grid.addFoundryButton.disable();
 		                    grid.addAidsButton.disable();
@@ -3243,6 +3296,7 @@ Ext.onReady(function() {
 		                	grid.copyButton.enable();
 		                	grid.removeButton.disable();
 		                	grid.addMaterialsButton.enable();
+		                	grid.addOtherPriceButton.enable();
 		                    grid.addProcessInfoButton.enable();
 		                    grid.addFoundryButton.enable();
 		                    grid.addAidsButton.enable();
@@ -3255,6 +3309,7 @@ Ext.onReady(function() {
 		                	grid.copyButton.disable();
 		                    grid.removeButton.disable();
 		                    grid.addMaterialsButton.enable();
+		                    grid.addOtherPriceButton.enable();
 		                    grid.addProcessInfoButton.enable();
 		                    grid.addFoundryButton.enable();
 		                    grid.addAidsButton.enable();
@@ -3267,6 +3322,7 @@ Ext.onReady(function() {
 	                    grid.editButton.disable();
 	                    grid.copyButton.disable();
 	                    grid.addMaterialsButton.disable();
+	                    grid.addOtherPriceButton.disable();
 	                    grid.addProcessInfoButton.disable();
 	                    grid.addFoundryButton.disable();
 	                    grid.addAidsButton.disable();
@@ -3358,9 +3414,13 @@ Ext.onReady(function() {
 		    		iconCls : 'silk-table-multiple',
 		    		ref:'../copyButton',
 		    		handler:function(){
-		    			var record = grid.getSelectionModel().getSelected();
+						var record = grid.getSelectionModel().getSelected();
 		    			if(record){
-		    				showQuoteInfoCompleteCopyWin(record,store)
+		    				Ext.Msg.confirm('操作提示', '<nobr>确定要复制当前选中的报时单?</nobr>', function(btn) {
+								if ('yes' == btn) {
+		    						showQuoteInfoCompleteCopyWin(record,store)
+								}
+		    				});
 		    			}else{
 		    				Ext.Msg.alert('操作提示','请先选择要复制的行.');
 		    			}
@@ -3378,6 +3438,7 @@ Ext.onReady(function() {
 					text:'其他报价管理',
 					ref:'../addOtherPriceButton',
 					disabled:true,
+					hidden:!Ext.ROLE_R12,
 					handler:function(){
 		    			var record = grid.getSelectionModel().getSelected();
 		    			if(record){
@@ -4782,6 +4843,9 @@ Ext.onReady(function() {
 					items:[
 						{boxLabel: '系统日志查看', name: 'r21',handler:function(){
 		                	win.showSystemLog.setValue(this.checked);
+		                }},
+		                {boxLabel: '其他报价管理', name: 'r22',handler:function(){
+		                	win.showOtherPrice.setValue(this.checked);
 		                }}
 		            ]
 				},
@@ -4806,7 +4870,8 @@ Ext.onReady(function() {
 					{xtype : 'hidden',name : 'role.r18',ref:'../checkQuoteInfo'},
 					{xtype : 'hidden',name : 'role.r19',ref:'../stuffSpeciesSpecificationManage'},
 					{xtype : 'hidden',name : 'role.r20',ref:'../adjustMaterialPrice'},
-					{xtype : 'hidden',name : 'role.r21',ref:'../showSystemLog'}
+					{xtype : 'hidden',name : 'role.r21',ref:'../showSystemLog'},
+					{xtype : 'hidden',name : 'role.r22',ref:'../showOtherPrice'}
 				],
 				listeners : {
 					render : function(){
@@ -4838,6 +4903,7 @@ Ext.onReady(function() {
 						    		win.group5.items.get(2).setValue(role.r19);
 						    		win.group5.items.get(3).setValue(role.r20);
 						    		win.group6.items.get(0).setValue(role.r21);
+						    		win.group6.items.get(1).setValue(role.r22);
 						    		win.rid.setValue(role.rid);
 						    	}
 						    },
@@ -5182,10 +5248,6 @@ Ext.onReady(function() {
 										bbar.updateInfo();	
 									}
 								});
-							}
-							if(quoteInfoRecord){
-								quoteInfoRecord.set('price',obj.infos.quoteInfo[0].price);
-								quoteInfoRecord.commit();
 							}
 						}else{
 							Ext.Msg.show({
