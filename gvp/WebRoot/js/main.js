@@ -13,7 +13,7 @@ Ext.onReady(function() {
 				'</div>',
 		 '</tpl>'
 	);
-	
+	 
 	var specificationTpl = new Ext.XTemplate(
 		'<tpl for=".">',
 				'<div class="x-combo-list-item">',
