@@ -15,6 +15,8 @@ import com.googlecode.jsonplugin.annotations.JSON;
 public class PriceList implements Serializable {
 
 	private Integer listid;
+	
+	
 
 	/** 规格id */
 	private Integer specid;

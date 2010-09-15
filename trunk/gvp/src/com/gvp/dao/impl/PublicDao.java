@@ -15,9 +15,16 @@ import org.hibernate.type.Type;
 import org.springframework.orm.hibernate3.HibernateCallback;
 import org.springframework.orm.hibernate3.support.HibernateDaoSupport;
 
+import com.gvp.core.IJdbcDao;
 import com.gvp.dao.IPublicDao;
 
 public class PublicDao extends HibernateDaoSupport implements IPublicDao {
+	
+	private IJdbcDao jdbc;
+
+	public void setJdbc(IJdbcDao jdbc) {
+		this.jdbc = jdbc;
+	}
 
 	public Object findEntityById(Object obj, Integer id) {
 		try {
