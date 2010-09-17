@@ -16,13 +16,14 @@ public class PriceList implements Serializable {
 
 	private Integer listid;
 	
+	/** 材质id */
+	private Integer stuffid;
 	
+	/** 种类id */
+	private Integer speciesid;
 
 	/** 规格id */
 	private Integer specid;
-
-	/** 规格名称 */
-	private String specName;
 
 	/** 供应商材料单价 */
 	private String price;
@@ -33,11 +34,13 @@ public class PriceList implements Serializable {
 	/** 记录时间 */
 	private Date recordTime;
 
-	public PriceList(Integer listid, Integer specid, String specName, String price, String remark, Date recordTime) {
+
+	public PriceList(Integer listid, Integer stuffid, Integer speciesid, Integer specid, String price, String remark, Date recordTime) {
 		super();
 		this.listid = listid;
+		this.stuffid = stuffid;
+		this.speciesid = speciesid;
 		this.specid = specid;
-		this.specName = specName;
 		this.price = price;
 		this.remark = remark;
 		this.recordTime = recordTime;
@@ -79,20 +82,28 @@ public class PriceList implements Serializable {
 		this.specid = specid;
 	}
 
-	public String getSpecName() {
-		return specName;
-	}
-
-	public void setSpecName(String specName) {
-		this.specName = specName;
-	}
-
 	public String getRemark() {
 		return remark;
 	}
 
 	public void setRemark(String remark) {
 		this.remark = remark;
+	}
+
+	public Integer getStuffid() {
+		return stuffid;
+	}
+
+	public void setStuffid(Integer stuffid) {
+		this.stuffid = stuffid;
+	}
+
+	public Integer getSpeciesid() {
+		return speciesid;
+	}
+
+	public void setSpeciesid(Integer speciesid) {
+		this.speciesid = speciesid;
 	}
 
 }

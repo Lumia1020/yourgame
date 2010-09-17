@@ -7,8 +7,9 @@
 		<id name="listid" column="listid">
 			<generator class="native" />
 		</id>
+		<property name="stuffid" />
+		<property name="speciesid" />
 		<property name="specid" />
-		<property name="specName" length="50" />
 		<property name="price" length="50" />
 		<property name="remark" length="200"/>
 		<property name="recordTime" />

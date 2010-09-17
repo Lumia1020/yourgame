@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.hibernate.criterion.DetachedCriteria;
 import org.hibernate.type.Type;
+import org.springframework.jdbc.core.RowMapper;
 
 import com.gvp.po.User;
 
@@ -97,5 +98,20 @@ public interface IPublicDao{
 	List findByNativeSql(String hql, Class c, Object[] params, Type[] types);
 
 	void update(Object instance);
+
+	/**
+	 * Spring jdbc的分页
+	 * @param sql
+	 * @param params
+	 * @param rowMapper
+	 * @return
+	 */
+	List<?> findPageBySpringSQL(String sql, Object[] params, RowMapper rowMapper);
+
+	List<?> findPageBySpringSQL(String sql, Object[] params, Class<?> elementType);
+
+	int queryForInt(String sql, Object[] args);
+
+	List<?> findBySpringSQL(String sql, Object[] params);
 
 }

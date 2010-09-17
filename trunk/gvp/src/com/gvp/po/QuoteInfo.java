@@ -57,8 +57,8 @@ public class QuoteInfo implements Serializable {
 		return state;
 	}
 
-	public void setState(String checked) {
-		this.state = checked;
+	public void setState(String state) {
+		this.state = state;
 	}
 
 	public String getCustomerName() {

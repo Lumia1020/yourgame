@@ -12,6 +12,7 @@ import org.hibernate.criterion.DetachedCriteria;
 import org.hibernate.criterion.Projections;
 import org.hibernate.type.IntegerType;
 import org.hibernate.type.Type;
+import org.springframework.jdbc.core.RowMapper;
 import org.springframework.orm.hibernate3.HibernateCallback;
 import org.springframework.orm.hibernate3.support.HibernateDaoSupport;
 
@@ -19,11 +20,27 @@ import com.gvp.core.IJdbcDao;
 import com.gvp.dao.IPublicDao;
 
 public class PublicDao extends HibernateDaoSupport implements IPublicDao {
-	
+
 	private IJdbcDao jdbc;
 
 	public void setJdbc(IJdbcDao jdbc) {
 		this.jdbc = jdbc;
+	}
+
+	public List<?> findPageBySpringSQL(String sql, Object[] params, RowMapper rowMapper) {
+		return jdbc.executeQueryList(sql, params, rowMapper);
+	}
+
+	public List<?> findPageBySpringSQL(String sql, Object[] params, Class<?> elementType) {
+		return jdbc.executeQueryList(sql, params, elementType);
+	}
+
+	public int queryForInt(String sql, Object[] args) {
+		return jdbc.queryForInt(sql, args);
+	}
+	
+	public List<?> findBySpringSQL(String sql,Object[] params){
+		return jdbc.executeQueryList(sql, params);
 	}
 
 	public Object findEntityById(Object obj, Integer id) {

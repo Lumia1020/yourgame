@@ -4,6 +4,8 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.List;
 import java.util.Map;
 
+import org.springframework.jdbc.core.RowMapper;
+
 import com.gvp.core.Page;
 import com.gvp.po.PriceList;
 import com.gvp.po.QuoteInfo;
@@ -55,5 +57,9 @@ public interface IPublicService {
 	public PriceList adjustQuoteInfos(PriceList priceList);
 
 	public WorkflowLog saveWorkflowLog(WorkflowLog workflow);
+
+	Page getResultListBySpringJDBC(Page page, String sql, Object[] params, RowMapper rowMapper);
+
+	Page getResultListBySpringJDBC(Page page, String sql, Object[] params, Class<?> elementType);
 
 }

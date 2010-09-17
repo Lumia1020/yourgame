@@ -40,6 +40,7 @@ import com.gvp.po.SystemLog;
 import com.gvp.po.User;
 import com.gvp.po.WorkflowLog;
 import com.gvp.service.IPublicService;
+import com.gvp.service.vo.QuoteInfoMapper;
 
 @SuppressWarnings("serial")
 public class PublicAction extends BaseAction {
@@ -1184,81 +1185,157 @@ public class PublicAction extends BaseAction {
 	@SuppressWarnings("unchecked")
 	@Action(description = "查询报时单")
 	public String findQuoteInfoList() {
-		DetachedCriteria dc = DetachedCriteria.forClass(QuoteInfo.class);
 		String condition = page.getParams().get("condition");
 		String queryLevel = page.getParams().get("queryLevel");
 		String queryValue = page.getParams().get("queryValue");
 
+		List params = new ArrayList();
+		
+		StringBuilder sql = new StringBuilder("select this_.*  from  t_quote_info this_ where 1=1 ");
+		
 		if ("customerType".equals(queryLevel)) {
-			dc.add(Restrictions.eq("customerType", queryValue));
+			sql.append(" and this_.customerType = ? ");
+			params.add(queryValue);
 		}
 		if ("quoteInfo".equals(queryLevel)) {
-			dc.add(Restrictions.eq("cid", Integer.parseInt(queryValue)));
+			sql.append(" and this_.cid = ? ");
+			params.add(queryValue);
 		}
-
+		
 		if (!MyUtils.isEmpty(condition)) {
 			if (quoteInfo != null) {
 				if (quoteInfo.getQid() != null) {
-					dc.add(Restrictions.eq("qid", quoteInfo.getQid()));
+					sql.append(" and this_.qid = ? ");
+					params.add(quoteInfo.getQid());
 				} else {
-					dc.add(EnhancedExample.createDefault(quoteInfo));
+					sql.append(" and (lower(this_.customerName) like ? "); 
+					sql.append(" or lower(this_.customerType) like ? ");
+					sql.append(" or lower(this_.productCode) like ? "); 
+					sql.append(" or lower(this_.quoter) like ? ");
+					sql.append(" or lower(this_.price) like ? ");
+					sql.append(" or lower(this_.dccNo) like ? ");
+					sql.append(" or lower(this_.pageNo) like ? )");
+					
+					
+					params.add("%" + quoteInfo.getCustomerName() + "%");
+					params.add("%" + quoteInfo.getCustomerType() + "%");
+					params.add("%" + quoteInfo.getProductCode() + "%");
+					params.add("%" + quoteInfo.getQuoter() + "%");
+					params.add("%" + quoteInfo.getPrice() + "%");
+					params.add("%" + quoteInfo.getDccNo() + "%");
+					params.add("%" + quoteInfo.getPageNo() + "%");
 				}
-				this.page.setResult(dc);
-				this.page = publicService.getResultList(page);
 			}
 			if (materials != null) {
-				DetachedCriteria dMaterials = DetachedCriteria.forClass(Materials.class);
-				Page p = new Page();
-				dMaterials.add(EnhancedExample.createDefault(materials));
-				p.setResult(dMaterials);
-				p = publicService.getResultList(p);
-				Iterator<Materials> it = p.getRoot().iterator();
-				if (it.hasNext()) {
-					StringBuffer hql = new StringBuffer("FROM QuoteInfo WHERE qid IN(");
-					while (it.hasNext()) {
-						Materials m = it.next();
-						hql.append(m.getQid());
-						if (it.hasNext()) {
-							hql.append(",");
-						}
-					}
-					hql.append(")");
-
-					List results = publicService.getList(hql.toString());
-					this.page.getRoot().addAll(results);
-				}
+				sql.append(" union all ");		
+				sql.append(" select q.* from t_quote_info q "); 
+				sql.append(" where q.qid in ( ");
+				sql.append(" select m.qid from t_materials m "); 
+				sql.append(" where ( lower(m.productsName) like ? or lower(m.materialsName) like ? or lower(m.diameter) like ?)) "); 
+				params.add("%" + materials.getProductsName() + "%");
+				params.add("%" + materials.getMaterialsName() + "%");
+				params.add("%" + materials.getDiameter() + "%");
 			}
 			if (refFiles != null) {
-				DetachedCriteria dd = DetachedCriteria.forClass(RefFiles.class);
-				Page p = new Page();
-				dd.add(EnhancedExample.createDefault(refFiles));
-				p.setResult(dd);
-				p = publicService.getResultList(p);
-				Iterator<RefFiles> it = p.getRoot().iterator();
-				if (it.hasNext()) {
-					StringBuffer hql = new StringBuffer("FROM QuoteInfo WHERE qid IN (");
-					while (it.hasNext()) {
-						RefFiles r = it.next();
-						hql.append(r.getQid());
-						if (it.hasNext()) {
-							hql.append(",");
-						}
-					}
-					hql.append(")");
-
-					List results = publicService.getList(hql.toString());
-					this.page.getRoot().addAll(results);
-				}
+				sql.append(" union all");
+				sql.append(" select q.* from t_quote_info q ");
+				sql.append(" where q.qid in (");
+				sql.append(" select r.qid from t_ref_files r ");
+				sql.append(" where (lower(r.remark) like ?)) ");
+				params.add("%" + refFiles.getRemark() + "%");
 			}
 		} else {
 			if (null != quoteInfo.getQid()) {
-				dc.add(Restrictions.eq("qid", quoteInfo.getQid()));
+				sql.append("and this_.qid = ? ");
+				params.add(quoteInfo.getQid());
 			}
-			this.page.setResult(dc);
-			this.page = publicService.getResultList(page);
 		}
+		this.page = publicService.getResultListBySpringJDBC(page, sql.toString(),params.toArray(),new QuoteInfoMapper());
 		return SUCCESS;
 	}
+//	/**
+//	 * 获得报时信息
+//	 * 
+//	 * @return
+//	 */
+//	@SuppressWarnings("unchecked")
+//	@Action(description = "查询报时单")
+//	public String findQuoteInfoList() {
+//		DetachedCriteria dc = DetachedCriteria.forClass(QuoteInfo.class);
+//		String condition = page.getParams().get("condition");
+//		String queryLevel = page.getParams().get("queryLevel");
+//		String queryValue = page.getParams().get("queryValue");
+//		
+//		if ("customerType".equals(queryLevel)) {
+//			dc.add(Restrictions.eq("customerType", queryValue));
+//		}
+//		if ("quoteInfo".equals(queryLevel)) {
+//			dc.add(Restrictions.eq("cid", Integer.parseInt(queryValue)));
+//		}
+//		
+//		if (!MyUtils.isEmpty(condition)) {
+//			if (quoteInfo != null) {
+//				if (quoteInfo.getQid() != null) {
+//					dc.add(Restrictions.eq("qid", quoteInfo.getQid()));
+//				} else {
+//					dc.add(EnhancedExample.createDefault(quoteInfo));
+//				}
+//				this.page.setResult(dc);
+//				this.page = publicService.getResultList(page);
+//			}
+//			if (materials != null) {
+//				DetachedCriteria dMaterials = DetachedCriteria.forClass(Materials.class);
+//				Page p = new Page();
+//				dMaterials.add(EnhancedExample.createDefault(materials));
+//				p.setResult(dMaterials);
+//				p = publicService.getResultList(p);
+//				Iterator<Materials> it = p.getRoot().iterator();
+//				if (it.hasNext()) {
+//					StringBuffer hql = new StringBuffer("FROM QuoteInfo WHERE qid IN(");
+//					while (it.hasNext()) {
+//						Materials m = it.next();
+//						hql.append(m.getQid());
+//						if (it.hasNext()) {
+//							hql.append(",");
+//						}
+//					}
+//					hql.append(")");
+//					
+//					List results = publicService.getList(hql.toString());
+//					this.page.getRoot().addAll(results);
+//				}
+//			}
+//			if (refFiles != null) {
+//				DetachedCriteria dd = DetachedCriteria.forClass(RefFiles.class);
+//				Page p = new Page();
+//				dd.add(EnhancedExample.createDefault(refFiles));
+//				p.setResult(dd);
+//				p = publicService.getResultList(p);
+//				Iterator<RefFiles> it = p.getRoot().iterator();
+//				if (it.hasNext()) {
+//					StringBuffer hql = new StringBuffer("FROM QuoteInfo WHERE qid IN (");
+//					while (it.hasNext()) {
+//						RefFiles r = it.next();
+//						hql.append(r.getQid());
+//						if (it.hasNext()) {
+//							hql.append(",");
+//						}
+//					}
+//					hql.append(")");
+//					
+//					List results = publicService.getList(hql.toString());
+//					this.page.getRoot().addAll(results);
+//				}
+//			}
+//		} else {
+//			if (null != quoteInfo.getQid()) {
+//				dc.add(Restrictions.eq("qid", quoteInfo.getQid()));
+//			}
+//			this.page.setResult(dc);
+//			this.page = publicService.getResultList(page);
+//		}
+//		return SUCCESS;
+//	}
 
 	/**
 	 * 根据id找生产材料信息
