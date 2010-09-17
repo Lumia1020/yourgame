@@ -3209,7 +3209,7 @@ Ext.onReady(function() {
 		var store = new Ext.data.Store({
 			url: 'findQuoteInfoList.action',
 			paramNames:{start:'page.start',	limit:'page.limit'},
-			baseParams:{'page.start':0,'page.limit':0},
+			baseParams:{'page.start':0,'page.limit':20},
 			reader: new Ext.data.JsonReader({totalProperty: 'totalProperty',root: 'root'},
 			[
 				{name: 'qid'},
@@ -3559,7 +3559,12 @@ Ext.onReady(function() {
 		    			}
 		    		}
 		    	}]
-	    	}
+	    	},
+	    	bbar:new Ext.PagingToolbar({
+	    		store: store,
+	    		displayInfo: true,
+	    		pageSize:20
+	    	})
 	    });
 	    
 	     var panel = {

@@ -12,6 +12,7 @@ import org.hibernate.criterion.DetachedCriteria;
 import org.hibernate.criterion.Restrictions;
 import org.hibernate.type.IntegerType;
 import org.hibernate.type.Type;
+import org.springframework.jdbc.core.RowMapper;
 
 import com.gvp.core.MyUtils;
 import com.gvp.core.Page;
@@ -35,6 +36,40 @@ public class PublicService implements IPublicService {
 
 	public void setPublicDao(IPublicDao userDao) {
 		this.publicDao = userDao;
+	}
+	
+	public Page getResultListBySpringJDBC(Page page,String sql,Object[] params, RowMapper rowMapper){
+		StringBuilder resultSql = new StringBuilder("select tb.* from ( ");
+		resultSql.append(sql);
+		resultSql.append(" ) tb LIMIT ");
+		resultSql.append(page.getStart());
+		resultSql.append(" , ");
+		resultSql.append(page.getLimit());
+		
+		System.out.println(resultSql.toString());
+		List<?> results = publicDao.findPageBySpringSQL(resultSql.toString(), params, rowMapper);
+		int count = publicDao.findBySpringSQL(sql, params).size();
+		page.setRoot(results);
+		page.setTotalProperty(count);
+		
+		return page;
+	}
+	
+	public Page getResultListBySpringJDBC(Page page,String sql,Object[] params, Class<?> elementType){
+		StringBuilder resultSql = new StringBuilder("select tb.* from ( ");
+		resultSql.append(sql);
+		resultSql.append(" ) tb LIMIT ");
+		resultSql.append(page.getStart());
+		resultSql.append(" , ");
+		resultSql.append(page.getLimit());
+		
+		System.out.println(resultSql.toString());
+		List<?> results = publicDao.findPageBySpringSQL(resultSql.toString(), params, elementType);
+		int count = publicDao.findBySpringSQL(sql, params).size();
+		page.setRoot(results);
+		page.setTotalProperty(count);
+		
+		return page;
 	}
 
 	@SuppressWarnings("unchecked")
@@ -366,4 +401,5 @@ public class PublicService implements IPublicService {
 		}
 		return priceList;
 	}
+
 }
