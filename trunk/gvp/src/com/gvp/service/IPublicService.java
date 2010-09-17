@@ -4,6 +4,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.List;
 import java.util.Map;
 
+import org.hibernate.type.Type;
 import org.springframework.jdbc.core.RowMapper;
 
 import com.gvp.core.Page;
@@ -11,6 +12,7 @@ import com.gvp.po.PriceList;
 import com.gvp.po.QuoteInfo;
 import com.gvp.po.User;
 import com.gvp.po.WorkflowLog;
+import com.gvp.service.vo.PriceListMapper;
 
 public interface IPublicService {
 	/**
@@ -61,5 +63,11 @@ public interface IPublicService {
 	Page getResultListBySpringJDBC(Page page, String sql, Object[] params, RowMapper rowMapper);
 
 	Page getResultListBySpringJDBC(Page page, String sql, Object[] params, Class<?> elementType);
+
+	Page getResultListBySpringJDBC(Page page, String sql, Object[] params);
+
+	List<?> findByNativeSql(String hql, Class<?> c, Object[] params, Type[] types);
+
+	public List<?> findBySpringSql(String string, Object[] params, RowMapper rowMapper);
 
 }

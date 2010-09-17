@@ -99,19 +99,13 @@ public interface IPublicDao{
 
 	void update(Object instance);
 
-	/**
-	 * Spring jdbc的分页
-	 * @param sql
-	 * @param params
-	 * @param rowMapper
-	 * @return
-	 */
-	List<?> findPageBySpringSQL(String sql, Object[] params, RowMapper rowMapper);
+	List<?> findBySpringSql(String sql, Object[] params, RowMapper rowMapper);
 
-	List<?> findPageBySpringSQL(String sql, Object[] params, Class<?> elementType);
+	List<?> findBySpringSql(String sql, Object[] params, Class<?> elementType);
 
 	int queryForInt(String sql, Object[] args);
 
-	List<?> findBySpringSQL(String sql, Object[] params);
+	List<?> findBySpringSql(String sql, Object[] params);
+
 
 }
