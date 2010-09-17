@@ -40,6 +40,7 @@ import com.gvp.po.SystemLog;
 import com.gvp.po.User;
 import com.gvp.po.WorkflowLog;
 import com.gvp.service.IPublicService;
+import com.gvp.service.vo.PriceListMapper;
 import com.gvp.service.vo.QuoteInfoMapper;
 
 @SuppressWarnings("serial")
@@ -771,9 +772,25 @@ public class PublicAction extends BaseAction {
 	public String adjustQuoteInfos() {
 		try {
 			this.priceList.setRecordTime(new Date());
-			// this.infos.put("priceList",
-			// publicService.saveEntity(this.priceList,null));
-			this.infos.put("priceList", publicService.adjustQuoteInfos(priceList));
+			PriceList p = publicService.adjustQuoteInfos(priceList);
+			StringBuilder sql = new StringBuilder();
+			
+			sql.append(" SELECT tst.stuffName,");
+			sql.append(" ts.speciesName,");
+			sql.append(" tsp.specName,");
+			sql.append(" tp.price,");
+			sql.append(" tp.remark,");
+			sql.append(" tp.recordTime,");
+			sql.append(" tp.listid");
+			sql.append(" FROM t_price_list    AS tp,");
+			sql.append(" t_species       AS ts,");
+			sql.append(" t_specification AS tsp,");
+			sql.append(" t_stuff         AS tst");
+			sql.append(" WHERE tp.stuffid = tst.stuffid");
+			sql.append(" AND tp.speciesid = ts.speciesid");
+			sql.append(" AND tp.specid = tsp.specid");
+			sql.append(" AND tp.listid = ? ");
+			this.infos.put("priceList", publicService.findBySpringSql(sql.toString(),new Object[]{p.getListid()},new PriceListMapper()).get(0));
 			this.success = true;
 		} catch (RuntimeException e) {
 			this.success = false;
@@ -1434,12 +1451,35 @@ public class PublicAction extends BaseAction {
 	 */
 	@Action(description = "查找供应商材料单价修改信息")
 	public String findPriceList() {
-		DetachedCriteria dc = DetachedCriteria.forClass(PriceList.class);
+		StringBuilder sql = new StringBuilder();
+		sql.append(" SELECT tst.stuffName,");
+		sql.append(" ts.speciesName,");
+		sql.append(" tsp.specName,");
+		sql.append(" tp.price,");
+		sql.append(" tp.remark,");
+		sql.append(" tp.recordTime,");
+		sql.append(" tp.listid");
+		sql.append(" FROM t_price_list    AS tp,");
+		sql.append(" t_species       AS ts,");
+		sql.append(" t_specification AS tsp,");
+		sql.append(" t_stuff         AS tst");
+		sql.append(" WHERE tp.stuffid = tst.stuffid");
+		sql.append(" AND tp.speciesid = ts.speciesid");
+		sql.append(" AND tp.specid = tsp.specid");
+		
+		List<String> params = new ArrayList<String>();
 		if (priceList != null) {
-			dc.add(EnhancedExample.createDefault(priceList, false));
+			sql.append(" AND (tp.remark like ? OR tst.stuffName like ? OR ts.speciesName like ? OR tsp.specName like ? )");
+			StringBuilder likeParam = new StringBuilder();
+			likeParam.append("%").append(priceList.getRemark()).append("%");
+			String param = likeParam.toString();
+			params.add(param);
+			params.add(param);
+			params.add(param);
+			params.add(param);
 		}
-		this.page.setResult(dc);
-		this.page = publicService.getResultList(page);
+		
+		this.page = publicService.getResultListBySpringJDBC(page, sql.toString(), params.toArray(),new PriceListMapper());
 		return SUCCESS;
 	}
 

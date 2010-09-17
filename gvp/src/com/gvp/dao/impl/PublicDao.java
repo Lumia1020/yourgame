@@ -27,11 +27,11 @@ public class PublicDao extends HibernateDaoSupport implements IPublicDao {
 		this.jdbc = jdbc;
 	}
 
-	public List<?> findPageBySpringSQL(String sql, Object[] params, RowMapper rowMapper) {
+	public List<?> findBySpringSql(String sql, Object[] params, RowMapper rowMapper) {
 		return jdbc.executeQueryList(sql, params, rowMapper);
 	}
 
-	public List<?> findPageBySpringSQL(String sql, Object[] params, Class<?> elementType) {
+	public List<?> findBySpringSql(String sql, Object[] params, Class<?> elementType) {
 		return jdbc.executeQueryList(sql, params, elementType);
 	}
 
@@ -39,7 +39,7 @@ public class PublicDao extends HibernateDaoSupport implements IPublicDao {
 		return jdbc.queryForInt(sql, args);
 	}
 	
-	public List<?> findBySpringSQL(String sql,Object[] params){
+	public List<?> findBySpringSql(String sql,Object[] params){
 		return jdbc.executeQueryList(sql, params);
 	}
 

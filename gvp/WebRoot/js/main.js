@@ -17,8 +17,8 @@ Ext.onReady(function() {
 	var specificationTpl = new Ext.XTemplate(
 		'<tpl for=".">',
 				'<div class="x-combo-list-item">',
-					'<div style="font-size: 12px;float:left;width:25%;"><b>{specName}</b></div>',
-					'<div style="font-size: 12px;float:left;color:green;width:25%;">{price}</div>',
+					'<div style="font-size: 12px;float:left;width:40%;"><b>{specName}</b></div>',
+					'<div style="font-size: 12px;float:left;color:green;width:10%;">{price}</div>',
 					'<div style="font-size: 12px;float:left;color:gray;width:25%;">{speciesName}</div>',
 					'<div style="font-size: 12px;float:right;color:gray;width:25%;">{stuffName}</div>',
 				'</div>',
@@ -2683,8 +2683,8 @@ Ext.onReady(function() {
 						        pageSize:10,
 					            id:'materials.stuffName',
 						        name: 'materials.stuffName',
-					            hiddenId:'materials.stuffid',
-					            hiddenName:'materials.stuffid',
+					            hiddenId:'priceList.stuffid',
+					            hiddenName:'priceList.stuffid',
 						        ref: '../../../../comboStuff',
 					        	store:{
 					        		xtype: 'store',
@@ -2724,8 +2724,8 @@ Ext.onReady(function() {
 						        ref: '../../../../comboSpecies',
 						        id:'materials.speciesName',
 						        name:'materials.speciesName',
-						        hiddenId: 'materials.speciesid',
-						        hiddenName: 'materials.speciesid',
+						        hiddenId: 'priceList.speciesid',
+						        hiddenName: 'priceList.speciesid',
 						        submitValue:true,
 					        	store:{
 					        		xtype: 'store',
@@ -3307,7 +3307,7 @@ Ext.onReady(function() {
 		            	if(state == '已退回'){
 		            		grid.editButton.enable();
 		                	grid.copyButton.disable();
-		                    grid.removeButton.disable();
+		                    grid.removeButton.enable();
 		                    grid.addMaterialsButton.enable();
 		                    grid.addOtherPriceButton.enable();
 		                    grid.addProcessInfoButton.enable();
@@ -3726,7 +3726,8 @@ Ext.onReady(function() {
 			reader: new Ext.data.JsonReader({totalProperty: 'totalProperty',root: 'root'},
 			[
 				{name: 'listid'},
-				{name: 'specid'},
+				{name: 'stuffName'},
+				{name: 'speciesName'},
 				{name: 'specName'},
 				{name: 'price',type:'float'},
 				{name: 'remark'},
@@ -3748,12 +3749,14 @@ Ext.onReady(function() {
 				defaultSortable:true,
 				defaultWidth:120,
 				columns: [
-					{header: '规格名称',dataIndex:'specid',renderer:function(value,cellmeta,record){return record.data.specName;}},
+					{header: '材质名称',dataIndex:'stuffName'},
+					{header: '种类名称',dataIndex:'speciesName'},
+					{header: '规格名称',dataIndex:'specName'},
 					{header: '说明',dataIndex:'remark',id:expandId},
 					{header: '单价',dataIndex:'price',xtype:'numbercolumn',hidden:!Ext.ROLE_R06,format:'0,000.000000'}, 
-					{header: '调整日期',dataIndex:'recordTime',renderer:Ext.util.Format.dateRenderer('Y-m-d H:i:s')}
+					{header: '调整日期',dataIndex:'recordTime',renderer:Ext.util.Format.dateRenderer('Y-m-d')}
 	    	]}),
-	    	tbar:['查询条件',initSearchField(store,null,['priceList.specName','priceList.remark']),'->',{
+	    	tbar:['说明',initSearchField(store,null,['priceList.remark']),'->',{
 	    		text :'调节'
 	    		,iconCls:'silk-add'
 	    		,ref:'../addButton'

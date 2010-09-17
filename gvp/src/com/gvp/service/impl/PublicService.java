@@ -38,6 +38,24 @@ public class PublicService implements IPublicService {
 		this.publicDao = userDao;
 	}
 	
+	public Page getResultListBySpringJDBC(Page page,String sql,Object[] params){
+		StringBuilder resultSql = new StringBuilder("select tb.* from ( ");
+		resultSql.append(sql);
+		resultSql.append(" ) tb LIMIT ");
+		resultSql.append(page.getStart());
+		resultSql.append(" , ");
+		resultSql.append(page.getLimit());
+		
+		System.out.println(resultSql.toString());
+		
+		List<?> results = publicDao.findBySpringSql(resultSql.toString(), params);
+		int count = publicDao.findBySpringSql(sql, params).size();
+		page.setRoot(results);
+		page.setTotalProperty(count);
+		
+		return page;
+	}
+	
 	public Page getResultListBySpringJDBC(Page page,String sql,Object[] params, RowMapper rowMapper){
 		StringBuilder resultSql = new StringBuilder("select tb.* from ( ");
 		resultSql.append(sql);
@@ -47,8 +65,8 @@ public class PublicService implements IPublicService {
 		resultSql.append(page.getLimit());
 		
 		System.out.println(resultSql.toString());
-		List<?> results = publicDao.findPageBySpringSQL(resultSql.toString(), params, rowMapper);
-		int count = publicDao.findBySpringSQL(sql, params).size();
+		List<?> results = publicDao.findBySpringSql(resultSql.toString(), params, rowMapper);
+		int count = publicDao.findBySpringSql(sql, params).size();
 		page.setRoot(results);
 		page.setTotalProperty(count);
 		
@@ -64,8 +82,8 @@ public class PublicService implements IPublicService {
 		resultSql.append(page.getLimit());
 		
 		System.out.println(resultSql.toString());
-		List<?> results = publicDao.findPageBySpringSQL(resultSql.toString(), params, elementType);
-		int count = publicDao.findBySpringSQL(sql, params).size();
+		List<?> results = publicDao.findBySpringSql(resultSql.toString(), params, elementType);
+		int count = publicDao.findBySpringSql(sql, params).size();
 		page.setRoot(results);
 		page.setTotalProperty(count);
 		
@@ -378,6 +396,10 @@ public class PublicService implements IPublicService {
 		return publicDao.findByHQL(hql);
 	}
 
+	public List<?> findByNativeSql(String hql, Class<?> c,Object[] params,Type[] types) {
+		return publicDao.findByNativeSql(hql, c,params,types);
+	}
+	
 	public List findByNativeSql(String hql, Class c) {
 		return publicDao.findByNativeSql(hql, c);
 	}
@@ -400,6 +422,10 @@ public class PublicService implements IPublicService {
 			this.process(m.getQid());
 		}
 		return priceList;
+	}
+
+	public List<?> findBySpringSql(String sql, Object[] params, RowMapper rowMapper) {
+		return this.publicDao.findBySpringSql(sql, params,rowMapper);
 	}
 
 }
