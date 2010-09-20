@@ -3593,12 +3593,61 @@ Ext.onReady(function() {
 		                text: '其他客户',
 		                singleClickExpand:true,
 		                method: 'findCustomerList'
+		            },{
+		            	text: '已审核',
+		            	method: 'checked',
+		            	leaf: true
+		            },{
+		            	text: '已提交审核申请(未审核)',
+		            	method: 'submited',
+		            	leaf: true
+		            },{
+		            	text: '未提交审核申请',
+		            	method: 'unsubmited',
+		            	leaf: true
+		            },{
+		            	text: '已退回',
+		            	method: 'returned',
+		            	leaf: true
+		            },{
+		            	text: '原始',
+		            	method: 'original',
+		            	leaf: true
+		            },{
+		            	text: '非原始',
+		            	method: 'unoriginal',
+		            	leaf: true
 		            }]
 				},
 				listeners:{
 					'click':function(node){
             			if(node.isLeaf()){
             				var sd = node.getOwnerTree().nextSibling().getStore();
+            				if(node.attributes.method == 'checked'){
+            					sd.load({params:{'quoteInfo.state':'已审核','page.params.sub':true}});
+            					return;
+            				}
+            				if(node.attributes.method == 'submited'){
+            					sd.load({params:{'quoteInfo.state':'已提交审核申请','page.params.sub':true}});
+            					return;
+            				}
+            				if(node.attributes.method == 'unsubmited'){
+            					sd.load({params:{'quoteInfo.state':'未提交审核申请','page.params.sub':true}});
+            					return;
+            				}
+            				if(node.attributes.method == 'returned'){
+            					sd.load({params:{'quoteInfo.state':'已退回','page.params.sub':true}});
+            					return;
+            				}
+            				if(node.attributes.method == 'original'){
+            					sd.load({params:{'page.params.version':'native','page.params.sub':true}});
+            					return;
+            				}
+            				if(node.attributes.method == 'unoriginal'){
+            					sd.load({params:{'page.params.version':'copy','page.params.sub':true}});
+            					return;
+            				}
+            				
             				sd.load({params:{'quoteInfo.qid':node.id}});
             			}
             		}

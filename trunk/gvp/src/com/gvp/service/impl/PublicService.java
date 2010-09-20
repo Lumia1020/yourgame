@@ -64,7 +64,6 @@ public class PublicService implements IPublicService {
 		resultSql.append(" , ");
 		resultSql.append(page.getLimit());
 		
-		System.out.println(resultSql.toString());
 		List<?> results = publicDao.findBySpringSql(resultSql.toString(), params, rowMapper);
 		int count = publicDao.findBySpringSql(sql, params).size();
 		page.setRoot(results);
@@ -81,7 +80,6 @@ public class PublicService implements IPublicService {
 		resultSql.append(" , ");
 		resultSql.append(page.getLimit());
 		
-		System.out.println(resultSql.toString());
 		List<?> results = publicDao.findBySpringSql(resultSql.toString(), params, elementType);
 		int count = publicDao.findBySpringSql(sql, params).size();
 		page.setRoot(results);
