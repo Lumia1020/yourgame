@@ -3159,7 +3159,10 @@ Ext.onReady(function() {
 					{header: '单价',dataIndex:'price',xtype:'numbercolumn',hidden:!Ext.ROLE_R06,format:'0,000.000000'}, 
 					{header: '填单日期',dataIndex:'recordTime',renderer:Ext.util.Format.dateRenderer('Y-m-d')},
 					{header: '更新日期',dataIndex:'modifyTime',renderer:Ext.util.Format.dateRenderer('Y-m-d')},
-					{header: '状态',dataIndex:'state',width:150}
+					{header: '状态',dataIndex:'state',width:150},
+					{header: '版本',dataIndex:'ownerId',width:60,renderer:function(value,cellmeta,record){
+						return (value == '' ? '原始':'非原始');
+					}}
 	    	]}),
 	    	tbar:[{
 	    		text :'审核通过'
@@ -3356,7 +3359,10 @@ Ext.onReady(function() {
 					{header: '单价',dataIndex:'price',xtype:'numbercolumn',hidden:!Ext.ROLE_R06,format:'0,000.000000'}, 
 					{header: '填单日期',dataIndex:'recordTime',renderer:Ext.util.Format.dateRenderer('Y-m-d')},
 					{header: '更新日期',dataIndex:'modifyTime',renderer:Ext.util.Format.dateRenderer('Y-m-d')},
-					{header: '状态',dataIndex:'state',width:150}
+					{header: '状态',dataIndex:'state',width:150},
+					{header: '版本',dataIndex:'ownerId',width:60,renderer:function(value,cellmeta,record){
+						return (value == '' ? '原始':'非原始');
+					}}
 	    	]}),
 	    	listeners:{
 	    		'rowdblclick':function(g,i,e){
@@ -3668,6 +3674,30 @@ Ext.onReady(function() {
 				                text: '其他客户',
 				                singleClickExpand:true,
 				                method: 'findCustomerList'
+				            },{
+				            	text: '已审核',
+				            	method: 'checked',
+				            	leaf: true
+				            },{
+				            	text: '已提交审核申请(未审核)',
+				            	method: 'submited',
+				            	leaf: true
+				            },{
+				            	text: '未提交审核申请',
+				            	method: 'unsubmited',
+				            	leaf: true
+				            },{
+				            	text: '已退回',
+				            	method: 'returned',
+				            	leaf: true
+				            },{
+				            	text: '原始',
+				            	method: 'original',
+				            	leaf: true
+				            },{
+				            	text: '非原始',
+				            	method: 'unoriginal',
+				            	leaf: true
 				            }]
                 		});
                 		this.ownerCt.ownerCt.getSelectionModel().clearSelections();
