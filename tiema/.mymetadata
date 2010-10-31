@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project-module
+  type="WEB"
+  name="tiema"
+  id="myeclipse.1288012036286"
+  context-root="/tiema"
+  j2ee-spec="5.0"
+  archive="tiema.war">
+  <attributes>
+    <attribute name="webrootdir" value="WebRoot" />
+  </attributes>
+</project-module>
+
