@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC 
+	"-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+	"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<class name="com.gvp.po.ProductCode" table="t_product_code" lazy="true" batch-size="10" dynamic-update="true">
+		<id name="pcid" column="pcid">
+			<generator class="native" />
+		</id>
+		<property name="code" length="100"/>
+		<property name="remark"/>
+		<property name="qid"/>
+	</class>
+</hibernate-mapping>
