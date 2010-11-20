@@ -143,6 +143,153 @@ Ext.onReady(function() {
 		}).show();
 	}
 	
+	function initProductCodeGrid(quoteInfoRecord,height,flag){
+		var quoteInfo = quoteInfoRecord.data;
+		var store = new Ext.data.Store({
+			url: 'findProductCodeList.action',
+			paramNames:{start:'page.start',limit:'page.limit'},
+			baseParams:{'page.start':0,'page.limit':0,'productCode.qid':quoteInfo.qid},
+			autoLoad:flag,
+			reader: new Ext.data.JsonReader({totalProperty: 'totalProperty',root: 'root'},
+			[
+				{name: 'pcid'},
+				{name: 'code',allowBlank:false},
+				{name: 'remark'},
+				{name: 'qid'}
+			]),
+			listeners:{
+				'update': function(thiz, record, operation){
+					if(operation == Ext.data.Record.EDIT){
+						if(record.data.picd){
+							Ext.Ajax.request({
+							    url: 'updateProductCode.action',
+							    params: {
+									'productCode.pcid': record.data.picd,		
+									'productCode.code': record.data.code,
+									'productCode.remark': record.data.remark,
+									'productCode.qid':quoteInfo.qid
+								},
+							    success: function(response) {
+							    	var obj = Ext.decode(response.responseText);
+							    	if(obj.success){
+							    		record.beginEdit();
+							    		record.data = obj.infos.productCode;
+							    		record.commit();
+							    		thiz.commitChanges();
+							    	}else{
+							    		thiz.rejectChanges();
+							    	}
+							    },
+							    failure: function(response) {
+							    	Ext.Msg.alert('错误','server-side failure with status code ' + response.status);
+							    	thiz.rejectChanges();
+							    }
+						    });
+						}else{
+							Ext.Ajax.request({
+							    url: 'saveProductCode.action',
+							    params: {
+							    	'productCode.qid':quoteInfo.qid,
+									'productCode.code': record.data.code,
+									'productCode.remark': record.data.remark
+								},
+							    success: function(response) {
+							    	var obj = Ext.decode(response.responseText);
+							    	if(obj.success){
+							    		record.beginEdit();
+							    		record.data = obj.infos.productCode;
+							    		record.commit();
+							    		grid.getSelectionModel().selectRow(0);
+							    		Ext.get(grid.getView().getRow(0)).frame('green',2,{duration: .3});
+							    	}
+							    },
+							    failure: function(response) {
+							    	Ext.Msg.alert('错误','server-side failure with status code ' + response.status);
+							    	thiz.rejectChanges();
+							    }
+						    });
+						}
+					}
+				}
+			}
+		});
+	    
+	    var editor = initEditor(null,null,2);
+	    editor.on('invalid',function(record,sd){
+	    	Ext.get(grid.getView().getRow(0)).fadeOut({
+			    endOpacity: 0, 
+			    easing: 'easeOut',
+			    duration: .5,
+			    remove: false,
+			    useDisplay: false,
+			    callback:function(){
+			    	sd.remove(record);
+			    }
+			});
+	    });
+	    
+	    var sm = new Ext.grid.CheckboxSelectionModel({
+	        listeners: {
+	            selectionchange: function(sm) {
+	                if (sm.getCount()) {
+	                    grid.removeButton.enable();
+	                } else {
+	                    grid.removeButton.disable();
+	                }
+	            }
+	        }
+	    });
+	    
+	    var expandId = Ext.id();
+	     
+		var grid = new Ext.grid.GridPanel({
+			height : height,
+			store: store,
+		    plugins : editor,
+		    autoExpandColumn: expandId,
+			sm: sm,
+			border:false,
+			colModel:new Ext.grid.ColumnModel({
+				defaultSortable:true,
+				defaultWidth:100,
+				columns: [sm,
+			        {header: '产品编码',dataIndex: 'code',editor:{xtype : 'textfield',maxLength:40,allowBlank:false,name:'code'}},
+			        {header: '备注',dataIndex: 'remark',editor:{xtype:'textfield',maxLength:400,name:'remark'},id:expandId}
+			    ]
+			}),
+		    tbar : [{text :'添加'
+	    		,iconCls:'silk-add'
+	    		,ref:'../addButton'
+	    		,handler:function(){
+	    			var productCode = new grid.store.recordType({
+						remark:''
+			        });
+			        editor.stopEditing();
+			        grid.store.insert(0, productCode);
+			        editor.startEditing(0);
+	    		}
+	    	},{
+				text	: '删除',
+				iconCls : 'silk-delete',
+				ref : '../removeButton',
+				disabled:true,
+				handler : function(){
+					editor.stopEditing(false);
+					deleteRecords('deleteProductCode.action','page.params.ids','pcid',grid,store,null,quoteInfo.qid,quoteInfoRecord);
+				}
+			},'-',{
+				text	: '刷新',
+				iconCls : 'x-tbar-loading',
+				handler : function(){
+					editor.stopEditing(false);
+					store.reload();
+				}
+			}]
+		});
+		
+		return grid;
+	}
+	
 	/**
 	 * 初始化报时单其他报价grid
 	 */
@@ -458,6 +605,53 @@ Ext.onReady(function() {
 		return grid;
 	}
 	
+	/**
+	 * 初始化产品编码grid
+	 * @param quoteInfo 报时表对象
+	 * @param height GridPanel高度
+	 */
+	function showProductCodeGrid(quoteInfo,height,flag){
+		var store = new Ext.data.Store({
+			url: 'findProductCodeList.action',
+			paramNames:{start:'page.start',limit:'page.limit'},
+			baseParams:{'page.start':0,'page.limit':0,'productCode.qid':quoteInfo.qid},
+			autoLoad:flag,
+			reader: new Ext.data.JsonReader({totalProperty: 'totalProperty',root: 'root'},
+			[
+				{name: 'pcid'},
+				{name: 'code',allowBlank:false},
+				{name: 'remark'},
+				{name: 'qid'}
+			])
+		});
+	    
+	    
+	    var expandId = Ext.id();
+	     
+		var grid = new Ext.grid.GridPanel({
+			hideLabel:true,
+			title : '其他产品编码',
+			isFormField : true,
+			store: store,
+			height:height,
+			autoScroll:true,
+		    autoExpandColumn: expandId,
+			sm: new Ext.grid.RowSelectionModel(),
+			colModel:new Ext.grid.ColumnModel({
+				defaults:{
+					sortable:true,
+					width:150,
+					menuDisabled:true
+				},
+				columns: [
+			        {header: '产品编码',dataIndex: 'code'},
+			        {header: '备注',dataIndex: 'remark',id:expandId}
+			    ]
+			})
+		});
+		
+		return grid;
+	}
 	/**
 	 * 初始化外发加工信息grid仅用于展示
 	 * @param quoteInfo 报时表对象
@@ -2407,6 +2601,30 @@ Ext.onReady(function() {
 		innerWin.show();
 	}
 	
+	/**
+	 * 产品编码管理
+	 */
+	function showProductCodeWinManage(grid){
+		var quoteInfoRecord = grid.getSelectionModel().getSelected();
+		var innerWin = new Ext.Window({
+			title:'产品编码管理',
+			width:650,
+			modal:true,
+			resizable:false,
+			height:270,
+			autoScroll:true,
+			bodyStyle:'overflow-x:hidden',
+			items:[initProductCodeGrid(quoteInfoRecord,200,true)],
+			fbar:[{
+				text:'关闭',
+				handler:function(){
+					innerWin.close();
+				}
+			}]
+		});
+		innerWin.show();
+	}
+	
 	/***
 	 * 外发加工管理
 	 */
@@ -2839,6 +3057,7 @@ Ext.onReady(function() {
 					var foundryList = obj.infos.foundry;
 					var otherPriceList = obj.infos.otherPrice;
 					var processList = obj.infos.process;
+					var productCodeList = obj.infos.productCode;
 					var materials = obj.infos.materials[0] || {};
 					var reference = obj.infos.reference[0] || {};
 					var refFilesList = obj.infos.refFiles;
@@ -2858,15 +3077,19 @@ Ext.onReady(function() {
 											store.add([new store.recordType(data)]);
 										});
 									}
-									var otherPriceStore = innerWin.get(0).get(2).getStore();
+									var productCodeStore = innerWin.get(0).get(2).getStore();
+									addData(productCodeStore,productCodeList);
+									
+									var otherPriceStore = innerWin.get(0).get(3).getStore();
 									addData(otherPriceStore,otherPriceList);
-									var processStore = innerWin.get(0).get(5).getStore();
+									
+									var processStore = innerWin.get(0).get(6).getStore();
 									addData(processStore,processList);
-									var foundryStore = innerWin.get(0).get(6).getStore();
+									var foundryStore = innerWin.get(0).get(7).getStore();
 									addData(foundryStore,foundryList);
-									var aidsStore = innerWin.get(0).get(7).getStore();
+									var aidsStore = innerWin.get(0).get(8).getStore();
 									addData(aidsStore,aidsList);
-									var refFilesStore = innerWin.get(0).get(12).getStore();
+									var refFilesStore = innerWin.get(0).get(13).getStore();
 									addData(refFilesStore,refFilesList);
 									innerWin.enable();
 								},
@@ -2958,7 +3181,7 @@ Ext.onReady(function() {
 					                    value: recordTime
 					                }]
 					            }]
-					        },showOtherPriceGrid(quoteInfo,150,false),{
+					        },showProductCodeGrid(quoteInfo,150,false),showOtherPriceGrid(quoteInfo,150,false),{
 					       	 	html:'<br><b>生产材料信息</b><br><hr><br>',
 								border:false 
 					        },{
@@ -3320,6 +3543,7 @@ Ext.onReady(function() {
 		                    grid.addFilesButton.enable();
 		                	grid.submitCheckButton.enable();
 		            	}
+		            	grid.addProductCodeButton.enable();
 		            }else{
 		            	grid.removeButton.disable();
 	                    grid.editButton.disable();
@@ -3332,6 +3556,7 @@ Ext.onReady(function() {
 	                    grid.addReferenceInfoButton.disable();
 	                    grid.addFilesButton.disable();
 	                    grid.submitCheckButton.disable();
+	                    grid.addProductCodeButton.disable();
 		            }
 	            }
 	        }
@@ -3441,6 +3666,19 @@ Ext.onReady(function() {
 						deleteRecords('deleteQuoteInfo.action','page.params.ids','qid',grid,store);
 					}
 				},{xtype: 'tbseparator',hidden:!Ext.ROLE_R05},{
+					text:'产品编码管理',
+					hidden: !Ext.ROLE_R23,
+					ref:'../addProductCodeButton',
+					disabled:true,
+					handler:function(){
+						var record = grid.getSelectionModel().getSelected();
+		    			if(record){
+		    				showProductCodeWinManage(grid);
+		    			}else{
+		    				Ext.Msg.alert('操作提示','请先选择要操作的行.');
+		    			}
+					}
+				},{
 					text:'其他报价管理',
 					ref:'../addOtherPriceButton',
 					disabled:true,
@@ -4933,6 +5171,9 @@ Ext.onReady(function() {
 		                }},
 		                {boxLabel: '其他报价管理', name: 'r22',handler:function(){
 		                	win.showOtherPrice.setValue(this.checked);
+		                }},
+		                {boxLabel: '产品编码信息', name: 'r23',handler:function(){
+		                	win.showProductCode.setValue(this.checked);
 		                }}
 		            ]
 				},
@@ -4958,7 +5199,8 @@ Ext.onReady(function() {
 					{xtype : 'hidden',name : 'role.r19',ref:'../stuffSpeciesSpecificationManage'},
 					{xtype : 'hidden',name : 'role.r20',ref:'../adjustMaterialPrice'},
 					{xtype : 'hidden',name : 'role.r21',ref:'../showSystemLog'},
-					{xtype : 'hidden',name : 'role.r22',ref:'../showOtherPrice'}
+					{xtype : 'hidden',name : 'role.r22',ref:'../showOtherPrice'},
+					{xtype : 'hidden',name : 'role.r23',ref:'../showProductCode'}
 				],
 				listeners : {
 					render : function(){
@@ -4991,6 +5233,7 @@ Ext.onReady(function() {
 						    		win.group5.items.get(3).setValue(role.r20);
 						    		win.group6.items.get(0).setValue(role.r21);
 						    		win.group6.items.get(1).setValue(role.r22);
+						    		win.group6.items.get(2).setValue(role.r23);
 						    		win.rid.setValue(role.rid);
 						    	}
 						    },

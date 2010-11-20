@@ -29,6 +29,7 @@ import com.gvp.po.Materials;
 import com.gvp.po.OtherQuotePrice;
 import com.gvp.po.PriceList;
 import com.gvp.po.ProcessInfo;
+import com.gvp.po.ProductCode;
 import com.gvp.po.QuoteInfo;
 import com.gvp.po.RefFiles;
 import com.gvp.po.ReferenceInfo;
@@ -46,47 +47,49 @@ import com.gvp.service.vo.QuoteInfoMapper;
 @SuppressWarnings("serial")
 public class PublicAction extends BaseAction {
 
-	private IPublicService publicService;
+	private IPublicService		publicService;
 
-	private User user;
+	private User				user;
 
-	private Customer customer;
+	private Customer			customer;
 
-	private Stuff stuff;
+	private Stuff				stuff;
 
-	private QuoteInfo quoteInfo;
+	private QuoteInfo			quoteInfo;
 
-	private Aids aids;
+	private Aids				aids;
 
-	private Role role;
+	private Role				role;
 
-	private RefFiles refFiles;
+	private RefFiles			refFiles;
 
-	private Foundry foundry;
+	private Foundry				foundry;
 
-	private Materials materials;
+	private Materials			materials;
 
-	private ReferenceInfo reference;
+	private ReferenceInfo		reference;
 
-	private ProcessInfo process;
+	private ProcessInfo			process;
 
-	private boolean success;
+	private boolean				success;
 
-	private Page page;
+	private Page				page;
 
-	private Map<String, Object> infos = new HashMap<String, Object>();
+	private Map<String, Object>	infos	= new HashMap<String, Object>();
 
-	private Species species;
+	private Species				species;
 
-	private Specification specification;
+	private Specification		specification;
 
-	private PriceList priceList;
+	private PriceList			priceList;
 
-	private SystemLog log;
+	private ProductCode			productCode;
 
-	private WorkflowLog workflow;
+	private SystemLog			log;
 
-	private OtherQuotePrice otherPrice;
+	private WorkflowLog			workflow;
+
+	private OtherQuotePrice		otherPrice;
 
 	public OtherQuotePrice getOtherPrice() {
 		return otherPrice;
@@ -127,6 +130,18 @@ public class PublicAction extends BaseAction {
 	public void setSpecification(Specification specification) {
 		this.specification = specification;
 	}
+	
+	/**
+	 * 删除报时单的产品编号
+	 * 
+	 * @return
+	 */
+	@Action(description = "删除报时单的产品编码")
+	public String deleteProductCode() {
+		final String hql = "delete ProductCode where pcid in (" + page.getParams().get("ids") + ")";
+		this.success = publicService.deleteEntities(hql, null);
+		return SUCCESS;
+	}
 
 	/**
 	 * 删除报时单的其他报价信息
@@ -136,10 +151,10 @@ public class PublicAction extends BaseAction {
 	@Action(description = "删除报时单的其他报价信息")
 	public String deleteOtherPrice() {
 		final String hql = "delete OtherQuotePrice where oid in (" + page.getParams().get("ids") + ")";
-		this.success = publicService.deleteEntities(hql,null);
+		this.success = publicService.deleteEntities(hql, null);
 		return SUCCESS;
 	}
-	
+
 	/**
 	 * 删除外发加工信息
 	 * 
@@ -285,9 +300,29 @@ public class PublicAction extends BaseAction {
 			OtherQuotePrice p = (OtherQuotePrice) publicService.updateEntity(otherPrice, otherPrice.getOid(), null);
 			if (p != null) {
 				this.infos.put("otherPrice", p);
-				// this.infos.put("quoteInfo",
-				// publicService.findQuoteInfoById(otherPrice.getOid(),
-				// false).get("quoteInfo"));
+				this.success = true;
+			}
+		} catch (RuntimeException e) {
+			this.infos.put("msg", MyUtils.getExceptionMessages(e));
+			e.printStackTrace();
+		}
+		return SUCCESS;
+	}
+	
+	/**
+	 * 更新报时单的产品编码
+	 * 
+	 * @return
+	 * @throws IllegalAccessException
+	 * @throws InvocationTargetException
+	 * @throws NoSuchMethodException
+	 */
+	@Action(description = "修改报时单产品编码")
+	public String updateProductCode() throws IllegalAccessException, InvocationTargetException, NoSuchMethodException {
+		try {
+			ProductCode p = (ProductCode) publicService.updateEntity(productCode, productCode.getPcid(), null);
+			if (p != null) {
+				this.infos.put("productCode", p);
 				this.success = true;
 			}
 		} catch (RuntimeException e) {
@@ -666,6 +701,23 @@ public class PublicAction extends BaseAction {
 	}
 
 	/**
+	 * 保存报时单的产品编码
+	 * 
+	 * @return
+	 */
+	@Action(description = "新增报时单的产品编码")
+	public String saveProductCode() {
+		try {
+			this.infos.put("productCode", publicService.saveEntity(this.productCode, null));
+			this.success = true;
+		} catch (RuntimeException e) {
+			this.success = false;
+			e.printStackTrace();
+		}
+		return SUCCESS;
+	}
+
+	/**
 	 * 保存加工信息
 	 * 
 	 * @return
@@ -774,7 +826,7 @@ public class PublicAction extends BaseAction {
 			this.priceList.setRecordTime(new Date());
 			PriceList p = publicService.adjustQuoteInfos(priceList);
 			StringBuilder sql = new StringBuilder();
-			
+
 			sql.append(" SELECT tst.stuffName,");
 			sql.append(" ts.speciesName,");
 			sql.append(" tsp.specName,");
@@ -790,7 +842,7 @@ public class PublicAction extends BaseAction {
 			sql.append(" AND tp.speciesid = ts.speciesid");
 			sql.append(" AND tp.specid = tsp.specid");
 			sql.append(" AND tp.listid = ? ");
-			this.infos.put("priceList", publicService.findBySpringSql(sql.toString(),new Object[]{p.getListid()},new PriceListMapper()).get(0));
+			this.infos.put("priceList", publicService.findBySpringSql(sql.toString(), new Object[] { p.getListid() }, new PriceListMapper()).get(0));
 			this.success = true;
 		} catch (RuntimeException e) {
 			this.success = false;
@@ -936,6 +988,20 @@ public class PublicAction extends BaseAction {
 		DetachedCriteria dc = DetachedCriteria.forClass(Aids.class);
 		if (aids != null) {
 			dc.add(Example.create(aids));
+		}
+		this.page.setResult(dc);
+		this.page = publicService.getResultList(page);
+		return SUCCESS;
+	}
+
+	/**
+	 * 获得产品编码集合
+	 */
+	@Action(description = "查询报时表的编码集合")
+	public String findProductCodeList() {
+		DetachedCriteria dc = DetachedCriteria.forClass(ProductCode.class);
+		if (productCode != null) {
+			dc.add(Example.create(productCode));
 		}
 		this.page.setResult(dc);
 		this.page = publicService.getResultList(page);
@@ -1193,119 +1259,119 @@ public class PublicAction extends BaseAction {
 		this.page = publicService.getResultList(page);
 		return SUCCESS;
 	}
-	
-//	/**
-//	 * 获得报时信息
-//	 * 
-//	 * @return
-//	 */
-//	@SuppressWarnings("unchecked")
-//	@Action(description = "查询报时单")
-//	public String findQuoteInfoList() {
-//		DetachedCriteria dc = DetachedCriteria.forClass(QuoteInfo.class);
-//		String condition = page.getParams().get("condition");
-//		String queryLevel = page.getParams().get("queryLevel");
-//		String queryValue = page.getParams().get("queryValue");
-//		String sub = page.getParams().get("sub"); // 为空则表示查询所有关联
-//
-//		String version = page.getParams().get("version"); // 报时表版本 original(原版
-//															// native)
-//															// unoriginal(副本
-//															// copy)
-//
-//		if ("customerType".equals(queryLevel)) {
-//			dc.add(Restrictions.eq("customerType", queryValue));
-//		}
-//		if ("quoteInfo".equals(queryLevel)) {
-//			dc.add(Restrictions.eq("cid", Integer.parseInt(queryValue)));
-//		}
-//
-//		if ("native".equals(version)) {
-//			dc.add(Restrictions.isNull("ownerId"));
-//		}
-//		if ("copy".equals(version)) {
-//			dc.add(Restrictions.isNotNull("ownerId"));
-//		}
-//
-//		if (!MyUtils.isEmpty(condition)) {
-//			if (quoteInfo != null) {
-//				String state = quoteInfo.getState();
-//				if (quoteInfo.getQid() != null) {
-//					dc.add(Restrictions.eq("qid", quoteInfo.getQid()));
-//				} else {
-//					if (StringUtils.isNotEmpty(state)) {
-//						dc.add(Restrictions.eq("state", state));
-//					} else {
-//						dc.add(EnhancedExample.createDefault(quoteInfo));
-//					}
-//				}
-//				this.page.setResult(dc);
-//				this.page = publicService.getResultList(page);
-//			}
-//			if (StringUtils.isBlank(sub)) {
-//				if (materials != null) {
-//					DetachedCriteria dMaterials = DetachedCriteria.forClass(Materials.class);
-//					Page p = new Page();
-//					dMaterials.add(EnhancedExample.createDefault(materials));
-//					p.setResult(dMaterials);
-//					p = publicService.getResultList(p);
-//					Iterator<Materials> it = p.getRoot().iterator();
-//					if (it.hasNext()) {
-//						StringBuffer hql = new StringBuffer("FROM QuoteInfo WHERE qid IN(");
-//						while (it.hasNext()) {
-//							Materials m = it.next();
-//							hql.append(m.getQid());
-//							if (it.hasNext()) {
-//								hql.append(",");
-//							}
-//						}
-//						hql.append(")");
-//
-//						List results = publicService.getList(hql.toString());
-//						this.page.getRoot().addAll(results);
-//					}
-//				}
-//				if (refFiles != null) {
-//					DetachedCriteria dd = DetachedCriteria.forClass(RefFiles.class);
-//					Page p = new Page();
-//					dd.add(EnhancedExample.createDefault(refFiles));
-//					p.setResult(dd);
-//					p = publicService.getResultList(p);
-//					Iterator<RefFiles> it = p.getRoot().iterator();
-//					if (it.hasNext()) {
-//						StringBuffer hql = new StringBuffer("FROM QuoteInfo WHERE qid IN (");
-//						while (it.hasNext()) {
-//							RefFiles r = it.next();
-//							hql.append(r.getQid());
-//							if (it.hasNext()) {
-//								hql.append(",");
-//							}
-//						}
-//						hql.append(")");
-//
-//						List results = publicService.getList(hql.toString());
-//						this.page.getRoot().addAll(results);
-//					}
-//				}
-//			}
-//		} else {
-//			if (quoteInfo != null) {
-//				String state = quoteInfo.getState();
-//				if (quoteInfo.getQid() != null) {
-//					dc.add(Restrictions.eq("qid", quoteInfo.getQid()));
-//				} else {
-//					if (StringUtils.isNotEmpty(state)) {
-//						dc.add(Restrictions.eq("state", state));
-//					} else {
-//						dc.add(EnhancedExample.createDefault(quoteInfo));
-//					}
-//				}
-//			}
-//			this.page.setResult(dc);
-//			this.page = publicService.getResultList(page);
-//		}
-//		return SUCCESS;
-//	}
+
+	//	/**
+	//	 * 获得报时信息
+	//	 * 
+	//	 * @return
+	//	 */
+	//	@SuppressWarnings("unchecked")
+	//	@Action(description = "查询报时单")
+	//	public String findQuoteInfoList() {
+	//		DetachedCriteria dc = DetachedCriteria.forClass(QuoteInfo.class);
+	//		String condition = page.getParams().get("condition");
+	//		String queryLevel = page.getParams().get("queryLevel");
+	//		String queryValue = page.getParams().get("queryValue");
+	//		String sub = page.getParams().get("sub"); // 为空则表示查询所有关联
+	//
+	//		String version = page.getParams().get("version"); // 报时表版本 original(原版
+	//															// native)
+	//															// unoriginal(副本
+	//															// copy)
+	//
+	//		if ("customerType".equals(queryLevel)) {
+	//			dc.add(Restrictions.eq("customerType", queryValue));
+	//		}
+	//		if ("quoteInfo".equals(queryLevel)) {
+	//			dc.add(Restrictions.eq("cid", Integer.parseInt(queryValue)));
+	//		}
+	//
+	//		if ("native".equals(version)) {
+	//			dc.add(Restrictions.isNull("ownerId"));
+	//		}
+	//		if ("copy".equals(version)) {
+	//			dc.add(Restrictions.isNotNull("ownerId"));
+	//		}
+	//
+	//		if (!MyUtils.isEmpty(condition)) {
+	//			if (quoteInfo != null) {
+	//				String state = quoteInfo.getState();
+	//				if (quoteInfo.getQid() != null) {
+	//					dc.add(Restrictions.eq("qid", quoteInfo.getQid()));
+	//				} else {
+	//					if (StringUtils.isNotEmpty(state)) {
+	//						dc.add(Restrictions.eq("state", state));
+	//					} else {
+	//						dc.add(EnhancedExample.createDefault(quoteInfo));
+	//					}
+	//				}
+	//				this.page.setResult(dc);
+	//				this.page = publicService.getResultList(page);
+	//			}
+	//			if (StringUtils.isBlank(sub)) {
+	//				if (materials != null) {
+	//					DetachedCriteria dMaterials = DetachedCriteria.forClass(Materials.class);
+	//					Page p = new Page();
+	//					dMaterials.add(EnhancedExample.createDefault(materials));
+	//					p.setResult(dMaterials);
+	//					p = publicService.getResultList(p);
+	//					Iterator<Materials> it = p.getRoot().iterator();
+	//					if (it.hasNext()) {
+	//						StringBuffer hql = new StringBuffer("FROM QuoteInfo WHERE qid IN(");
+	//						while (it.hasNext()) {
+	//							Materials m = it.next();
+	//							hql.append(m.getQid());
+	//							if (it.hasNext()) {
+	//								hql.append(",");
+	//							}
+	//						}
+	//						hql.append(")");
+	//
+	//						List results = publicService.getList(hql.toString());
+	//						this.page.getRoot().addAll(results);
+	//					}
+	//				}
+	//				if (refFiles != null) {
+	//					DetachedCriteria dd = DetachedCriteria.forClass(RefFiles.class);
+	//					Page p = new Page();
+	//					dd.add(EnhancedExample.createDefault(refFiles));
+	//					p.setResult(dd);
+	//					p = publicService.getResultList(p);
+	//					Iterator<RefFiles> it = p.getRoot().iterator();
+	//					if (it.hasNext()) {
+	//						StringBuffer hql = new StringBuffer("FROM QuoteInfo WHERE qid IN (");
+	//						while (it.hasNext()) {
+	//							RefFiles r = it.next();
+	//							hql.append(r.getQid());
+	//							if (it.hasNext()) {
+	//								hql.append(",");
+	//							}
+	//						}
+	//						hql.append(")");
+	//
+	//						List results = publicService.getList(hql.toString());
+	//						this.page.getRoot().addAll(results);
+	//					}
+	//				}
+	//			}
+	//		} else {
+	//			if (quoteInfo != null) {
+	//				String state = quoteInfo.getState();
+	//				if (quoteInfo.getQid() != null) {
+	//					dc.add(Restrictions.eq("qid", quoteInfo.getQid()));
+	//				} else {
+	//					if (StringUtils.isNotEmpty(state)) {
+	//						dc.add(Restrictions.eq("state", state));
+	//					} else {
+	//						dc.add(EnhancedExample.createDefault(quoteInfo));
+	//					}
+	//				}
+	//			}
+	//			this.page.setResult(dc);
+	//			this.page = publicService.getResultList(page);
+	//		}
+	//		return SUCCESS;
+	//	}
 
 	/**
 	 * 获得报时信息
@@ -1322,9 +1388,9 @@ public class PublicAction extends BaseAction {
 		String version = page.getParams().get("version"); // 报时表版本 original(原版  native)  unoriginal(副本  copy)
 
 		List params = new ArrayList();
-		
+
 		StringBuilder sql = new StringBuilder("select this_.*  from  t_quote_info this_ where 1=1 ");
-		
+
 		if ("customerType".equals(queryLevel)) {
 			sql.append(" and this_.customerType = ? ");
 			params.add(queryValue);
@@ -1339,7 +1405,7 @@ public class PublicAction extends BaseAction {
 		if ("copy".equals(version)) {
 			sql.append(" and this_.ownerId is not null ");
 		}
-		
+
 		if (!MyUtils.isEmpty(condition)) {
 			if (quoteInfo != null) {
 				String state = quoteInfo.getState();
@@ -1351,15 +1417,14 @@ public class PublicAction extends BaseAction {
 						sql.append(" and this_.state = ? ");
 						params.add(state);
 					} else {
-						sql.append(" and (lower(this_.customerName) like ? "); 
+						sql.append(" and (lower(this_.customerName) like ? ");
 						sql.append(" or lower(this_.customerType) like ? ");
-						sql.append(" or lower(this_.productCode) like ? "); 
+						sql.append(" or lower(this_.productCode) like ? ");
 						sql.append(" or lower(this_.quoter) like ? ");
 						sql.append(" or lower(this_.price) like ? ");
 						sql.append(" or lower(this_.dccNo) like ? ");
 						sql.append(" or lower(this_.pageNo) like ? )");
-						
-						
+
 						params.add("%" + quoteInfo.getCustomerName() + "%");
 						params.add("%" + quoteInfo.getCustomerType() + "%");
 						params.add("%" + quoteInfo.getProductCode() + "%");
@@ -1372,11 +1437,11 @@ public class PublicAction extends BaseAction {
 			}
 			if (StringUtils.isBlank(sub)) {
 				if (materials != null) {
-					sql.append(" union all ");		
-					sql.append(" select q.* from t_quote_info q "); 
+					sql.append(" union all ");
+					sql.append(" select q.* from t_quote_info q ");
 					sql.append(" where q.qid in ( ");
-					sql.append(" select m.qid from t_materials m "); 
-					sql.append(" where ( lower(m.productsName) like ? or lower(m.materialsName) like ? or lower(m.diameter) like ?)) "); 
+					sql.append(" select m.qid from t_materials m ");
+					sql.append(" where ( lower(m.productsName) like ? or lower(m.materialsName) like ? or lower(m.diameter) like ?)) ");
 					params.add("%" + materials.getProductsName() + "%");
 					params.add("%" + materials.getMaterialsName() + "%");
 					params.add("%" + materials.getDiameter() + "%");
@@ -1401,15 +1466,14 @@ public class PublicAction extends BaseAction {
 						sql.append(" and this_.state = ? ");
 						params.add(state);
 					} else {
-						sql.append(" and (lower(this_.customerName) like ? "); 
+						sql.append(" and (lower(this_.customerName) like ? ");
 						sql.append(" or lower(this_.customerType) like ? ");
-						sql.append(" or lower(this_.productCode) like ? "); 
+						sql.append(" or lower(this_.productCode) like ? ");
 						sql.append(" or lower(this_.quoter) like ? ");
 						sql.append(" or lower(this_.price) like ? ");
 						sql.append(" or lower(this_.dccNo) like ? ");
 						sql.append(" or lower(this_.pageNo) like ? )");
-						
-						
+
 						params.add("%" + quoteInfo.getCustomerName() + "%");
 						params.add("%" + quoteInfo.getCustomerType() + "%");
 						params.add("%" + quoteInfo.getProductCode() + "%");
@@ -1421,92 +1485,93 @@ public class PublicAction extends BaseAction {
 				}
 			}
 		}
-		this.page = publicService.getResultListBySpringJDBC(page, sql.toString(),params.toArray(),new QuoteInfoMapper());
+		this.page = publicService.getResultListBySpringJDBC(page, sql.toString(), params.toArray(), new QuoteInfoMapper());
 		return SUCCESS;
 	}
-//	/**
-//	 * 获得报时信息
-//	 * 
-//	 * @return
-//	 */
-//	@SuppressWarnings("unchecked")
-//	@Action(description = "查询报时单")
-//	public String findQuoteInfoList() {
-//		DetachedCriteria dc = DetachedCriteria.forClass(QuoteInfo.class);
-//		String condition = page.getParams().get("condition");
-//		String queryLevel = page.getParams().get("queryLevel");
-//		String queryValue = page.getParams().get("queryValue");
-//		
-//		if ("customerType".equals(queryLevel)) {
-//			dc.add(Restrictions.eq("customerType", queryValue));
-//		}
-//		if ("quoteInfo".equals(queryLevel)) {
-//			dc.add(Restrictions.eq("cid", Integer.parseInt(queryValue)));
-//		}
-//		
-//		if (!MyUtils.isEmpty(condition)) {
-//			if (quoteInfo != null) {
-//				if (quoteInfo.getQid() != null) {
-//					dc.add(Restrictions.eq("qid", quoteInfo.getQid()));
-//				} else {
-//					dc.add(EnhancedExample.createDefault(quoteInfo));
-//				}
-//				this.page.setResult(dc);
-//				this.page = publicService.getResultList(page);
-//			}
-//			if (materials != null) {
-//				DetachedCriteria dMaterials = DetachedCriteria.forClass(Materials.class);
-//				Page p = new Page();
-//				dMaterials.add(EnhancedExample.createDefault(materials));
-//				p.setResult(dMaterials);
-//				p = publicService.getResultList(p);
-//				Iterator<Materials> it = p.getRoot().iterator();
-//				if (it.hasNext()) {
-//					StringBuffer hql = new StringBuffer("FROM QuoteInfo WHERE qid IN(");
-//					while (it.hasNext()) {
-//						Materials m = it.next();
-//						hql.append(m.getQid());
-//						if (it.hasNext()) {
-//							hql.append(",");
-//						}
-//					}
-//					hql.append(")");
-//					
-//					List results = publicService.getList(hql.toString());
-//					this.page.getRoot().addAll(results);
-//				}
-//			}
-//			if (refFiles != null) {
-//				DetachedCriteria dd = DetachedCriteria.forClass(RefFiles.class);
-//				Page p = new Page();
-//				dd.add(EnhancedExample.createDefault(refFiles));
-//				p.setResult(dd);
-//				p = publicService.getResultList(p);
-//				Iterator<RefFiles> it = p.getRoot().iterator();
-//				if (it.hasNext()) {
-//					StringBuffer hql = new StringBuffer("FROM QuoteInfo WHERE qid IN (");
-//					while (it.hasNext()) {
-//						RefFiles r = it.next();
-//						hql.append(r.getQid());
-//						if (it.hasNext()) {
-//							hql.append(",");
-//						}
-//					}
-//					hql.append(")");
-//					
-//					List results = publicService.getList(hql.toString());
-//					this.page.getRoot().addAll(results);
-//				}
-//			}
-//		} else {
-//			if (null != quoteInfo.getQid()) {
-//				dc.add(Restrictions.eq("qid", quoteInfo.getQid()));
-//			}
-//			this.page.setResult(dc);
-//			this.page = publicService.getResultList(page);
-//		}
-//		return SUCCESS;
-//	}
+
+	//	/**
+	//	 * 获得报时信息
+	//	 * 
+	//	 * @return
+	//	 */
+	//	@SuppressWarnings("unchecked")
+	//	@Action(description = "查询报时单")
+	//	public String findQuoteInfoList() {
+	//		DetachedCriteria dc = DetachedCriteria.forClass(QuoteInfo.class);
+	//		String condition = page.getParams().get("condition");
+	//		String queryLevel = page.getParams().get("queryLevel");
+	//		String queryValue = page.getParams().get("queryValue");
+	//		
+	//		if ("customerType".equals(queryLevel)) {
+	//			dc.add(Restrictions.eq("customerType", queryValue));
+	//		}
+	//		if ("quoteInfo".equals(queryLevel)) {
+	//			dc.add(Restrictions.eq("cid", Integer.parseInt(queryValue)));
+	//		}
+	//		
+	//		if (!MyUtils.isEmpty(condition)) {
+	//			if (quoteInfo != null) {
+	//				if (quoteInfo.getQid() != null) {
+	//					dc.add(Restrictions.eq("qid", quoteInfo.getQid()));
+	//				} else {
+	//					dc.add(EnhancedExample.createDefault(quoteInfo));
+	//				}
+	//				this.page.setResult(dc);
+	//				this.page = publicService.getResultList(page);
+	//			}
+	//			if (materials != null) {
+	//				DetachedCriteria dMaterials = DetachedCriteria.forClass(Materials.class);
+	//				Page p = new Page();
+	//				dMaterials.add(EnhancedExample.createDefault(materials));
+	//				p.setResult(dMaterials);
+	//				p = publicService.getResultList(p);
+	//				Iterator<Materials> it = p.getRoot().iterator();
+	//				if (it.hasNext()) {
+	//					StringBuffer hql = new StringBuffer("FROM QuoteInfo WHERE qid IN(");
+	//					while (it.hasNext()) {
+	//						Materials m = it.next();
+	//						hql.append(m.getQid());
+	//						if (it.hasNext()) {
+	//							hql.append(",");
+	//						}
+	//					}
+	//					hql.append(")");
+	//					
+	//					List results = publicService.getList(hql.toString());
+	//					this.page.getRoot().addAll(results);
+	//				}
+	//			}
+	//			if (refFiles != null) {
+	//				DetachedCriteria dd = DetachedCriteria.forClass(RefFiles.class);
+	//				Page p = new Page();
+	//				dd.add(EnhancedExample.createDefault(refFiles));
+	//				p.setResult(dd);
+	//				p = publicService.getResultList(p);
+	//				Iterator<RefFiles> it = p.getRoot().iterator();
+	//				if (it.hasNext()) {
+	//					StringBuffer hql = new StringBuffer("FROM QuoteInfo WHERE qid IN (");
+	//					while (it.hasNext()) {
+	//						RefFiles r = it.next();
+	//						hql.append(r.getQid());
+	//						if (it.hasNext()) {
+	//							hql.append(",");
+	//						}
+	//					}
+	//					hql.append(")");
+	//					
+	//					List results = publicService.getList(hql.toString());
+	//					this.page.getRoot().addAll(results);
+	//				}
+	//			}
+	//		} else {
+	//			if (null != quoteInfo.getQid()) {
+	//				dc.add(Restrictions.eq("qid", quoteInfo.getQid()));
+	//			}
+	//			this.page.setResult(dc);
+	//			this.page = publicService.getResultList(page);
+	//		}
+	//		return SUCCESS;
+	//	}
 
 	/**
 	 * 根据id找生产材料信息
@@ -1620,7 +1685,7 @@ public class PublicAction extends BaseAction {
 		sql.append(" WHERE tp.stuffid = tst.stuffid");
 		sql.append(" AND tp.speciesid = ts.speciesid");
 		sql.append(" AND tp.specid = tsp.specid");
-		
+
 		List<String> params = new ArrayList<String>();
 		if (priceList != null) {
 			sql.append(" AND (tp.remark like ? OR tst.stuffName like ? OR ts.speciesName like ? OR tsp.specName like ? )");
@@ -1632,8 +1697,8 @@ public class PublicAction extends BaseAction {
 			params.add(param);
 			params.add(param);
 		}
-		
-		this.page = publicService.getResultListBySpringJDBC(page, sql.toString(), params.toArray(),new PriceListMapper());
+
+		this.page = publicService.getResultListBySpringJDBC(page, sql.toString(), params.toArray(), new PriceListMapper());
 		return SUCCESS;
 	}
 
@@ -1878,6 +1943,14 @@ public class PublicAction extends BaseAction {
 
 	public void setSpecies(Species species) {
 		this.species = species;
+	}
+
+	public ProductCode getProductCode() {
+		return productCode;
+	}
+
+	public void setProductCode(ProductCode productCode) {
+		this.productCode = productCode;
 	}
 
 }

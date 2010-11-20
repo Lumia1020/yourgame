@@ -38,6 +38,7 @@
 			Ext.ROLE_R20 = '<s:property value="#session.role.r20"/>' == 'true' ? true:false;
 			Ext.ROLE_R21 = '<s:property value="#session.role.r21"/>' == 'true' ? true:false;
 			Ext.ROLE_R22 = '<s:property value="#session.role.r22"/>' == 'true' ? true:false;
+			Ext.ROLE_R23 = '<s:property value="#session.role.r23"/>' == 'true' ? true:false;
 		</script>
 		<script type="text/javascript" src="../js/ext-lang-zh_CN.js"></script>
 		<script type="text/javascript" src="../js/swfupload.js"></script>

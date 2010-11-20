@@ -94,6 +94,11 @@
 				<param name="includeProperties">success,infos.*</param>
 			</result>
 		</action>
+		<action name="saveProductCode" class="publicAction" method="saveProductCode">
+			<result type="json">
+				<param name="includeProperties">success,infos.*</param>
+			</result>
+		</action>
 		<action name="saveOtherPrice" class="publicAction" method="saveOtherPrice">
 			<result type="json">
 				<param name="includeProperties">success,infos.*</param>
@@ -261,6 +266,13 @@
 				<param name="includeProperties">root.*,totalProperty</param>
 			</result>
 		</action>
+		<action name="findProductCodeList" class="publicAction" method="findProductCodeList">
+			<result type="json">
+				<param name="root">page</param>
+				<param name="excludeNullProperties">true</param>
+				<param name="includeProperties">root.*,totalProperty</param>
+			</result>
+		</action>
 		<action name="findCustomerList" class="publicAction" method="findCustomerList">
 			<result type="json">
 				<param name="root">page</param>
@@ -286,6 +298,11 @@
 		</action>
 		
 		
+		<action name="deleteProductCode" class="publicAction" method="deleteProductCode">
+			<result type="json">
+				<param name="includeProperties">success</param>
+			</result>
+		</action>
 		<action name="deleteSpecification" class="publicAction" method="deleteSpecification">
 			<result type="json">
 				<param name="includeProperties">success</param>
@@ -348,6 +365,11 @@
 		</action>
 		
 		
+		<action name="updateProductCode" class="publicAction" method="updateProductCode">
+			<result type="json">
+				<param name="includeProperties">success,infos.*</param>
+			</result>
+		</action>
 		<action name="updateSpecification" class="publicAction" method="updateSpecification">
 			<result type="json">
 				<param name="includeProperties">success,infos.*</param>

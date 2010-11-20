@@ -23,6 +23,7 @@ import com.gvp.po.Materials;
 import com.gvp.po.OtherQuotePrice;
 import com.gvp.po.PriceList;
 import com.gvp.po.ProcessInfo;
+import com.gvp.po.ProductCode;
 import com.gvp.po.QuoteInfo;
 import com.gvp.po.RefFiles;
 import com.gvp.po.ReferenceInfo;
@@ -381,6 +382,7 @@ public class PublicService implements IPublicService {
 			infos.put("process", this.getList(ProcessInfo.class, qid));
 			infos.put("reference", this.getList(ReferenceInfo.class, qid));
 			infos.put("refFiles", this.getList(RefFiles.class, qid));
+			infos.put("productCode", this.getList(ProductCode.class, qid));
 		}
 		return infos;
 	}

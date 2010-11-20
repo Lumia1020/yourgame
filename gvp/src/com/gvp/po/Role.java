@@ -50,6 +50,16 @@ public class Role implements Serializable {
 	private Boolean r21; // 系统日志查看
 	
 	private Boolean r22; // 其他报价管理
+	
+	private Boolean r23; //产品编码信息
+
+	public Boolean getR23() {
+		return r23;
+	}
+
+	public void setR23(Boolean r23) {
+		this.r23 = r23;
+	}
 
 	public Boolean getR22() {
 		return r22;
