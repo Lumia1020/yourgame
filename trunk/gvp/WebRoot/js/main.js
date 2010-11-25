@@ -2136,14 +2136,14 @@ Ext.onReady(function() {
 							    valueField: 'text',
 							    displayField: 'text'
 			                },{
+			                	fieldLabel:'DCC-',
+			                	name: 'quoteInfo.dccNo'
+			                },{
 			                	fieldLabel:'产品名称',
 			                	name:'materials.productsName'
 			                },{
 			                    fieldLabel: '产品编码',
 			                    name: 'quoteInfo.productCode'
-			                },{
-			                	fieldLabel:'DCC-',
-			                	name: 'quoteInfo.dccNo'
 			                }]
 			            },{
 			            	defaults:{xtype:'textfield',anchor:'93%'},
@@ -2182,6 +2182,29 @@ Ext.onReady(function() {
 				                    name:'endModifyTime'
 				                }]
 					        },{
+								xtype:'combo',
+								fieldLabel:'客户名称',
+								name: 'quoteInfo.cid',
+				            	valueField:'cid',
+				            	displayField:'customerName',
+						        emptyText:'请选择客户...',
+						        triggerAction: 'all',
+					        	typeAhead: true,
+						        forceSelection: true,
+						        selectOnFocus:false,
+						        editable:false,
+						        allowBlank:false,
+				            	store:{
+				            		xtype: 'store',
+									url: 'findCustomerList.action',
+									paramNames:{start:'page.start',	limit:'page.limit'},
+									baseParams:{'page.start':0,'page.limit':0},
+									reader: new Ext.data.JsonReader(
+										{totalProperty: 'totalProperty',root: 'root'},
+										[{name:'cid'},{name:'customerName'},{name:'customerCode'},{name:'customerType'}]
+									)
+							    }
+							},{
 			                	fieldLabel:'状态',
 			                	name:'state',
 			                	xtype:'combo',
