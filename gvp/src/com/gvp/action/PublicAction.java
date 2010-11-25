@@ -104,9 +104,8 @@ public class PublicAction extends BaseAction {
 	
 	
 	/**
-	 * 高级查询
 	 * @Title: findQuoteInfoAdvanced
-	 * @Description: TODO 
+	 * @Description: 高级查询 
 	 * @return
 	 */
 	@Action(description = "高级查询")
