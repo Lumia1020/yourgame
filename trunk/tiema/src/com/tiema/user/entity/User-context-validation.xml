@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE validators PUBLIC 
+  		"-//OpenSymphony Group//XWork Validator 1.0//EN" 
+  		"http://www.opensymphony.com/xwork/xwork-validator-1.0.2.dtd">
+  		
+<validators>
+	<field name="chineseName">
+		<field-validator type="requiredstring">
+			<message><![CDATA[<b>中文名</b> 为必填项。]]></message>
+		</field-validator>
+		<field-validator type="stringlength">
+			<param name="maxLength">10</param>
+			<param name="trim">true</param>
+			<message><![CDATA[<b>中文名</b> 最多 ${maxLength} 个字符。]]></message>
+		</field-validator>
+	</field>
+	
+	<field name="username">
+		<field-validator type="requiredstring">
+			<message><![CDATA[<b>用户名</b> 为必填项。]]></message>
+		</field-validator>
+		<field-validator type="stringlength">
+			<param name="maxLength">30</param>
+			<param name="trim">true</param>
+			<message><![CDATA[<b>用户名</b> 最多 ${maxLength} 个字符。]]></message>
+		</field-validator>
+		<field-validator type="userNotExists">
+			<param name="idName">id</param>
+			<message><![CDATA[用户名 <b>“${username}”</b>  在系统中已经存在。]]></message>
+		</field-validator>
+	</field>
+	
+	<field name="password">
+		<field-validator type="requiredstring">
+			<message><![CDATA[<b>用户密码</b> 为必填项。]]></message>
+		</field-validator>
+		<field-validator type="stringlength">
+			<param name="maxLength">20</param>
+			<param name="trim">true</param>
+			<message><![CDATA[<b>用户密码</b> 最多 ${maxLength} 个字符。]]></message>
+		</field-validator>
+	</field>
+
+	<field name="jobTitle">
+		<field-validator type="stringlength">
+			<param name="maxLength">20</param>
+			<param name="trim">true</param>
+			<message><![CDATA[<b>职称</b> 最多 ${maxLength} 个字符。]]></message>
+		</field-validator>
+	</field>
+
+	<field name="homeAddress">
+		<field-validator type="stringlength">
+			<param name="maxLength">100</param>
+			<param name="trim">true</param>
+			<message><![CDATA[<b>家庭地址</b> 最多 ${maxLength} 个字符。]]></message>
+		</field-validator>
+	</field>
+
+	<field name="email">
+		<field-validator type="email">
+			<message><![CDATA[请输入合法的<b>电子邮件</b> 如:example@163.com]]></message>
+		</field-validator>
+		<field-validator type="stringlength">
+			<param name="maxLength">100</param>
+			<param name="trim">true</param>
+			<message><![CDATA[<b>电子邮件</b> 最多 ${maxLength} 个字符。]]></message>
+		</field-validator>
+	</field>
+
+	<field name="mobile">
+		<field-validator type="stringlength">
+			<param name="maxLength">20</param>
+			<param name="trim">true</param>
+			<message><![CDATA[<b>移动电话</b> 最多 ${maxLength} 个字符。]]></message>
+		</field-validator>
+	</field>
+
+	<field name="zipCode">
+		<field-validator type="stringlength">
+			<param name="minLength">6</param>
+			<param name="maxLength">6</param>
+			<param name="trim">true</param>
+			<message><![CDATA[<b>邮政编码</b> 最少 ${minLength} 个字符、最多 ${maxLength} 个字符。]]></message>
+		</field-validator>
+	</field>
+
+	<field name="emergencyContacts">
+		<field-validator type="stringlength">
+			<param name="maxLength">20</param>
+			<param name="trim">true</param>
+			<message><![CDATA[<b>紧急情况联系人</b> 最多 ${maxLength} 个字符。]]></message>
+		</field-validator>
+	</field>
+
+	<field name="emergencyPhone">
+		<field-validator type="stringlength">
+			<param name="maxLength">20</param>
+			<param name="trim">true</param>
+			<message><![CDATA[<b>紧急情况联系电话</b> 最多 ${maxLength} 个字符。]]></message>
+		</field-validator>
+	</field>
+
+
+	<field name="remark">
+		<field-validator type="stringlength">
+			<param name="maxLength">200</param>
+			<param name="trim">true</param>
+			<message><![CDATA[<b>备注</b> 最多 ${maxLength} 个字符。]]></message>
+		</field-validator>
+	</field>
+</validators>

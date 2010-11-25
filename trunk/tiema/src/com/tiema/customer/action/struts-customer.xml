@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE struts PUBLIC
+        "-//Apache Software Foundation//DTD Struts Configuration 2.0//EN"
+        "http://struts.apache.org/dtds/struts-2.0.dtd">
+
+<struts>
+
+	<package name="default-customer" namespace="/default/customer" extends="struts-default">
+		<action name="*">
+			<result>/module/{1}/{1}_manage.jsp</result>
+		</action>
+	</package>
+
+	<package name="json-customer" namespace="/json/customer" extends="json-default">
+		<action name="page!*" class="customerAction">
+			<result type="json">
+				<param name="enumAsBean">true</param>
+				<param name="root">page</param>
+				<param name="includeProperties"><![CDATA[
+					result,
+					result\[\d+\],
+					result\[\d+\]\[1\]\.id,
+					result\[\d+\]\[1\]\.customerNumber,
+					result\[\d+\]\[1\]\.customerName,
+					result\[\d+\]\[1\]\.membershipCategory\.categoryName,
+					result\[\d+\]\[1\]\.birthday,
+					result\[\d+\]\[1\]\.originalCustomer,
+					result\[\d+\]\[1\]\.mobile,
+					totalCount,
+					success
+				]]></param>
+			</result>
+		</action>
+		<action name="success!*" class="customerAction">
+			<result type="json">
+				<param name="includeProperties">success,jsons.*</param>
+			</result>
+		</action>
+
+		<action name="entity-*" class="customerAction" method="{1}">
+			<interceptor-ref name="jsonValidationWorkflowStack" />
+			<result type="json">
+				<param name="enumAsBean">true</param>
+				<param name="includeProperties">customer\..*,success,jsons.*</param>
+			</result>
+		</action>
+	</package>
+</struts>

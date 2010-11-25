@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE validators PUBLIC 
+  		"-//OpenSymphony Group//XWork Validator 1.0//EN" 
+  		"http://www.opensymphony.com/xwork/xwork-validator-1.0.2.dtd">
+
+<validators>
+	<field name="clubName">
+		<field-validator type="requiredstring">
+			<message><![CDATA[<b>俱乐部名称</b> 为必填项。]]></message>
+		</field-validator>
+		<field-validator type="stringlength">
+			<param name="maxLength">30</param>
+			<param name="trim">true</param>
+			<message><![CDATA[<b>俱乐部名称</b> 最多 ${maxLength} 个字符。]]></message>
+		</field-validator>
+	</field>
+	
+	<field name="contact">
+		<field-validator type="stringlength">
+			<param name="maxLength">20</param>
+			<param name="trim">true</param>
+			<message><![CDATA[<b>联系人</b> 最多 ${maxLength} 个字符。]]></message>
+		</field-validator>
+	</field>
+	
+	<field name="telephone">
+		<field-validator type="stringlength">
+			<param name="maxLength">20</param>
+			<param name="trim">true</param>
+			<message><![CDATA[<b>固定电话</b> 最多 ${maxLength} 个字符。]]></message>
+		</field-validator>
+	</field>
+
+	<field name="fax">
+		<field-validator type="stringlength">
+			<param name="maxLength">20</param>
+			<param name="trim">true</param>
+			<message><![CDATA[<b>传真号码</b> 最多 ${maxLength} 个字符。]]></message>
+		</field-validator>
+	</field>
+
+	<field name="address">
+		<field-validator type="stringlength">
+			<param name="maxLength">100</param>
+			<param name="trim">true</param>
+			<message><![CDATA[<b>俱乐部地址</b> 最多 ${maxLength} 个字符。]]></message>
+		</field-validator>
+	</field>
+
+	<field name="zipCode">
+		<field-validator type="stringlength">
+			<param name="minLength">6</param>
+			<param name="maxLength">6</param>
+			<param name="trim">true</param>
+			<message><![CDATA[<b>邮政编码</b> 最少 ${minLength} 个字符、最多 ${maxLength} 个字符。]]></message>
+		</field-validator>
+	</field>
+	
+	<field name="im">
+		<field-validator type="stringlength">
+			<param name="maxLength">20</param>
+			<param name="trim">true</param>
+			<message><![CDATA[<b>QQ/MSN</b> 最多 ${maxLength} 个字符。]]></message>
+		</field-validator>
+	</field>
+
+	<field name="url">
+		<field-validator type="url">
+			<message><![CDATA[请输入合法的<b>球会网址</b> 如:http://www.qq.com]]></message>
+		</field-validator>
+		<field-validator type="stringlength">
+			<param name="maxLength">200</param>
+			<param name="trim">true</param>
+			<message><![CDATA[<b>球会网址</b> 最多 ${maxLength} 个字符。]]></message>
+		</field-validator>
+	</field>
+	
+	<field name="route">
+		<field-validator type="stringlength">
+			<param name="maxLength">100</param>
+			<param name="trim">true</param>
+			<message><![CDATA[<b>交通xianlu</b> 最多 ${maxLength} 个字符。]]></message>
+		</field-validator>
+	</field>
+
+	<field name="remark">
+		<field-validator type="stringlength">
+			<param name="maxLength">200</param>
+			<param name="trim">true</param>
+			<message><![CDATA[<b>备注</b> 最多 ${maxLength} 个字符。]]></message>
+		</field-validator>
+	</field>
+</validators>

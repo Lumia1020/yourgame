@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Struts2Diagram version="2.0">
+  <package name="default-role" location="258,10" size="280,245">
+    <action name="*" location="65,57" size="150,41">
+      <result name="success">
+        <resourceEdge source="success" routing="0" target="{0}_manage.jsp" />
+      </result>
+    </action>
+    <action name="*!*" location="65,162" size="150,41">
+      <result name="success">
+        <resourceEdge source="success" routing="0" target="{0}_manage.jsp" />
+      </result>
+    </action>
+  </package>
+  <package name="json-role" location="10,359" size="460,211">
+    <action name="page!*" location="15,23" size="150,41">
+      <result name="success" />
+    </action>
+    <action name="map!*" location="260,23" size="150,41">
+      <result name="success" />
+    </action>
+    <action name="success!*" location="15,163" size="150,41">
+      <result name="success" />
+    </action>
+    <action name="entity-*" location="0,0" size="0,0">
+      <result name="success" />
+    </action>
+  </package>
+  <webResource name="{0}_manage.jsp" path="/module/{0}/{0}_manage.jsp" location="29,135" size="150,55" />
+</Struts2Diagram>
+
