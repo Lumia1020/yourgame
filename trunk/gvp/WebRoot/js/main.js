@@ -1718,7 +1718,7 @@ Ext.onReady(function() {
 						                	name: 'quoteInfo.dccNo',
 						                	value:quoteInfo.dccNo
 						                },{
-						                    fieldLabel: '报时日期',
+						                    fieldLabel: '填单日期',
 						                    xtype:'datefield',
 						                    format:'Y-m-d',
 						                    name: 'quoteInfo.recordTime',
@@ -1866,7 +1866,7 @@ Ext.onReady(function() {
 						                	name: 'quoteInfo.dccNo',
 						                	value:quoteInfo.dccNo
 						                },{
-						                    fieldLabel: '报时日期',
+						                    fieldLabel: '填单日期',
 						                    xtype:'datefield',
 						                    format:'Y-m-d',
 						                    name: 'quoteInfo.recordTime',
@@ -1930,6 +1930,304 @@ Ext.onReady(function() {
 				Ext.Msg.show('错误提示','数据加载失败');
 			}
 		});
+	}
+	
+	
+	/**
+	*显示高级查询界面
+	*/
+	function showAdvancedQueryWindow(){
+		var innerWin = new Ext.Window({
+			title:'高级查询',
+			width:700,
+			modal:true,
+			resizable:false,
+			height:340,
+			autoScroll:true,
+			closeAciton:'close',
+			bodyStyle:'overflow-x:hidden',
+			layout:'fit',
+			fbar:[{
+				text:'查询',
+				handler:function(){
+					innerWin.get(0).getForm().submit({
+						 waitTitle : '请稍候',
+						 waitMsg : '正在提交查询请求,请稍候...',
+						 success: function(form, action) {
+					     	innerWin.close();
+					     	var store = grid.getStore();
+					     	var record = new store.recordType(action.result.infos.priceList);
+					     	record.set('recordTime',Date.parseDate(action.result.infos.priceList.recordTime,'Y-m-d H:i:s'));
+					     	record.commit();
+					     	store.insert(0,record);
+					     	grid.getSelectionModel().selectRow(0);
+					     	Ext.get(grid.getView().getRow(0)).frame('green',2,{duration: .3});
+					     },
+					     failure: function(form, action) {
+					        switch (action.failureType) {
+					            case Ext.form.Action.CLIENT_INVALID:
+					                Ext.Msg.alert('失败', '表单中可能包含无效内容');
+					                break;
+					            case Ext.form.Action.CONNECT_FAILURE:
+					                Ext.Msg.alert('失败', 'Ajax连接失败');
+					                break;
+					            case Ext.form.Action.SERVER_INVALID:
+					               Ext.Msg.alert('失败', action.result.msg);
+					       }
+					    }
+
+					});
+				}
+			},{
+				text:'关闭',
+				handler:function(){
+					innerWin.close();
+				}
+			}],
+			items:[{
+				xtype:'form',
+				url : 'adjustQuoteInfos.action',
+				labelWidth: 80,
+				bodyStyle:'padding:15px 10px 10px 10px',
+				border: false,
+				items:[{
+		        	xtype:'fieldset',
+		            title: '综合查询条件',
+		            items :[{
+			            layout:'column',
+			            defaults:{layout:'form',columnWidth:.5,border:false},
+			            border:false,
+			            items:[{
+			            	defaults:{xtype:'textfield',anchor:'90%'},
+			                items: [{
+			                	fieldLabel: '材质',
+			                	xtype:'combo',
+					            valueField:'stuffid',
+					        	displayField:'stuffName',
+					        	queryParam:'stuff.stuffName',
+						        typeAhead: true,
+								triggerAction: 'all',
+						        minChars:1,
+						        listWidth:250,
+						        selectOnFocus:true,
+						        submitValue:true,
+						        pageSize:10,
+					            id:'materials.stuffName',
+						        name: 'materials.stuffName',
+					            hiddenId:'priceList.stuffid',
+					            hiddenName:'priceList.stuffid',
+						        ref: '../../../../comboStuff',
+					        	store:{
+					        		xtype: 'store',
+									url: 'findStuffList.action',
+									paramNames:{start:'page.start',	limit:'page.limit'},
+									baseParams:{'page.start':0,'page.limit':10},
+									reader: new Ext.data.JsonReader(
+										{totalProperty: 'totalProperty',root: 'root'},
+										[{name : 'stuffid'}, {name : 'stuffName'}]
+									)
+							    },
+								listeners:{
+									'select':function(){
+										var comboSpecies = innerWin.comboSpecies;
+										comboSpecies.enable();
+										comboSpecies.clearValue();
+										var sd = comboSpecies.getStore();
+										sd.removeAll();
+										sd.load();
+										comboSpecies.onTriggerClick();
+									}
+								}
+			                }, {
+			                	xtype:'combo',
+			                	fieldLabel: '种类',
+					            valueField:'speciesid',
+					        	displayField:'speciesName',
+					        	queryParam:'species.speciesName',
+						        typeAhead: true,
+						        disabled:true,
+								triggerAction: 'all',
+						        minChars:1,
+						        tpl: resultTpl,
+						        listWidth:250,
+						        selectOnFocus:true,
+						        pageSize:10,
+						        ref: '../../../../comboSpecies',
+						        id:'materials.speciesName',
+						        name:'materials.speciesName',
+						        hiddenId: 'priceList.speciesid',
+						        hiddenName: 'priceList.speciesid',
+						        submitValue:true,
+					        	store:{
+					        		xtype: 'store',
+									url: 'findSpeciesList.action',
+									paramNames:{start:'page.start',	limit:'page.limit'},
+									baseParams:{'page.start':0,'page.limit':10},
+									reader: new Ext.data.JsonReader(
+										{totalProperty: 'totalProperty',root: 'root'},
+										[{name : 'speciesid'},{name:'speciesName'},{name : 'stuffName'}]
+									),
+									listeners:{
+										'beforeload':function(sd,options){
+											sd.setBaseParam('species.stuffid',innerWin.comboStuff.hiddenField.value);
+										}
+									}
+							    },
+							    listeners:{
+							    	'select':function(){
+							    		var comboSpecification = innerWin.comboSpecification;
+										comboSpecification.enable();
+										comboSpecification.clearValue();
+										var sd = comboSpecification.getStore();
+										sd.removeAll();
+										sd.load();
+										comboSpecification.onTriggerClick();
+							    	}
+							    }
+			                }, {
+			                	xtype:'combo',
+			                	fieldLabel: '规格',
+					            valueField:'specid',
+					        	displayField:'specName',
+					        	queryParam:'specification.specName',
+						        typeAhead: true,
+						        disabled:true,
+								triggerAction: 'all',
+						        minChars:1,
+						        tpl: specificationTpl,
+						        listWidth:250,
+						        selectOnFocus:true,
+						        allowBlank:false,
+						        pageSize:10,
+						        ref: '../../../../comboSpecification',
+						        id:'priceList.specName',
+						        name: 'priceList.specName',
+						        hiddenId:'priceList.specid',
+						        hiddenName:'priceList.specid',
+						        submitValue:true,
+					        	store:{
+					        		xtype: 'store',
+									url: 'findSpecificationList.action',
+									paramNames:{start:'page.start',	limit:'page.limit'},
+									baseParams:{'page.start':0,'page.limit':10},
+									reader: new Ext.data.JsonReader(
+										{totalProperty: 'totalProperty',root: 'root'},
+										[{name : 'specid'},{name : 'specName'},{name : 'speciesid'},{name:'speciesName'},{name : 'stuffName'},{name:'price'}]
+									),
+									listeners:{
+										'beforeload':function(sd){
+											sd.setBaseParam('specification.stuffid',innerWin.comboStuff.hiddenField.value);
+											sd.setBaseParam('specification.speciesid',innerWin.comboSpecies.hiddenField.value);
+										}
+									}
+							    }
+			                },{
+			                	fieldLabel:'客户类别',
+			                	xtype:'combo',
+			                	name:'customer.customerType',
+			                	typeAhead: true,
+			                	editable:false,
+							    triggerAction: 'all',
+							    mode: 'local',
+							    store: new Ext.data.ArrayStore({
+							        fields: ['text'],
+							        data: [['主要客户'], ['其他客户']]
+							    }),
+							    valueField: 'text',
+							    displayField: 'text'
+			                },{
+			                	fieldLabel:'产品名称',
+			                	name:'materials.productsName'
+			                },{
+			                    fieldLabel: '产品编码',
+			                    name: 'quoteInfo.productCode'
+			                },{
+			                	fieldLabel:'DCC-',
+			                	name: 'quoteInfo.dccNo'
+			                }]
+			            },{
+			            	defaults:{xtype:'textfield',anchor:'93%'},
+			                items: [{
+						        layout:'column',
+						        xtype: 'container',
+						        fieldLabel: '填单日期',
+						        defaults:{editable:false,format:'Y-m-d',xtype:'datefield'},
+				                items:[{
+				                    columnWidth:.45,
+				                    name: 'startRecordTime'
+				                },{
+				                	columnWidth:.1,
+				                	border:false,
+				                	xtype:'panel', 
+				                	html:'&nbsp;到'
+				                },{
+				                    columnWidth:.45,
+				                    name:'endRecordTime'
+				                }]
+					        },{
+						        layout:'column',
+						        xtype: 'container',
+						        fieldLabel: '更新日期',
+						        defaults:{editable:false,format:'Y-m-d',xtype:'datefield'},
+				                items:[{
+				                    columnWidth:.45,
+				                    name: 'startModifyTime'
+				                },{
+				                	columnWidth:.1,
+				                	border:false,
+				                	xtype:'panel',
+				                	html:'&nbsp;到'
+				                },{
+				                    columnWidth:.45, 
+				                    name:'endModifyTime'
+				                }]
+					        },{
+			                	fieldLabel:'状态',
+			                	name:'state',
+			                	xtype:'combo',
+			                	name:'quoteInfo.state',
+			                	typeAhead: true,
+			                	editable:false,
+							    triggerAction: 'all',
+							    mode: 'local',
+							    store: new Ext.data.ArrayStore({
+							        fields: ['text'],
+							        data: [['已审核'],['已提交审核申请'],['未提交审核申请'],['已退回']]
+							    }),
+							    valueField: 'text',
+							    displayField: 'text'
+			                },{
+			                	fieldLabel:'版本',
+			                	name:'version',
+			                	xtype:'combo',
+			                	typeAhead: true,
+			                	editable:false,
+							    triggerAction: 'all',
+							    mode: 'local',
+							    store: new Ext.data.ArrayStore({
+							        fields: ['text'],
+							        data: [['原始'],['非原始']]
+							    }),
+							    valueField: 'text',
+							    displayField: 'text'
+			                },{
+			                	fieldLabel:'文件夹页码',
+			                	name:'quoteInfo.pageNo'
+			                },{
+					            xtype: 'checkboxgroup',
+					            fieldLabel: '排序方式',
+					            items: [
+					                {boxLabel: '文件夹页码', name: 'sortByPageNo'},
+					                {boxLabel: '填单日期', name: 'sortByRecordTime', checked: true}
+					            ]
+					        }]
+			            }]
+			        }]
+		        }]
+			}]
+		});
+		
+		innerWin.show();
 	}
 	
 	/**
@@ -2034,7 +2332,7 @@ Ext.onReady(function() {
 			                	fieldLabel:'DCC-',
 			                	name: 'quoteInfo.dccNo'
 			                },{
-			                    fieldLabel: '报时日期',
+			                    fieldLabel: '填单日期',
 			                    xtype:'datefield'
 			                    ,format:'Y-m-d',
 			                    value:new Date().clearTime(),
@@ -3176,7 +3474,7 @@ Ext.onReady(function() {
 					                	name: 'quoteInfo.dccNo',
 					                	value:quoteInfo.dccNo
 					                },{
-					                    fieldLabel: '报时日期',
+					                    fieldLabel: '填单日期',
 					                    name: 'quoteInfo.recordTime',
 					                    value: recordTime
 					                }]
@@ -3602,20 +3900,28 @@ Ext.onReady(function() {
 	    	tbar:{
 	    		xtype:'toolbar',
 	    		enableOverflow: true,
-	    		items:['条件',initSearchField(store,null,[
-		    		'page.params.condition',
-		    		'quoteInfo.customerName',
-		    		'quoteInfo.customerType',
-		    		'quoteInfo.pageNo',
-		    		'quoteInfo.price',
-		    		'quoteInfo.productCode',
-		    		'quoteInfo.quoter',
-		    		'quoteInfo.dccNo',
-		    		'refFiles.remark',
-		    		'materials.productsName',
-		    		'materials.materialsName',
-		    		'materials.diameter'
-		    	]),
+	    		items:[{
+	    				text:'高级查询',
+	    				handler:function(){
+	    					showAdvancedQueryWindow();
+	    				}
+	    			},
+//	    		'条件',initSearchField(store,null,[
+//		    		'page.params.condition',
+//		    		'quoteInfo.customerName',
+//		    		'quoteInfo.customerType',
+//		    		'quoteInfo.pageNo',
+//		    		'quoteInfo.price',
+//		    		'quoteInfo.productCode',
+//		    		'quoteInfo.quoter',
+//		    		'quoteInfo.dccNo',
+//		    		'refFiles.remark',
+//		    		'materials.productsName',
+//		    		'materials.materialsName',
+//		    		'materials.diameter'
+//		    	]),
+		    	
+		    	
 		    	'->',{
 		    		text :'添加'
 		    		,iconCls:'silk-add'

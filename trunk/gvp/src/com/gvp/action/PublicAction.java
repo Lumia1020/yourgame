@@ -90,46 +90,32 @@ public class PublicAction extends BaseAction {
 	private WorkflowLog			workflow;
 
 	private OtherQuotePrice		otherPrice;
-
-	public OtherQuotePrice getOtherPrice() {
-		return otherPrice;
+	
+	private Date startRecordTime;	//填单日期
+	private Date endRecordTime;
+	
+	private Date startModifyTime;//更新日期
+	private Date endModifyTime;
+	
+	private String version;	//版本
+	
+	private String sortByPageNo;//根据文件夹页码排序
+	private String sortByRecordTime;//根据填单日期排序
+	
+	
+	/**
+	 * 高级查询
+	 * @Title: findQuoteInfoAdvanced
+	 * @Description: TODO 
+	 * @return
+	 */
+	@Action(description = "高级查询")
+	public String findQuoteInfoAdvanced(){
+		
+		return SUCCESS;
 	}
 
-	public void setOtherPrice(OtherQuotePrice otherPrice) {
-		this.otherPrice = otherPrice;
-	}
-
-	public WorkflowLog getWorkflow() {
-		return workflow;
-	}
-
-	public void setWorkflow(WorkflowLog work) {
-		this.workflow = work;
-	}
-
-	public SystemLog getLog() {
-		return log;
-	}
-
-	public void setLog(SystemLog log) {
-		this.log = log;
-	}
-
-	public PriceList getPriceList() {
-		return priceList;
-	}
-
-	public void setPriceList(PriceList priceList) {
-		this.priceList = priceList;
-	}
-
-	public Specification getSpecification() {
-		return specification;
-	}
-
-	public void setSpecification(Specification specification) {
-		this.specification = specification;
-	}
+	
 	
 	/**
 	 * 删除报时单的产品编号
@@ -1951,6 +1937,102 @@ public class PublicAction extends BaseAction {
 
 	public void setProductCode(ProductCode productCode) {
 		this.productCode = productCode;
+	}
+
+	public Date getStartModifyTime() {
+		return startModifyTime;
+	}
+
+	public void setStartModifyTime(Date startModifyTime) {
+		this.startModifyTime = startModifyTime;
+	}
+
+	public Date getEndModifyTime() {
+		return endModifyTime;
+	}
+
+	public void setEndModifyTime(Date endModifyTime) {
+		this.endModifyTime = endModifyTime;
+	}
+
+	public String getVersion() {
+		return version;
+	}
+
+	public void setVersion(String version) {
+		this.version = version;
+	}
+
+	public String getSortByPageNo() {
+		return sortByPageNo;
+	}
+
+	public void setSortByPageNo(String sortByPageNo) {
+		this.sortByPageNo = sortByPageNo;
+	}
+
+	public String getSortByRecordTime() {
+		return sortByRecordTime;
+	}
+
+	public void setSortByRecordTime(String sortByRecordTime) {
+		this.sortByRecordTime = sortByRecordTime;
+	}
+	
+	public Date getStartRecordTime() {
+		return startRecordTime;
+	}
+
+	public void setStartRecordTime(Date startRecordTime) {
+		this.startRecordTime = startRecordTime;
+	}
+
+	public Date getEndRecordTime() {
+		return endRecordTime;
+	}
+
+	public void setEndRecordTime(Date endRecordTime) {
+		this.endRecordTime = endRecordTime;
+	}
+
+	public OtherQuotePrice getOtherPrice() {
+		return otherPrice;
+	}
+
+	public void setOtherPrice(OtherQuotePrice otherPrice) {
+		this.otherPrice = otherPrice;
+	}
+
+	public WorkflowLog getWorkflow() {
+		return workflow;
+	}
+
+	public void setWorkflow(WorkflowLog work) {
+		this.workflow = work;
+	}
+
+	public SystemLog getLog() {
+		return log;
+	}
+
+	public void setLog(SystemLog log) {
+		this.log = log;
+	}
+
+	public PriceList getPriceList() {
+		return priceList;
+	}
+
+	public void setPriceList(PriceList priceList) {
+		this.priceList = priceList;
+	}
+
+	public Specification getSpecification() {
+		return specification;
+	}
+
+	public void setSpecification(Specification specification) {
+		this.specification = specification;
 	}
 
 }
