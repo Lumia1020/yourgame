@@ -1,0 +1,33 @@
+//Service实现类注解一定要省略后面的Impl,为了其他地方定义变量时方便命名
+
+resources --存放一些开发是的参考资料和文档
+test ---测试根路径
+src ----源码根路径  
+WebRoot
+|--images --存放web程序所需的公共图片
+|--css --存放web程序所需的公共样式表
+|--js --存放web程序所需的公共js文件
+|--commons --存放web程序所需的公共文件
+|--libraries --存放一些页面的开发的第三方框架
+|----jquery
+|------plugin	--插件
+|--------jquery.uuid.js
+|------jquery-1.4.2.min.js
+|----fusion_charts
+|------version_3_2_1
+|--module --模块目录,分类存放模块名
+|----user --功能模块文件夹(存放与某个功能模块相关的资源)jsp、html页面
+|------images --存放与该功能模块相关的图片
+|------css --存放与该模块相关的样式表文件
+|------js --存放与该模块相关的js文件
+
+
+Jsp页面命名：小写,单词间下划线隔开, "模块_功能.jsp" 如:user_manage.jsp
+
+ava中的常量一般采用大写字母单词命名，单词与单词之间用下划线（_）加以分割，这符合ANSI的常量命名规则，如下所示的代码：
+
+static final int MIN_WIDTH = 14;
+
+static final int MAX_WIDTH = 1000;
+
+static final int GET_THE_MEMORY = 128; 

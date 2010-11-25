@@ -1,0 +1,16 @@
+<!DOCTYPE validators PUBLIC "-//OpenSymphony Group//XWork Validator 1.0.2//EN" "http://www.opensymphony.com/xwork/xwork-validator-1.0.2.dtd">
+
+<validators>
+	<field name="agencyCompany">
+		<field-validator type="visitor">
+			<param name="context">context</param>
+			<param name="appendPrefix">true</param>
+			<message></message>
+		</field-validator>
+	</field>
+	<field name="agencyCompany.id">
+		<field-validator type="required">
+			<message><![CDATA[找不到更新中介公司的ID!]]></message>
+		</field-validator>
+	</field>
+</validators>

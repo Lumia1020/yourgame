@@ -1,0 +1,21 @@
+<!DOCTYPE validators PUBLIC "-//OpenSymphony Group//XWork Validator 1.0.2//EN" "http://www.opensymphony.com/xwork/xwork-validator-1.0.2.dtd">
+
+<validators>
+	<field name="clubPrice">
+		<field-validator type="visitor">
+			<param name="context">context</param>
+			<param name="appendPrefix">true</param>
+			<message></message>
+		</field-validator>
+	</field>
+	<field name="clubPrice.endDate">
+		<field-validator type="clubPriceDateRangeValid">
+			<param name="update">false</param>
+			<param name="startDateFieldName">clubPrice.startDate</param>
+			<param name="endDateFieldName">clubPrice.endDate</param>
+			<param name="clubPriceIdFieldName">clubPrice.id</param>
+			<param name="golfClubIdFieldName">clubPrice.golfClub.id</param>
+			<message><![CDATA[<b>${clubPrice.startDate}</b> 到 <b>${clubPrice.endDate}</b> 的日期范围不可用，请更换其他日期范围。 ]]></message>
+		</field-validator>
+	</field>
+</validators>

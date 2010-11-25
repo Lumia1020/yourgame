@@ -1,0 +1,10 @@
+wtree.js
+
+　　在dtree基础上扩展，与dtree完全兼容。扩展内容主要是加入了checkbox的支持、可以定制图标路径（系统中使用多棵不同树的时候很有用）
+
+　　欢迎使用，交流：wallimn@sohu.com，欢迎访问我的博客：http://blog.csdn.net/wallimn
+
+　　此软件可随意转发，转发请保留本人信息。
+
+                            wallimn
+                           2009-02-13

@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE struts PUBLIC
+        "-//Apache Software Foundation//DTD Struts Configuration 2.0//EN"
+        "http://struts.apache.org/dtds/struts-2.0.dtd">
+
+<struts>
+
+	<package name="default-golf-club" namespace="/default/golf-club" extends="struts-default">
+		<action name="*">
+			<result>/module/{1}/{1}_manage.jsp</result>
+		</action>
+	</package>
+
+	<package name="json-golf-club" namespace="/json/golf-club" extends="json-default">
+		<action name="page!*" class="golfClubAction">
+			<result type="json">
+				<param name="enumAsBean">true</param>
+				<param name="root">page</param>
+				<param name="includeProperties"><![CDATA[
+					result.*,
+					totalCount,
+					success
+				]]></param>
+			</result>
+		</action>
+		<action name="success!*" class="golfClubAction">
+			<result type="json">
+				<param name="enumAsBean">true</param>
+				<param name="includeProperties">success,jsons.*,golfClub\..*</param>
+			</result>
+		</action>
+
+
+		<action name="entity-*" class="golfClubAction" method="{1}">
+			<interceptor-ref name="jsonValidationWorkflowStack" />
+			<result type="json">
+				<param name="enumAsBean">true</param>
+				<param name="includeProperties">golfClub\..*,success,jsons.*</param>
+			</result>
+		</action>
+	</package>
+</struts>

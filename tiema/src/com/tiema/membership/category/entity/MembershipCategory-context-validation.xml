@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE validators PUBLIC 
+  		"-//OpenSymphony Group//XWork Validator 1.0//EN" 
+  		"http://www.opensymphony.com/xwork/xwork-validator-1.0.2.dtd">
+  		
+<validators>
+	<field name="categoryName">
+		<field-validator type="requiredstring">
+			<message><![CDATA[<b>会籍种类名称</b> 为必填项。]]></message>
+		</field-validator>
+		<field-validator type="stringlength">
+			<param name="maxLength">20</param>
+			<param name="trim">true</param>
+			<message><![CDATA[<b>会籍种类名称</b> 最多 ${maxLength} 个字符。]]></message>
+		</field-validator>
+		<field-validator type="membershipCategoryNotExists">
+			<param name="idName">id</param>
+			<message><![CDATA[会籍种类名称 <b>“${categoryName}”</b> 在系统中已经存在。]]></message>
+		</field-validator>
+	</field>
+	<field name="remark">
+		<field-validator type="stringlength">
+			<param name="maxLength">200</param>
+			<param name="trim">true</param>
+			<message><![CDATA[<b>备注</b> 最多 ${maxLength} 个字符。]]></message>
+		</field-validator>
+	</field>
+</validators>

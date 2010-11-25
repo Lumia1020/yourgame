@@ -1,0 +1,15 @@
+body, html {width:100%;	height:100%;background-color:#f2f2f2;font-size:12px;color:#666;line-height:20px;font-family:Arial, Helvetica, sans-serif;}
+* {margin:0;padding:0;}
+img{ border:0;}
+a {	color:#666; text-decoration:none;}
+a:hover {color:#333; text-decoration:none;}
+
+.layout{ width:390px; height:448px; margin:0 auto; background:url(../images/login/bg.jpg) left top no-repeat; margin-top:50px;}
+.layout dl{ width:225px; height:auto; margin:0 auto; padding-top:240px;}
+.layout dl dt{ display:block; width:65px; height:20px; background:url(../images/login/bg_title.jpg) left top no-repeat; text-indent:10px; color:#fff; }
+.layout dl dd{ display:block; margin:8px 0px;width:210px;height:31px;background:url(../images/login/bg_input.jpg) left top no-repeat;}
+.loginInput{ width:190px; height:18px;margin:5px 10px; border:0;line-height:18px; color:#666; background:none;overflow:hidden;}
+.loginButton{width:220px; margin:0 auto;text-align:right; padding-right:5px;}
+.loginButton img{cursor: pointer;}
+.copying{ width:390px; margin:0 auto; text-align:center; margin-top:20px;}
+

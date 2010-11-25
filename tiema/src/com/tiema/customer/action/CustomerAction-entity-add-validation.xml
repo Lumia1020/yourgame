@@ -1,0 +1,29 @@
+<!DOCTYPE validators PUBLIC "-//OpenSymphony Group//XWork Validator 1.0.2//EN" "http://www.opensymphony.com/xwork/xwork-validator-1.0.2.dtd">
+
+<validators>
+	<field name="customer">
+		<field-validator type="visitor">
+			<param name="context">context</param>
+			<param name="appendPrefix">true</param>
+			<message></message>
+		</field-validator>
+	</field>
+	<field name="customer.customerNumber">
+		<field-validator type="requiredstring">
+			<message><![CDATA[<b>客户编号</b> 为必填项。]]></message>
+		</field-validator>
+		<field-validator type="stringlength">
+			<param name="maxLength">18</param>
+			<param name="trim">true</param>
+			<message><![CDATA[<b>客户编号</b> 最多 ${maxLength} 个字符。]]></message>
+		</field-validator>
+		<field-validator type="customerNumberNotExists">
+			<message><![CDATA[<b>“${customerNumber}”</b> 这个客户编码已经存在。]]></message>
+		</field-validator>
+	</field>
+	<field name="customer.membershipCategory.id">
+		<field-validator type="required">
+			<message><![CDATA[<b>会籍种类</b> 为必选项。]]></message>
+		</field-validator>
+	</field>
+</validators>
