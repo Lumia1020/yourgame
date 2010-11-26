@@ -224,6 +224,13 @@
 				<param name="includeProperties">root.*,totalProperty</param>
 			</result>
 		</action>
+		<action name="findQuoteInfoAdvanced" class="publicAction" method="findQuoteInfoAdvanced">
+			<result type="json">
+				<param name="root">page</param>
+				<param name="excludeNullProperties">true</param>
+				<param name="includeProperties">root.*,totalProperty</param>
+			</result>
+		</action>
 		<action name="findProcessInfoList" class="publicAction" method="findProcessInfoList">
 			<result type="json">
 				<param name="root">page</param>
