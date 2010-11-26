@@ -1936,7 +1936,7 @@ Ext.onReady(function() {
 	/**
 	*显示高级查询界面
 	*/
-	function showAdvancedQueryWindow(){
+	function showAdvancedQueryWindow(store){
 		var innerWin = new Ext.Window({
 			title:'高级查询',
 			width:700,
@@ -1950,33 +1950,24 @@ Ext.onReady(function() {
 			fbar:[{
 				text:'查询',
 				handler:function(){
-					innerWin.get(0).getForm().submit({
-						 waitTitle : '请稍候',
-						 waitMsg : '正在提交查询请求,请稍候...',
-						 success: function(form, action) {
-					     	innerWin.close();
-					     	var store = grid.getStore();
-					     	var record = new store.recordType(action.result.infos.priceList);
-					     	record.set('recordTime',Date.parseDate(action.result.infos.priceList.recordTime,'Y-m-d H:i:s'));
-					     	record.commit();
-					     	store.insert(0,record);
-					     	grid.getSelectionModel().selectRow(0);
-					     	Ext.get(grid.getView().getRow(0)).frame('green',2,{duration: .3});
-					     },
-					     failure: function(form, action) {
-					        switch (action.failureType) {
-					            case Ext.form.Action.CLIENT_INVALID:
-					                Ext.Msg.alert('失败', '表单中可能包含无效内容');
-					                break;
-					            case Ext.form.Action.CONNECT_FAILURE:
-					                Ext.Msg.alert('失败', 'Ajax连接失败');
-					                break;
-					            case Ext.form.Action.SERVER_INVALID:
-					               Ext.Msg.alert('失败', action.result.msg);
-					       }
-					    }
-
-					});
+//					store.proxy.setUrl('findQuoteInfoAdvanced.action');
+//					Ext.apply(store.proxy,{
+//						url:'findQuoteInfoAdvanced.action',
+//						api:{
+//							create:{url:'findQuoteInfoAdvanced.action'},
+//							destroy:{url:'findQuoteInfoAdvanced.action'},
+//							read:{url:'findQuoteInfoAdvanced.action'},
+//							update:{url:'findQuoteInfoAdvanced.action'}
+//						}
+//					});
+//					console.log(store.proxy);
+					store.fuck = innerWin.get(0).getForm().getValues();
+					var params = store.fuck;
+					params['page.params.sortByPageNo'] = store.fuck.sortByPageNo;
+					params['page.params.sortByRecordTime'] = store.fuck.sortByRecordTime;
+//					params['page.params.startRecordTime'] = store.fuck.startRecordTime;
+//					params['page.params.endRecordTime'] = store.fuck.endRecordTime;
+					store.reload({params:store.fuck});
 				}
 			},{
 				text:'关闭',
@@ -1986,7 +1977,6 @@ Ext.onReady(function() {
 			}],
 			items:[{
 				xtype:'form',
-				url : 'adjustQuoteInfos.action',
 				labelWidth: 80,
 				bodyStyle:'padding:15px 10px 10px 10px',
 				border: false,
@@ -2151,7 +2141,7 @@ Ext.onReady(function() {
 						        layout:'column',
 						        xtype: 'container',
 						        fieldLabel: '填单日期',
-						        defaults:{editable:false,format:'Y-m-d',xtype:'datefield'},
+						        defaults:{format:'Y-m-d',xtype:'datefield'},
 				                items:[{
 				                    columnWidth:.45,
 				                    name: 'startRecordTime'
@@ -2168,7 +2158,7 @@ Ext.onReady(function() {
 						        layout:'column',
 						        xtype: 'container',
 						        fieldLabel: '更新日期',
-						        defaults:{editable:false,format:'Y-m-d',xtype:'datefield'},
+						        defaults:{format:'Y-m-d',xtype:'datefield'},
 				                items:[{
 				                    columnWidth:.45,
 				                    name: 'startModifyTime'
@@ -2185,15 +2175,14 @@ Ext.onReady(function() {
 								xtype:'combo',
 								fieldLabel:'客户名称',
 								name: 'quoteInfo.cid',
+								hiddenId:'quoteInfo.cid',
+						        hiddenName:'quoteInfo.cid',
 				            	valueField:'cid',
 				            	displayField:'customerName',
-						        emptyText:'请选择客户...',
 						        triggerAction: 'all',
 					        	typeAhead: true,
 						        forceSelection: true,
 						        selectOnFocus:false,
-						        editable:false,
-						        allowBlank:false,
 				            	store:{
 				            		xtype: 'store',
 									url: 'findCustomerList.action',
@@ -2210,7 +2199,6 @@ Ext.onReady(function() {
 			                	xtype:'combo',
 			                	name:'quoteInfo.state',
 			                	typeAhead: true,
-			                	editable:false,
 							    triggerAction: 'all',
 							    mode: 'local',
 							    store: new Ext.data.ArrayStore({
@@ -2224,7 +2212,6 @@ Ext.onReady(function() {
 			                	name:'version',
 			                	xtype:'combo',
 			                	typeAhead: true,
-			                	editable:false,
 							    triggerAction: 'all',
 							    mode: 'local',
 							    store: new Ext.data.ArrayStore({
@@ -3754,7 +3741,7 @@ Ext.onReady(function() {
 	 */
 	function initQuoteInfoGrid(){
 		var store = new Ext.data.Store({
-			url: 'findQuoteInfoList.action',
+			url: 'findQuoteInfoAdvanced.action',
 			paramNames:{start:'page.start',	limit:'page.limit'},
 			baseParams:{'page.start':0,'page.limit':20},
 			reader: new Ext.data.JsonReader({totalProperty: 'totalProperty',root: 'root'},
@@ -3774,6 +3761,12 @@ Ext.onReady(function() {
 			]),
 			listeners:{
 				beforeload:function(sd,option){
+					if(sd.fuck){
+						var values = sd.fuck;
+						for(var a in values){
+							sd.setBaseParam(a,values[a]);
+						}
+					}
 					var node = grid.previousSibling().getSelectionModel().getSelectedNode();
 					if(node){
 						var method = node.attributes.method;
@@ -3797,7 +3790,6 @@ Ext.onReady(function() {
 						sd.setBaseParam('page.params.queryLevel',null);
 						sd.setBaseParam('page.params.queryValue',null);
 					}
-					
 					return true;
 				}
 			}
@@ -3926,7 +3918,7 @@ Ext.onReady(function() {
 	    		items:[{
 	    				text:'高级查询',
 	    				handler:function(){
-	    					showAdvancedQueryWindow();
+	    					showAdvancedQueryWindow(store);
 	    				}
 	    			},
 //	    		'条件',initSearchField(store,null,[
@@ -4197,30 +4189,35 @@ Ext.onReady(function() {
             			if(node.isLeaf()){
             				var sd = node.getOwnerTree().nextSibling().getStore();
             				if(node.attributes.method == 'checked'){
-            					sd.load({params:{'quoteInfo.state':'已审核','page.params.sub':true}});
+            					sd.load({params:{'quoteInfo.state':'已审核'}});
+            					sd.setBaseParam('quoteInfo.state','已审核');
             					return;
             				}
             				if(node.attributes.method == 'submited'){
-            					sd.load({params:{'quoteInfo.state':'已提交审核申请','page.params.sub':true}});
+            					sd.load({params:{'quoteInfo.state':'已提交审核申请'}});
+            					sd.setBaseParam('quoteInfo.state','已提交审核申请');
             					return;
             				}
             				if(node.attributes.method == 'unsubmited'){
-            					sd.load({params:{'quoteInfo.state':'未提交审核申请','page.params.sub':true}});
+            					sd.load({params:{'quoteInfo.state':'未提交审核申请'}});
+            					sd.setBaseParam('quoteInfo.state','未提交审核申请');
             					return;
             				}
             				if(node.attributes.method == 'returned'){
-            					sd.load({params:{'quoteInfo.state':'已退回','page.params.sub':true}});
+            					sd.load({params:{'quoteInfo.state':'已退回'}});
+            					sd.setBaseParam('quoteInfo.state','已退回');
             					return;
             				}
             				if(node.attributes.method == 'original'){
-            					sd.load({params:{'page.params.version':'native','page.params.sub':true}});
+            					sd.load({params:{'version':'原始'}});
+            					sd.setBaseParam('version','原始');
             					return;
             				}
             				if(node.attributes.method == 'unoriginal'){
-            					sd.load({params:{'page.params.version':'copy','page.params.sub':true}});
+            					sd.load({params:{'version':'非原始'}});
+            					sd.setBaseParam('version','非原始');
             					return;
             				}
-            				
             				sd.load({params:{'quoteInfo.qid':node.id}});
             			}
             		}
