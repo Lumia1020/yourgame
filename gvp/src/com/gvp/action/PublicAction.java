@@ -91,18 +91,28 @@ public class PublicAction extends BaseAction {
 
 	private OtherQuotePrice		otherPrice;
 	
+	
 	private Date startRecordTime;	//填单日期
 	private Date endRecordTime;
 	
 	private Date startModifyTime;//更新日期
 	private Date endModifyTime;
 	
-	private String version;	//版本
-	
-	private String sortByPageNo;//根据文件夹页码排序
-	private String sortByRecordTime;//根据填单日期排序
+	private String version;
 	
 	
+	public String getVersion() {
+		return version;
+	}
+
+
+
+	public void setVersion(String version) {
+		this.version = version;
+	}
+
+
+
 	/**
 	 * @Title: findQuoteInfoAdvanced
 	 * @Description: 高级查询 
@@ -110,7 +120,149 @@ public class PublicAction extends BaseAction {
 	 */
 	@Action(description = "高级查询")
 	public String findQuoteInfoAdvanced(){
+		/*
+		 * SELECT tqi.* from t_quote_info tqi,t_materials tm where tqi.qid = tm.qid
+AND tqi.customerType = '主要客户'
+AND tqi.state = '已审核'
+AND tqi.dccNo LIKE '%6%'
+AND tqi.cid = 8
+AND tqi.pageNo = '255'
+AND tqi.productCode LIKE '%3%'
+AND tqi.ownerId is NOT NULL
+AND tqi.recordTime BETWEEN '2010-01-01' and '2010-12-12'
+AND tqi.modifyTime BETWEEN '2010-09-01' and '2010-12-01'
+AND tm.productsName like '%0%'
+AND tm.stuffid = 3
+AND tm.specid = 1
+AND tm.speciesid = 14;
+		 */
+		StringBuilder sql = new StringBuilder("SELECT tqi.* from t_quote_info tqi,t_materials tm where tqi.qid = tm.qid");
+		List params = new ArrayList();
 		
+		if(customer != null){
+			//客户类型
+			String customerType = customer.getCustomerType();
+			if(StringUtils.isNotEmpty(customerType)){
+				sql.append(" AND tqi.customerType = ? ");
+				params.add(customerType);
+			}
+		}
+		
+		if(quoteInfo != null){
+			Integer qid = quoteInfo.getQid();
+			if(qid != null){
+				sql.append(" AND tqi.qid = ? ");
+				params.add(qid);
+			}
+			//状态
+			String state = quoteInfo.getState();
+			if(StringUtils.isNotEmpty(state)){
+				sql.append(" AND tqi.state = ? ");
+				params.add(state);
+			}
+			
+			//dcc编码
+			String dccNo = quoteInfo.getDccNo();
+			if(StringUtils.isNotEmpty(dccNo)){
+				sql.append(" AND tqi.dccNo LIKE ? ");
+				params.add("%" + dccNo + "%");
+			}
+			
+			//客户id
+			Integer cid = quoteInfo.getCid();
+			if(cid != null){
+				sql.append(" AND tqi.cid = ? ");
+				params.add(cid);
+			}
+			
+			//文件夹页码
+			String pageNo = quoteInfo.getPageNo();
+			if(StringUtils.isNotEmpty(pageNo)){
+				sql.append(" AND tqi.pageNo = ? ");
+				params.add(pageNo);
+			}
+			
+			//产品编码
+			String productCode = quoteInfo.getProductCode();
+			if(StringUtils.isNotEmpty(productCode)){
+				sql.append(" AND tqi.productCode LIKE ? ");
+				params.add("%" + productCode + "%");
+			}
+		}
+		
+		//版本
+		if("原始".equals(version)){
+			sql.append(" AND tqi.ownerId is NULL ");
+		}
+		if("非原始".equals(version)){
+			sql.append(" AND tqi.ownerId is NOT NULL ");
+		}
+
+		//填单日期
+		if(startRecordTime != null && endRecordTime != null){
+			sql.append(" AND tqi.recordTime BETWEEN ? and ? ");
+			params.add(startRecordTime);
+			params.add(endRecordTime);
+		}
+		
+		//更新日期
+		if(startModifyTime != null && endModifyTime != null){
+			sql.append(" AND tqi.recordTime BETWEEN ? and ? ");
+			params.add(startModifyTime);
+			params.add(endModifyTime);
+		}
+		
+		if(materials != null){
+			//产品名称
+			String productsName = materials.getProductsName();
+			if(StringUtils.isNotEmpty(productsName)){
+				sql.append(" AND tm.productsName like ? ");
+				params.add("%" + productsName + "%");
+			}
+		}
+
+		if(priceList != null){
+			//材质
+			Integer stuffid = priceList.getStuffid();
+			if(stuffid != null){
+				sql.append(" AND tm.stuffid = ? ");
+				params.add(stuffid);
+			}
+			
+			//规格
+			Integer specid = priceList.getSpecid();
+			if(specid != null){
+				sql.append(" AND tm.specid = ? ");
+				params.add(specid);
+			}
+			
+			//种类
+			Integer speciesid = priceList.getSpeciesid();
+			if(speciesid != null){
+				sql.append(" AND tm.speciesid = ? ");
+				params.add(speciesid);
+			}
+		}
+		
+		String sortByRecordTime = page.getParams().get("sortByRecordTime");
+		String sortByPageNo = page.getParams().get("sortByPageNo");
+		if(StringUtils.isNotEmpty(sortByPageNo) || StringUtils.isNotEmpty(sortByRecordTime)){
+			sql.append(" ORDER BY ");
+			if(StringUtils.isNotEmpty(sortByPageNo)){
+				sql.append(" tqi.pageNo ");
+				if(StringUtils.isNotEmpty(sortByRecordTime)){
+					sql.append(" , ");
+				}
+			}
+			if(StringUtils.isNotEmpty(sortByRecordTime)){
+				sql.append(" tqi.recordTime ");
+			}
+		}
+		
+		//sortByPageNo
+		//sortByRecordTime
+		
+		this.page = publicService.getResultListBySpringJDBC(page, sql.toString(), params.toArray(), new QuoteInfoMapper());
 		return SUCCESS;
 	}
 
@@ -1954,30 +2106,7 @@ public class PublicAction extends BaseAction {
 		this.endModifyTime = endModifyTime;
 	}
 
-	public String getVersion() {
-		return version;
-	}
 
-	public void setVersion(String version) {
-		this.version = version;
-	}
-
-	public String getSortByPageNo() {
-		return sortByPageNo;
-	}
-
-	public void setSortByPageNo(String sortByPageNo) {
-		this.sortByPageNo = sortByPageNo;
-	}
-
-	public String getSortByRecordTime() {
-		return sortByRecordTime;
-	}
-
-	public void setSortByRecordTime(String sortByRecordTime) {
-		this.sortByRecordTime = sortByRecordTime;
-	}
-	
 	public Date getStartRecordTime() {
 		return startRecordTime;
 	}
