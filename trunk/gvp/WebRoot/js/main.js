@@ -692,7 +692,7 @@ Ext.onReady(function() {
 					menuDisabled:true
 				},
 				columns: [
-			        {header: '单价',hidden:!Ext.ROLE_R08,dataIndex: 'price'},
+			        {header: '单价',hidden:!Ext.ROLE_R24,dataIndex: 'price'},
 			        {header: '备注',dataIndex: 'remark',id:expandId}
 			    ]
 			})
@@ -745,7 +745,7 @@ Ext.onReady(function() {
 				columns: [
 			        {header: '电镀商',dataIndex:'plateMerchant',id:expandId},
 			        {header: '损耗率',dataIndex: 'attritionRate'},
-			        {header: '加工单价',hidden:!Ext.ROLE_R08,dataIndex: 'processPrice'},
+			        {header: '加工单价',hidden:!Ext.ROLE_R28,dataIndex: 'processPrice'},
 			        {header: '备注',dataIndex: 'remark'}
 			    ]
 			})
@@ -1195,7 +1195,7 @@ Ext.onReady(function() {
 				columns: [
 			        {header: '工具名称',dataIndex:'aidsName',id:expandId},
 			        {header: '原价',hidden:!Ext.ROLE_R08,dataIndex: 'originalPrice'},
-			        {header: '加工单价',dataIndex: 'price',hidden:!Ext.ROLE_R08}
+			        {header: '加工单价',dataIndex: 'price',hidden:!Ext.ROLE_R27}
 			    ]
 			})
 		});
@@ -3294,9 +3294,6 @@ Ext.onReady(function() {
 						        selectOnFocus:true,
 						        allowBlank:false,
 						        pageSize:10,
-						        ref: '../../../../comboSpecification',
-						        id:'priceList.specName',
-						        name: 'priceList.specName',
 						        hiddenId:'priceList.specid',
 						        hiddenName:'priceList.specid',
 						        submitValue:true,
@@ -3322,6 +3319,28 @@ Ext.onReady(function() {
 							    	}
 							    }
 			                },{
+								xtype:'combo',
+								fieldLabel:'客户名称',
+						        name: 'priceList.customerName',
+						        hiddenId:'priceList.cid',
+						        hiddenName:'priceList.cid',
+				            	valueField:'cid',
+				            	displayField:'customerName',
+						        triggerAction: 'all',
+					        	typeAhead: true,
+						        forceSelection: true,
+						        selectOnFocus:false,
+				            	store:{
+				            		xtype: 'store',
+									url: 'findCustomerList.action',
+									paramNames:{start:'page.start',	limit:'page.limit'},
+									baseParams:{'page.start':0,'page.limit':0},
+									reader: new Ext.data.JsonReader(
+										{totalProperty: 'totalProperty',root: 'root'},
+										[{name:'cid'},{name:'customerName'},{name:'customerCode'},{name:'customerType'}]
+									)
+							    }
+							},{
 			                    fieldLabel: '当前材料单价',
 			                    disabled:true,
 			                    ref: '../../../../textfieldMaterialPrice'
@@ -3391,13 +3410,13 @@ Ext.onReady(function() {
 									var otherPriceStore = innerWin.get(0).get(3).getStore();
 									addData(otherPriceStore,otherPriceList);
 									
-									var processStore = innerWin.get(0).get(6).getStore();
+									var processStore = innerWin.get(0).get(7).getStore();
 									addData(processStore,processList);
-									var foundryStore = innerWin.get(0).get(7).getStore();
+									var foundryStore = innerWin.get(0).get(8).getStore();
 									addData(foundryStore,foundryList);
-									var aidsStore = innerWin.get(0).get(8).getStore();
+									var aidsStore = innerWin.get(0).get(9).getStore();
 									addData(aidsStore,aidsList);
-									var refFilesStore = innerWin.get(0).get(13).getStore();
+									var refFilesStore = innerWin.get(0).get(14).getStore();
 									addData(refFilesStore,refFilesList);
 									innerWin.enable();
 								},
@@ -3519,8 +3538,8 @@ Ext.onReady(function() {
 					                    xtype:'numberfield',
 					                    decimalPrecision:6,
 					                    value:materials.price,
-					                    hidden:!Ext.ROLE_R08,
-					                    hideLabel:!Ext.ROLE_R08,
+					                    hidden:!Ext.ROLE_R26,
+					                    hideLabel:!Ext.ROLE_R26,
 					                    name: 'materials.price'
 					                }]
 					            },{
@@ -3537,19 +3556,30 @@ Ext.onReady(function() {
 					                	fieldLabel: '减沙',
 					                    xtype:'numberfield',
 					                    decimalPrecision:6,
-					                    hidden:!Ext.ROLE_R08,
-					                    hideLabel:!Ext.ROLE_R08,
+					                    hidden:!Ext.ROLE_R30,
+					                    hideLabel:!Ext.ROLE_R30,
 					                    name: 'materials.jiansha',
 					                    value: materials.jiansha
 					                },{
 					                    fieldLabel: '供应商材料单价',
 					                    name:'materials.materialPrice',
-					                    hidden:!Ext.ROLE_R08,
-					                    hideLabel:!Ext.ROLE_R08,
+					                    hidden:!Ext.ROLE_R25,
+					                    hideLabel:!Ext.ROLE_R25,
 					                    value:materials.materialPrice
+					                },{
+					                	fieldLabel:'价格调节时间',
+					                	name:'materials.adjustDate',
+					                	value:materials.adjustDate
 					                }]
 						        }]
-					        },showProcessInfoGrid(quoteInfo,150,false),showFoundryGrid(quoteInfo,150,false),showAidsGrid(quoteInfo,150,false),{
+					        },{
+			                    xtype:'textarea',
+			                    anchor:'97%',
+			                    readOnly:true,
+			                    fieldLabel: '调节说明',
+			                    name: 'materials.adjustRemark',
+			                    value:materials.adjustRemark
+			                },showProcessInfoGrid(quoteInfo,150,false),showFoundryGrid(quoteInfo,150,false),showAidsGrid(quoteInfo,150,false),{
 					       	 	html:'<br><b>参考信息</b><br><hr><br>',
 								border:false 
 					        },{
@@ -3569,8 +3599,8 @@ Ext.onReady(function() {
 					                    value: reference.finishedWeight
 					                },{
 					                    fieldLabel: '运费',
-					                    hidden:!Ext.ROLE_R08,
-					                    hideLabel:!Ext.ROLE_R08,
+					                    hidden:!Ext.ROLE_R29,
+					                    hideLabel:!Ext.ROLE_R29,
 					                    name:'reference.freight',
 					                    value:reference.freight
 				                    }]
@@ -3899,7 +3929,7 @@ Ext.onReady(function() {
 					{header: '更新日期',dataIndex:'modifyTime',renderer:Ext.util.Format.dateRenderer('Y-m-d')},
 					{header: '状态',dataIndex:'state',width:150},
 					{header: '版本',dataIndex:'ownerId',width:60,renderer:function(value,cellmeta,record){
-						return (value == '' ? '原始':'非原始');
+						return ((value == '' || value == 0 || value == null) ? '原始':'非原始');
 					}}
 	    	]}),
 	    	listeners:{
@@ -4395,6 +4425,7 @@ Ext.onReady(function() {
 					{header: '材质名称',dataIndex:'stuffName'},
 					{header: '种类名称',dataIndex:'speciesName'},
 					{header: '规格名称',dataIndex:'specName'},
+					{header: '客户名称',dataIndex:'customerName'},
 					{header: '说明',dataIndex:'remark',id:expandId},
 					{header: '单价',dataIndex:'price',xtype:'numbercolumn',hidden:!Ext.ROLE_R06,format:'0,000.000000'}, 
 					{header: '调整日期',dataIndex:'recordTime',renderer:Ext.util.Format.dateRenderer('Y-m-d')}
@@ -5400,8 +5431,8 @@ Ext.onReady(function() {
 		var win = new Ext.Window({
 			title : '权限管理',
 			iconCls:'silk-key',
-			width:540,
-			height:230,
+			width:650,
+			height:300,
 			modal:true,
 			//resizable:false,
 			items : [{
@@ -5434,10 +5465,10 @@ Ext.onReady(function() {
 		                {boxLabel: '显示总价', name: 'r06',handler:function(){
 		                	win.showTotalPrice.setValue(this.checked);
 		                }},
-		                {boxLabel: '显示生产单价', name: 'r07',handler:function(){
+		                {boxLabel: '显示加工信息-加工单价', name: 'r07',handler:function(){
 		                	win.showMaterialsPrice.setValue(this.checked);
 		                }},
-		                {boxLabel: '显示辅助单价', name: 'r08',handler:function(){
+		                {boxLabel: '显示辅助信息-原价', name: 'r08',handler:function(){
 		                	win.showAidsPrice.setValue(this.checked);
 		                }}
 		            ]
@@ -5500,6 +5531,35 @@ Ext.onReady(function() {
 		                }},
 		                {boxLabel: '产品编码信息', name: 'r23',handler:function(){
 		                	win.showProductCode.setValue(this.checked);
+		                }},
+		                {boxLabel: '显示其他报价-单价', name: 'r24',handler:function(){
+		                	win.qi_ta_bao_jia_danjia.setValue(this.checked);
+		                }}
+		            ]
+				},{
+					ref:'../group7',
+					items:[
+						{boxLabel: '显示供应商材料单价', name: 'r25',handler:function(){
+		                	win.gong_ying_shang_cailiao_danjia.setValue(this.checked);
+		                }},
+		                {boxLabel: '显示产品材料单价', name: 'r26',handler:function(){
+		                	win.chanpin_cailiao_danjia.setValue(this.checked);
+		                }},
+		                {boxLabel: '显示辅助信息的加工单价', name: 'r27',handler:function(){
+		                	win.fuzhu_xinxi_de_jiagong_xinxi.setValue(this.checked);
+		                }},
+		                {boxLabel: '显示外发加工的加工单价', name: 'r28',handler:function(){
+		                	win.waifa_jiagong_de_jiagong_xinxi.setValue(this.checked);
+		                }}
+		            ]
+				},{
+					ref:'../group8',
+					items:[
+						{boxLabel: '显示参考信息的运费', name: 'r29',handler:function(){
+		                	win.cankao_xinxi_de_yunfei.setValue(this.checked);
+		                }},
+						{boxLabel: '显示参考信息的减沙', name: 'r30',handler:function(){
+		                	win.cankao_xinxi_de_jiansha.setValue(this.checked);
 		                }}
 		            ]
 				},
@@ -5526,7 +5586,14 @@ Ext.onReady(function() {
 					{xtype : 'hidden',name : 'role.r20',ref:'../adjustMaterialPrice'},
 					{xtype : 'hidden',name : 'role.r21',ref:'../showSystemLog'},
 					{xtype : 'hidden',name : 'role.r22',ref:'../showOtherPrice'},
-					{xtype : 'hidden',name : 'role.r23',ref:'../showProductCode'}
+					{xtype : 'hidden',name : 'role.r23',ref:'../showProductCode'},
+					{xtype : 'hidden',name : 'role.r24',ref:'../qi_ta_bao_jia_danjia'},
+					{xtype : 'hidden',name : 'role.r25',ref:'../gong_ying_shang_cailiao_danjia'},
+					{xtype : 'hidden',name : 'role.r26',ref:'../chanpin_cailiao_danjia'},
+					{xtype : 'hidden',name : 'role.r27',ref:'../fuzhu_xinxi_de_jiagong_xinxi'},
+					{xtype : 'hidden',name : 'role.r28',ref:'../waifa_jiagong_de_jiagong_xinxi'},
+					{xtype : 'hidden',name : 'role.r29',ref:'../cankao_xinxi_de_yunfei'},
+					{xtype : 'hidden',name : 'role.r30',ref:'../cankao_xinxi_de_jiansha'}
 				],
 				listeners : {
 					render : function(){
@@ -5560,6 +5627,13 @@ Ext.onReady(function() {
 						    		win.group6.items.get(0).setValue(role.r21);
 						    		win.group6.items.get(1).setValue(role.r22);
 						    		win.group6.items.get(2).setValue(role.r23);
+						    		win.group6.items.get(3).setValue(role.r24);
+						    		win.group7.items.get(0).setValue(role.r25);
+						    		win.group7.items.get(1).setValue(role.r26);
+						    		win.group7.items.get(2).setValue(role.r27);
+						    		win.group7.items.get(3).setValue(role.r28);
+						    		win.group8.items.get(0).setValue(role.r29);
+						    		win.group8.items.get(1).setValue(role.r30);
 						    		win.rid.setValue(role.rid);
 						    	}
 						    },
