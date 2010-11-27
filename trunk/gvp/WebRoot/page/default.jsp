@@ -39,6 +39,15 @@
 			Ext.ROLE_R21 = '<s:property value="#session.role.r21"/>' == 'true' ? true:false;
 			Ext.ROLE_R22 = '<s:property value="#session.role.r22"/>' == 'true' ? true:false;
 			Ext.ROLE_R23 = '<s:property value="#session.role.r23"/>' == 'true' ? true:false;
+			
+			Ext.ROLE_R24 = '<s:property value="#session.role.r24"/>' == 'true' ? true:false;
+			Ext.ROLE_R25 = '<s:property value="#session.role.r25"/>' == 'true' ? true:false;
+			Ext.ROLE_R26 = '<s:property value="#session.role.r26"/>' == 'true' ? true:false;
+			Ext.ROLE_R27 = '<s:property value="#session.role.r27"/>' == 'true' ? true:false;
+			Ext.ROLE_R28 = '<s:property value="#session.role.r28"/>' == 'true' ? true:false;
+			Ext.ROLE_R29 = '<s:property value="#session.role.r29"/>' == 'true' ? true:false;
+			Ext.ROLE_R30 = '<s:property value="#session.role.r30"/>' == 'true' ? true:false;
+			
 		</script>
 		<script type="text/javascript" src="../js/ext-lang-zh_CN.js"></script>
 		<script type="text/javascript" src="../js/swfupload.js"></script>
