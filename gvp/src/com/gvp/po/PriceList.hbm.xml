@@ -10,6 +10,8 @@
 		<property name="stuffid" />
 		<property name="speciesid" />
 		<property name="specid" />
+		<property name="cid"/>
+		<property name="customerName" length="100" />
 		<property name="price" length="50" />
 		<property name="remark" length="200"/>
 		<property name="recordTime" />

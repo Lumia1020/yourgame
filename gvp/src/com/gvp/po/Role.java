@@ -19,9 +19,9 @@ public class Role implements Serializable {
 
 	private Boolean r06; // 显示总价
 
-	private Boolean r07; // 显示生产单价
+	private Boolean r07; // 加工信息-加工单价
 
-	private Boolean r08; // 显示辅助单价
+	private Boolean r08; // 辅助信息-原价
 
 	private Boolean r09; // 密码修改
 
@@ -52,6 +52,72 @@ public class Role implements Serializable {
 	private Boolean r22; // 其他报价管理
 	
 	private Boolean r23; //产品编码信息
+	
+	
+	private Boolean r24;//其他报价-单价
+	private Boolean r25;//供应商材料单价
+	private Boolean r26;//产品材料单价
+	private Boolean r27;//辅助信息的加工单价
+	private Boolean r28;//外发加工的加工单价
+	private Boolean r29;//参考信息的运费
+	private Boolean r30;//参考信息的减沙
+	
+
+	public Boolean getR24() {
+		return r24;
+	}
+
+	public void setR24(Boolean r24) {
+		this.r24 = r24;
+	}
+
+	public Boolean getR25() {
+		return r25;
+	}
+
+	public void setR25(Boolean r25) {
+		this.r25 = r25;
+	}
+
+	public Boolean getR26() {
+		return r26;
+	}
+
+	public void setR26(Boolean r26) {
+		this.r26 = r26;
+	}
+
+	public Boolean getR27() {
+		return r27;
+	}
+
+	public void setR27(Boolean r27) {
+		this.r27 = r27;
+	}
+
+	public Boolean getR28() {
+		return r28;
+	}
+
+	public void setR28(Boolean r28) {
+		this.r28 = r28;
+	}
+
+	public Boolean getR29() {
+		return r29;
+	}
+
+	public void setR29(Boolean r29) {
+		this.r29 = r29;
+	}
+
+	public Boolean getR30() {
+		return r30;
+	}
+
+	public void setR30(Boolean r30) {
+		this.r30 = r30;
+	}
 
 	public Boolean getR23() {
 		return r23;

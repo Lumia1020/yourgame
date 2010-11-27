@@ -23,6 +23,8 @@
 		<property name="price" length="100" />
 		<property name="jiansha" length="100" />
 		<property name="loss" length="100" />
+		<property name="adjustRemark" length="100" />
+		<property name="adjustDate"/>
 		<property name="qid" />
 	</class>
 </hibernate-mapping>

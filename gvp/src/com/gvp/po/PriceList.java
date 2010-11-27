@@ -15,15 +15,22 @@ import com.googlecode.jsonplugin.annotations.JSON;
 public class PriceList implements Serializable {
 
 	private Integer listid;
-	
+
 	/** 材质id */
 	private Integer stuffid;
-	
+
 	/** 种类id */
 	private Integer speciesid;
 
 	/** 规格id */
 	private Integer specid;
+
+	private Integer cid;
+
+	/**
+	 * 客户名称
+	 */
+	private String customerName;
 
 	/** 供应商材料单价 */
 	private String price;
@@ -34,8 +41,8 @@ public class PriceList implements Serializable {
 	/** 记录时间 */
 	private Date recordTime;
 
-
-	public PriceList(Integer listid, Integer stuffid, Integer speciesid, Integer specid, String price, String remark, Date recordTime) {
+	public PriceList(Integer listid, Integer stuffid, Integer speciesid, Integer specid, String price, String remark,
+			Date recordTime) {
 		super();
 		this.listid = listid;
 		this.stuffid = stuffid;
@@ -104,6 +111,22 @@ public class PriceList implements Serializable {
 
 	public void setSpeciesid(Integer speciesid) {
 		this.speciesid = speciesid;
+	}
+
+	public Integer getCid() {
+		return cid;
+	}
+
+	public void setCid(Integer cid) {
+		this.cid = cid;
+	}
+
+	public String getCustomerName() {
+		return customerName;
+	}
+
+	public void setCustomerName(String customerName) {
+		this.customerName = customerName;
 	}
 
 }

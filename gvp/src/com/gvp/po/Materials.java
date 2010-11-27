@@ -1,6 +1,9 @@
 package com.gvp.po;
 
 import java.io.Serializable;
+import java.util.Date;
+
+import com.googlecode.jsonplugin.annotations.JSON;
 
 /**
  * 生产材料信息
@@ -59,6 +62,11 @@ public class Materials implements Serializable {
 
 	/** 减沙 */
 	private String jiansha;
+	
+	/** @Fields adjustRemark : 调节备注 */
+	private String adjustRemark;
+	/** @Fields adjustDate : 调节时间 */
+	private Date adjustDate;
 
 	/** 关联报时记录 */
 	private Integer qid;
@@ -210,6 +218,23 @@ public class Materials implements Serializable {
 	public Materials adjust() {
 		this.price = Double.toString(Double.valueOf(this.weight) * Double.valueOf(this.materialPrice) / 10000);
 		return this;
+	}
+
+	public String getAdjustRemark() {
+		return adjustRemark;
+	}
+
+	public void setAdjustRemark(String ajdustRemark) {
+		this.adjustRemark = ajdustRemark;
+	}
+
+	@JSON(format = "yyyy-MM-dd HH:mm:ss")
+	public Date getAdjustDate() {
+		return adjustDate;
+	}
+
+	public void setAdjustDate(Date adjustDate) {
+		this.adjustDate = adjustDate;
 	}
 
 }

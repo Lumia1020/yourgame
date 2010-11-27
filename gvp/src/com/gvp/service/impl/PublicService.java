@@ -38,63 +38,61 @@ public class PublicService implements IPublicService {
 	public void setPublicDao(IPublicDao userDao) {
 		this.publicDao = userDao;
 	}
-	
-	public Page getResultListBySpringJDBC(Page page,String sql,Object[] params){
+
+	public Page getResultListBySpringJDBC(Page page, String sql, Object[] params) {
 		StringBuilder resultSql = new StringBuilder("select tb.* from ( ");
 		resultSql.append(sql);
 		resultSql.append(" ) tb LIMIT ");
 		resultSql.append(page.getStart());
 		resultSql.append(" , ");
 		resultSql.append(page.getLimit());
-		
+
 		System.out.println(resultSql.toString());
-		
+
 		List<?> results = publicDao.findBySpringSql(resultSql.toString(), params);
 		int count = publicDao.findBySpringSql(sql, params).size();
 		page.setRoot(results);
 		page.setTotalProperty(count);
-		
+
 		return page;
 	}
-	
-	public Page getResultListBySpringJDBC(Page page,String sql,Object[] params, RowMapper rowMapper){
+
+	public Page getResultListBySpringJDBC(Page page, String sql, Object[] params, RowMapper rowMapper) {
 		StringBuilder resultSql = new StringBuilder("select tb.* from ( ");
 		resultSql.append(sql);
 		resultSql.append(" ) tb LIMIT ");
 		resultSql.append(page.getStart());
 		resultSql.append(" , ");
 		resultSql.append(page.getLimit());
-		
+
 		List<?> results = publicDao.findBySpringSql(resultSql.toString(), params, rowMapper);
 		int count = publicDao.findBySpringSql(sql, params).size();
 		page.setRoot(results);
 		page.setTotalProperty(count);
-		
+
 		return page;
 	}
-	
-	public Page getResultListBySpringJDBC(Page page,String sql,Object[] params, Class<?> elementType){
+
+	public Page getResultListBySpringJDBC(Page page, String sql, Object[] params, Class<?> elementType) {
 		StringBuilder resultSql = new StringBuilder("select tb.* from ( ");
 		resultSql.append(sql);
 		resultSql.append(" ) tb LIMIT ");
 		resultSql.append(page.getStart());
 		resultSql.append(" , ");
 		resultSql.append(page.getLimit());
-		
+
 		List<?> results = publicDao.findBySpringSql(resultSql.toString(), params, elementType);
 		int count = publicDao.findBySpringSql(sql, params).size();
 		page.setRoot(results);
 		page.setTotalProperty(count);
-		
+
 		return page;
 	}
 
 	@SuppressWarnings("unchecked")
 	public User login(User user) {
 		List<User> users = publicDao.findByExample(user);
-		if (users != null && !users.isEmpty()) {
-			return users.get(0);
-		}
+		if (users != null && !users.isEmpty()) { return users.get(0); }
 		return null;
 	}
 
@@ -137,7 +135,7 @@ public class PublicService implements IPublicService {
 	 */
 	private void process(Integer qid) {
 		QuoteInfo qi = (QuoteInfo) publicDao.findEntityById(new QuoteInfo(), qid);
-		
+
 		Double price = 0d;
 
 		List mlist = publicDao.findByHQL("from Materials where qid=" + qid);
@@ -167,16 +165,16 @@ public class PublicService implements IPublicService {
 
 		List rlist = publicDao.findByHQL("from ReferenceInfo where qid=" + qid);
 		Iterator rlistIt = rlist.iterator();
-		if(rlistIt.hasNext()){
+		if (rlistIt.hasNext()) {
 			ReferenceInfo ri = (ReferenceInfo) rlistIt.next();
 			price += Double.valueOf(ri.getFreight());
 		}
-		
+
 		//计算其他价格
 		List olist = publicDao.findByHQL("from OtherQuotePrice where qid=" + qid);
-		if(!olist.isEmpty() && olist.size() > 0){
+		if (!olist.isEmpty() && olist.size() > 0) {
 			Double ov = price - Double.parseDouble(qi.getPrice());
-			for(Iterator it = olist.iterator(); it.hasNext();){
+			for (Iterator it = olist.iterator(); it.hasNext();) {
 				OtherQuotePrice p = (OtherQuotePrice) it.next();
 				p.setPrice(Double.toString(Double.parseDouble(p.getPrice()) + ov));
 				this.publicDao.update(p);
@@ -190,9 +188,9 @@ public class PublicService implements IPublicService {
 	public Object saveEntity(Object entity) {
 		return this.publicDao.saveEntity(entity);
 	}
-	
-	public WorkflowLog saveWorkflowLog(WorkflowLog workflow){
-		if(workflow != null){
+
+	public WorkflowLog saveWorkflowLog(WorkflowLog workflow) {
+		if (workflow != null) {
 			this.publicDao.saveEntity(workflow);
 			QuoteInfo qi = (QuoteInfo) this.publicDao.findEntityById(new QuoteInfo(), workflow.getQid());
 			qi.setState(workflow.getState());
@@ -261,7 +259,6 @@ public class PublicService implements IPublicService {
 		}
 		return rows > 0;
 	}
-
 
 	public List getList(Class clazz, Integer qid) {
 		DetachedCriteria dc = DetachedCriteria.forClass(clazz);
@@ -396,10 +393,10 @@ public class PublicService implements IPublicService {
 		return publicDao.findByHQL(hql);
 	}
 
-	public List<?> findByNativeSql(String hql, Class<?> c,Object[] params,Type[] types) {
-		return publicDao.findByNativeSql(hql, c,params,types);
+	public List<?> findByNativeSql(String hql, Class<?> c, Object[] params, Type[] types) {
+		return publicDao.findByNativeSql(hql, c, params, types);
 	}
-	
+
 	public List findByNativeSql(String hql, Class c) {
 		return publicDao.findByNativeSql(hql, c);
 	}
@@ -408,14 +405,25 @@ public class PublicService implements IPublicService {
 	public PriceList adjustQuoteInfos(PriceList priceList) {
 		this.publicDao.saveEntity(priceList);
 		Integer specid = priceList.getSpecid();
+		List params = new ArrayList();
+		List<Type> types = new ArrayList<Type>();
 
 		String hql = "select tm.* from t_materials tm where tm.qid in (select t.qid from t_quote_info t"
-				+ " where t.ownerId is not null and t.qid in (select m.qid from t_materials m where m.specid in (?)))";
-		List<Materials> materialsList = this.publicDao.findByNativeSql(hql, Materials.class, new Object[] { specid },
-				new Type[] { new IntegerType() });
+				+ " where t.ownerId is not null and t.qid in (select m.qid from t_materials m where m.specid in (?))";
+		params.add(specid);
+		types.add(new IntegerType());
+		if (priceList.getCid() != null) {
+			hql += " and t.cid = ? ";
+			params.add(priceList.getCid());
+			types.add(new IntegerType());
+		}
+		hql += ")";
+		List<Materials> materialsList = this.publicDao.findByNativeSql(hql, Materials.class, params.toArray(), types.toArray(new Type[]{}));
 
 		for (Iterator<Materials> it = materialsList.iterator(); it.hasNext();) {
 			Materials m = it.next();
+			m.setAdjustDate(new Date());//设定调节日期
+			m.setAdjustRemark(priceList.getRemark());//新增调节备注
 			m.setMaterialPrice(priceList.getPrice());
 			m.adjust();
 			this.publicDao.update(m);
@@ -425,7 +433,7 @@ public class PublicService implements IPublicService {
 	}
 
 	public List<?> findBySpringSql(String sql, Object[] params, RowMapper rowMapper) {
-		return this.publicDao.findBySpringSql(sql, params,rowMapper);
+		return this.publicDao.findBySpringSql(sql, params, rowMapper);
 	}
 
 }
