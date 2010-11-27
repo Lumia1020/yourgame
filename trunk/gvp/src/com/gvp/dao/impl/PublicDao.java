@@ -66,7 +66,7 @@ public class PublicDao extends HibernateDaoSupport implements IPublicDao {
 			query.addEntity(c);
 		}
 		if (params != null) {
-			query.setParameters(params, new Type[] { new IntegerType() });
+			query.setParameters(params, types);
 		}
 		return query.list();
 	}
