@@ -1968,6 +1968,7 @@ Ext.onReady(function() {
 //					params['page.params.startRecordTime'] = store.fuck.startRecordTime;
 //					params['page.params.endRecordTime'] = store.fuck.endRecordTime;
 					store.reload({params:store.fuck});
+					innerWin.close();
 				}
 			},{
 				text:'关闭',
@@ -3297,6 +3298,7 @@ Ext.onReady(function() {
 						        hiddenId:'priceList.specid',
 						        hiddenName:'priceList.specid',
 						        submitValue:true,
+						        ref: '../../../../comboSpecification',
 					        	store:{
 					        		xtype: 'store',
 									url: 'findSpecificationList.action',
