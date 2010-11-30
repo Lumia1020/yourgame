@@ -121,22 +121,24 @@ public class PublicAction extends BaseAction {
 	@Action(description = "高级查询")
 	public String findQuoteInfoAdvanced(){
 		/*
-		 * SELECT tqi.* from t_quote_info tqi,t_materials tm where tqi.qid = tm.qid
+		 * SELECT tqi.* from t_quote_info tqi,t_materials tm where tqi.qid = tm.qid 
 AND tqi.customerType = '主要客户'
 AND tqi.state = '已审核'
 AND tqi.dccNo LIKE '%6%'
 AND tqi.cid = 8
 AND tqi.pageNo = '255'
-AND tqi.productCode LIKE '%3%'
 AND tqi.ownerId is NOT NULL
 AND tqi.recordTime BETWEEN '2010-01-01' and '2010-12-12'
 AND tqi.modifyTime BETWEEN '2010-09-01' and '2010-12-01'
 AND tm.productsName like '%0%'
 AND tm.stuffid = 3
 AND tm.specid = 1
-AND tm.speciesid = 14;
+AND tm.speciesid = 14
+AND tqi.productCode LIKE '%3%'
+union all 
+select tqi.* from t_quote_info tqi where tqi.qid in (select tpc.qid from t_product_code tpc WHERE tpc.code like '%3%')
 		 */
-		StringBuilder sql = new StringBuilder("SELECT tqi.* from t_quote_info tqi,t_materials tm where tqi.qid = tm.qid");
+		StringBuilder sql = new StringBuilder("SELECT * FROM (SELECT tqi.* from t_quote_info tqi,t_materials tm where tqi.qid = tm.qid ");
 		List params = new ArrayList();
 		
 		if(customer != null){
@@ -145,48 +147,6 @@ AND tm.speciesid = 14;
 			if(StringUtils.isNotEmpty(customerType)){
 				sql.append(" AND tqi.customerType = ? ");
 				params.add(customerType);
-			}
-		}
-		
-		if(quoteInfo != null){
-			Integer qid = quoteInfo.getQid();
-			if(qid != null){
-				sql.append(" AND tqi.qid = ? ");
-				params.add(qid);
-			}
-			//状态
-			String state = quoteInfo.getState();
-			if(StringUtils.isNotEmpty(state)){
-				sql.append(" AND tqi.state = ? ");
-				params.add(state);
-			}
-			
-			//dcc编码
-			String dccNo = quoteInfo.getDccNo();
-			if(StringUtils.isNotEmpty(dccNo)){
-				sql.append(" AND tqi.dccNo LIKE ? ");
-				params.add("%" + dccNo + "%");
-			}
-			
-			//客户id
-			Integer cid = quoteInfo.getCid();
-			if(cid != null){
-				sql.append(" AND tqi.cid = ? ");
-				params.add(cid);
-			}
-			
-			//文件夹页码
-			String pageNo = quoteInfo.getPageNo();
-			if(StringUtils.isNotEmpty(pageNo)){
-				sql.append(" AND tqi.pageNo = ? ");
-				params.add(pageNo);
-			}
-			
-			//产品编码
-			String productCode = quoteInfo.getProductCode();
-			if(StringUtils.isNotEmpty(productCode)){
-				sql.append(" AND tqi.productCode LIKE ? ");
-				params.add("%" + productCode + "%");
 			}
 		}
 		
@@ -244,18 +204,64 @@ AND tm.speciesid = 14;
 			}
 		}
 		
+		if(quoteInfo != null){
+			Integer qid = quoteInfo.getQid();
+			if(qid != null){
+				sql.append(" AND tqi.qid = ? ");
+				params.add(qid);
+			}
+			//状态
+			String state = quoteInfo.getState();
+			if(StringUtils.isNotEmpty(state)){
+				sql.append(" AND tqi.state = ? ");
+				params.add(state);
+			}
+			
+			//dcc编码
+			String dccNo = quoteInfo.getDccNo();
+			if(StringUtils.isNotEmpty(dccNo)){
+				sql.append(" AND tqi.dccNo LIKE ? ");
+				params.add("%" + dccNo + "%");
+			}
+			
+			//客户id
+			Integer cid = quoteInfo.getCid();
+			if(cid != null){
+				sql.append(" AND tqi.cid = ? ");
+				params.add(cid);
+			}
+			
+			//文件夹页码
+			String pageNo = quoteInfo.getPageNo();
+			if(StringUtils.isNotEmpty(pageNo)){
+				sql.append(" AND tqi.pageNo = ? ");
+				params.add(pageNo);
+			}
+			
+			//产品编码
+			String productCode = quoteInfo.getProductCode();
+			if(StringUtils.isNotEmpty(productCode)){
+				sql.append(" AND tqi.productCode LIKE ? ");
+				params.add("%" + productCode + "%");
+				sql.append(" UNION ALL select tqi.* FROM t_quote_info tqi WHERE tqi.qid IN (SELECT tpc.qid FROM t_product_code tpc WHERE tpc.code LIKE ?) ");
+				params.add("%" + productCode + "%");
+			}
+		}
+		
+		sql.append(") a");
+		
 		String sortByRecordTime = page.getParams().get("sortByRecordTime");
 		String sortByPageNo = page.getParams().get("sortByPageNo");
 		if(StringUtils.isNotEmpty(sortByPageNo) || StringUtils.isNotEmpty(sortByRecordTime)){
 			sql.append(" ORDER BY ");
 			if(StringUtils.isNotEmpty(sortByPageNo)){
-				sql.append(" tqi.pageNo ");
+				sql.append(" a.pageNo ");
 				if(StringUtils.isNotEmpty(sortByRecordTime)){
 					sql.append(" , ");
 				}
 			}
 			if(StringUtils.isNotEmpty(sortByRecordTime)){
-				sql.append(" tqi.recordTime ");
+				sql.append(" a.recordTime ");
 			}
 		}
 		
