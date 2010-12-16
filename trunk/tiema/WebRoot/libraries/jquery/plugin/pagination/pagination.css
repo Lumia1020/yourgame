@@ -1,8 +1,0 @@
-.pagination a{text-decoration:none;border:solid 1px #AAE;color:#FFFFFF;background-color: white;padding: 2px 0}
-.pagination a:hover {background:none repeat scroll 0 0 #005395;border:1px solid #005395;color:#FFFFFF;text-decoration:none;}
-.pagination a,.pagination span,.go span{display:block;float:left;margin-right:5px;padding:1px 5px;color: #000}
-.pagination .current{background:#26B;color:#fff;border:solid 1px #AAE;font-weight: 700}
-.current.prev{font-weight: normal !important;}
-.pagination .current.prev,.pagination .current.next{color:#999;background:#fff;border-color:#999;}
-.pagination,*{font-size:12px;}
-.go{border:1px solid #AAAAEE;color:#999;background:#fff !important;border-color:#999;padding:1px 5px;}
