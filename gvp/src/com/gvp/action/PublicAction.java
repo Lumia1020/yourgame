@@ -138,7 +138,7 @@ AND tqi.productCode LIKE '%3%'
 union all 
 select tqi.* from t_quote_info tqi where tqi.qid in (select tpc.qid from t_product_code tpc WHERE tpc.code like '%3%')
 		 */
-		StringBuilder sql = new StringBuilder("SELECT * FROM (SELECT tqi.* from t_quote_info tqi,t_materials tm where tqi.qid = tm.qid ");
+		StringBuilder sql = new StringBuilder("SELECT * FROM (SELECT tqi.* from t_quote_info tqi left join t_materials tm on tqi.qid = tm.qid where 1=1 ");
 		List params = new ArrayList();
 		
 		if(customer != null){
