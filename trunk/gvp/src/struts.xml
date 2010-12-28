@@ -119,6 +119,11 @@
 				<param name="includeProperties">success,infos.*</param>
 			</result>
 		</action>
+		<action name="saveProvider" class="publicAction" method="saveProvider">
+			<result type="json">
+				<param name="includeProperties">success,infos.*</param>
+			</result>
+		</action>
 		<action name="saveCustomer" class="publicAction" method="saveCustomer">
 			<result type="json">
 				<param name="includeProperties">success,infos.*</param>
@@ -280,6 +285,13 @@
 				<param name="includeProperties">root.*,totalProperty</param>
 			</result>
 		</action>
+		<action name="findProviderList" class="publicAction" method="findProviderList">
+			<result type="json">
+				<param name="root">page</param>
+				<param name="excludeNullProperties">true</param>
+				<param name="includeProperties">root.*,totalProperty</param>
+			</result>
+		</action>
 		<action name="findCustomerList" class="publicAction" method="findCustomerList">
 			<result type="json">
 				<param name="root">page</param>
@@ -345,11 +357,6 @@
 				<param name="includeProperties">success</param>
 			</result>
 		</action>
-		<action name="deleteQuoteInfo" class="publicAction" method="deleteQuoteInfo">
-			<result type="json">
-				<param name="includeProperties">success</param>
-			</result>
-		</action>
 		<action name="deleteStuff" class="publicAction" method="deleteStuff">
 			<result type="json">
 				<param name="includeProperties">success</param>
@@ -361,6 +368,11 @@
 			</result>
 		</action>
 		<action name="deleteCustomer" class="publicAction" method="deleteCustomer">
+			<result type="json">
+				<param name="includeProperties">success</param>
+			</result>
+		</action>
+		<action name="deleteProvider" class="publicAction" method="deleteProvider">
 			<result type="json">
 				<param name="includeProperties">success</param>
 			</result>
@@ -438,6 +450,11 @@
 			</result>
 		</action>
 		<action name="updateSpecies" class="publicAction" method="updateSpecies">
+			<result type="json">
+				<param name="includeProperties">success,infos.*</param>
+			</result>
+		</action>
+		<action name="updateProvider" class="publicAction" method="updateProvider">
 			<result type="json">
 				<param name="includeProperties">success,infos.*</param>
 			</result>
