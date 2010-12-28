@@ -62,6 +62,16 @@ public class Role implements Serializable {
 	private Boolean r29;//参考信息的运费
 	private Boolean r30;//参考信息的减沙
 	
+	private Boolean r31;//供应商信息管理
+	
+
+	public Boolean getR31() {
+		return r31;
+	}
+
+	public void setR31(Boolean r31) {
+		this.r31 = r31;
+	}
 
 	public Boolean getR24() {
 		return r24;

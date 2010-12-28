@@ -11,10 +11,21 @@ import java.io.Serializable;
 @SuppressWarnings("serial")
 public class Stuff implements Serializable {
 
-	private Integer stuffid;
+	private Integer		stuffid;
 
 	/** 材质名称 */
-	private String stuffName;
+	private String		stuffName;
+
+	/** @Fields provider : 供应商 */
+	private Provider	provider;
+
+	public Provider getProvider() {
+		return provider;
+	}
+
+	public void setProvider(Provider provider) {
+		this.provider = provider;
+	}
 
 	public Stuff(Integer sid, String stuffName) {
 		super();

@@ -13,6 +13,11 @@ Ext.gvp.tree.data.manager = [{
 	id : 'gvp_customer',
 	hidden:!Ext.ROLE_R17,
 	leaf : true
+},{
+	text : '供应商信息管理',
+	id : 'gvp_provider',
+	hidden:!Ext.ROLE_R31,
+	leaf : true
 }, {
 	text : '材质信息管理',
 	id : 'gvp_stuff',

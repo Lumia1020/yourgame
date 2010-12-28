@@ -10,7 +10,6 @@ import org.hibernate.SQLQuery;
 import org.hibernate.Session;
 import org.hibernate.criterion.DetachedCriteria;
 import org.hibernate.criterion.Projections;
-import org.hibernate.type.IntegerType;
 import org.hibernate.type.Type;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.orm.hibernate3.HibernateCallback;
