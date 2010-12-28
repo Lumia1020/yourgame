@@ -8,5 +8,6 @@
 			<generator class="native" />
 		</id>
 		<property name="stuffName" length="200" />
+		<many-to-one name="provider" column="providerid" class="com.gvp.po.Provider" insert="true" update="true"></many-to-one>
 	</class>
 </hibernate-mapping>

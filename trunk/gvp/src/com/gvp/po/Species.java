@@ -11,28 +11,36 @@ import java.io.Serializable;
 @SuppressWarnings("serial")
 public class Species implements Serializable {
 
-	private Integer speciesid;
+	private Integer	speciesid;
 
 	/** 种类名 */
-	private String speciesName;
+	private String	speciesName;
 
-	/** 所属材质id */
-	private Integer stuffid;
-
-	/** 材质名称 */
-	private String stuffName;
-
+	/** 所属材质 */
+	private Stuff	stuff;
 
 	public Species(Integer speciesid, String speciesName, Integer stuffid, String stuffName) {
 		super();
 		this.speciesid = speciesid;
 		this.speciesName = speciesName;
-		this.stuffid = stuffid;
-		this.stuffName = stuffName;
+		this.stuff = new Stuff(stuffid, stuffName);
+	}
+
+	public Stuff getStuff() {
+		return stuff;
+	}
+
+	public void setStuff(Stuff stuff) {
+		this.stuff = stuff;
 	}
 
 	public Species() {
 		super();
+	}
+
+	public Species(Integer speciesid2, String speciesName2) {
+		this.speciesid = speciesid2;
+		this.speciesName = speciesName2;
 	}
 
 	public Integer getSpeciesid() {
@@ -51,19 +59,4 @@ public class Species implements Serializable {
 		this.speciesName = speciesName;
 	}
 
-	public Integer getStuffid() {
-		return stuffid;
-	}
-
-	public void setStuffid(Integer stuffid) {
-		this.stuffid = stuffid;
-	}
-
-	public String getStuffName() {
-		return stuffName;
-	}
-
-	public void setStuffName(String stuffName) {
-		this.stuffName = stuffName;
-	}
 }

@@ -5044,6 +5044,156 @@ Ext.onReady(function() {
 	
 	
 	/**
+	 * 初始化供应商管理
+	 */
+	function initProviderManageGrid(){
+		var store = new Ext.data.Store({
+			url: 'findProviderList.action',
+			paramNames:{start:'page.start',	limit:'page.limit'},
+			autoLoad:true,
+			baseParams:{'page.start':0,'page.limit':20},
+			reader: new Ext.data.JsonReader({totalProperty: 'totalProperty',root: 'root'},
+			[
+				{name: 'id'},
+				{name: 'providerName',allowBlank:false}
+			]),
+			listeners:{
+				'update': function(thiz, record, operation){
+					if(operation == Ext.data.Record.EDIT){
+						if(record.data.id){	//有id则为更新
+							Ext.Ajax.request({
+							    url: 'updateProvider.action',
+							    params: {
+							    	'provider.id':record.data.id,
+									'provider.providerName': record.data.providerName		
+								},
+							    success: function(response) {
+							    	var obj = Ext.decode(response.responseText);
+							    	if(obj.success){
+							    		record.beginEdit();
+							    		record.data = obj.infos.provider;
+							    		record.commit();
+							    		thiz.commitChanges();
+							    	}else{
+							    		thiz.rejectChanges();
+							    	}
+							    },
+							    failure: function(response) {
+							    	Ext.Msg.alert('错误','server-side failure with status code ' + response.status);
+							    	thiz.rejectChanges();
+							    }
+						    });
+						}else{//无id则为新增
+							Ext.Ajax.request({
+							    url: 'saveProvider.action',
+							    params: {
+									'provider.providerName': record.data.providerName
+								},
+							    success: function(response) {
+							    	var obj = Ext.decode(response.responseText);
+							    	if(obj.success){
+							    		record.beginEdit();
+							    		record.data = obj.infos.provider;
+							    		record.commit();
+							    		grid.getSelectionModel().selectRow(0);
+							    		Ext.get(grid.getView().getRow(0)).frame('green',2,{duration: .3});
+							    	}else{
+							    		Ext.Msg.alert('操作提示',obj.infos.msg);
+							    		thiz.rejectChanges();
+							    		thiz.remove(record);
+							    	}
+							    },
+							    failure: function(response) {
+							    	Ext.Msg.alert('错误','server-side failure with status code ' + response.status);
+							    	thiz.rejectChanges();
+							    }
+						    });
+						}
+						
+					}
+				}
+			}
+	    });
+	    
+	    
+	    var expandId = Ext.id();
+	    
+	    var sm = new Ext.grid.CheckboxSelectionModel({
+	        listeners: {
+	            selectionchange: function(sm) {
+	                if (sm.getCount()) {
+	                    grid.removeButton.enable();
+	                } else {
+	                    grid.removeButton.disable();
+	                }
+	            }
+	        }
+	    });
+	    
+	    var editor = initEditor(null,null,2);
+	    editor.on('invalid',function(record,sd){
+	    	Ext.get(grid.getView().getRow(0)).fadeOut({
+			    endOpacity: 0, 
+			    easing: 'easeOut',
+			    duration: .5,
+			    remove: false,
+			    useDisplay: false,
+			    callback:function(){
+			    	sd.remove(record);
+			    }
+			});
+	    });
+	    
+	    
+	    var grid = new Ext.grid.GridPanel({
+	    	region:'center',
+	    	border: false,
+	        trackMouseOver:false, 
+	        loadMask:true,
+	    	store: store,
+	    	autoExpandColumn: expandId,
+	        sm: sm,
+	        plugins:editor,
+	        colModel:new Ext.grid.ColumnModel({
+				defaultSortable:true,
+				defaultWidth:80,
+				columns: [sm,
+					{header: '供应商名称',dataIndex:'providerName',id:expandId,editor:{xtype:'textfield',maxLength:20,allowBlank:false}}
+	    	]}),
+	    	bbar:new Ext.PagingToolbar({
+	    		store: store,
+	    		displayInfo: true,
+	    		pageSize:20
+	    	}),
+	    	tbar:['供应商信息',initSearchField(store,null,['provider.providerName']),
+	    	'->',{
+	    		text :'添加'
+	    		,iconCls:'silk-add'
+	    		,ref:'../addButton'
+	    		,handler:function(){
+	    			var provider = new grid.store.recordType({
+			            providerName : ''
+			        });
+			        editor.stopEditing();
+			        grid.store.insert(0, provider);
+			        editor.startEditing(0);
+	    		}
+	    	},{
+				text : '删除',
+				disabled:true,
+				iconCls : 'silk-delete',
+				ref: '../removeButton',
+				handler:function(){
+					editor.stopEditing(false);
+					deleteRecords('deleteProvider.action','page.params.ids','id',grid,store);
+				}
+			}]
+	    });
+	    
+	    return grid;
+	}
+	
+	/**
 	 * 初始化客户管理
 	 */
 	function initCustomerManageGrid(){
@@ -5562,6 +5712,9 @@ Ext.onReady(function() {
 		                }},
 						{boxLabel: '显示参考信息的减沙', name: 'r30',handler:function(){
 		                	win.cankao_xinxi_de_jiansha.setValue(this.checked);
+		                }},
+						{boxLabel: '供应商信息管理', name: 'r31',handler:function(){
+		                	win.gong_ying_shang_guanli.setValue(this.checked);
 		                }}
 		            ]
 				},
@@ -5595,7 +5748,8 @@ Ext.onReady(function() {
 					{xtype : 'hidden',name : 'role.r27',ref:'../fuzhu_xinxi_de_jiagong_xinxi'},
 					{xtype : 'hidden',name : 'role.r28',ref:'../waifa_jiagong_de_jiagong_xinxi'},
 					{xtype : 'hidden',name : 'role.r29',ref:'../cankao_xinxi_de_yunfei'},
-					{xtype : 'hidden',name : 'role.r30',ref:'../cankao_xinxi_de_jiansha'}
+					{xtype : 'hidden',name : 'role.r30',ref:'../cankao_xinxi_de_jiansha'},
+					{xtype : 'hidden',name : 'role.r31',ref:'../gong_ying_shang_guanli'}
 				],
 				listeners : {
 					render : function(){
@@ -5636,6 +5790,7 @@ Ext.onReady(function() {
 						    		win.group7.items.get(3).setValue(role.r28);
 						    		win.group8.items.get(0).setValue(role.r29);
 						    		win.group8.items.get(1).setValue(role.r30);
+						    		win.group8.items.get(2).setValue(role.r31);
 						    		win.rid.setValue(role.rid);
 						    	}
 						    },
@@ -5747,6 +5902,11 @@ Ext.onReady(function() {
 								//客户管理
 								if(node.id == 'gvp_customer'){
 									grid = initCustomerManageGrid();
+								}
+								
+								//供应商管理
+								if(node.id == 'gvp_provider'){
+									grid = initProviderManageGrid();
 								}
 								
 								//材质管理

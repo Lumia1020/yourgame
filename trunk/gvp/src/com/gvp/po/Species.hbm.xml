@@ -7,8 +7,7 @@
 		<id name="speciesid" column="speciesid">
 			<generator class="native" />
 		</id>
-		<property name="stuffid" />
-		<property name="stuffName" length="200" />
+		<many-to-one name="stuff" column="stuffid" class="com.gvp.po.Stuff" insert="true" update="true"></many-to-one>
 		<property name="speciesName" length="200" />
 	</class>
 </hibernate-mapping>

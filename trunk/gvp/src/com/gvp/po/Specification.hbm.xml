@@ -8,10 +8,6 @@
 			<generator class="native" />
 		</id>
 		<property name="specName" length="100" />
-		<property name="stuffid" />
-		<property name="stuffName" length="200" />
-		<property name="price" length="100" />
-		<property name="speciesid" />
-		<property name="speciesName" length="200"/>
+		<many-to-one name="species" column="speciesid" class="com.gvp.po.Species" insert="true" update="true"></many-to-one>
 	</class>
 </hibernate-mapping>
