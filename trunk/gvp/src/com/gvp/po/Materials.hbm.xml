@@ -7,12 +7,7 @@
 		<id name="mid" column="mid">
 			<generator class="native" />
 		</id>
-		<property name="stuffid"/>
-		<property name="stuffName" length="100" />
-		<property name="speciesid" />
-		<property name="speciesName" length="100" />
-		<property name="specid" />
-		<property name="specName" length="100" />
+		<many-to-one name="specification" column="specid" class="com.gvp.po.Specification" insert="true" update="true"></many-to-one>
 		<property name="productsName" length="100" />
 		<property name="materialsName" length="100" />
 		<property name="diameter" length="100" />

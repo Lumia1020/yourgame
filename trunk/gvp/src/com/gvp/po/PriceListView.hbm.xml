@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC 
+	"-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+	"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<class name="com.gvp.po.PriceListView" table="v_price_list" lazy="true" batch-size="10" dynamic-update="true">
+		<id name="listid" column="listid">
+			<generator class="native" />
+		</id>
+		<property name="providerid" update="false" insert="false" />
+		<property name="providerName" length="100" update="false" insert="false" />
+		<property name="stuffid" update="false" insert="false" />
+		<property name="stuffName" length="100" update="false" insert="false" />
+		<property name="speciesid" update="false" insert="false" />
+		<property name="speciesName" length="100" update="false" insert="false" />
+		<property name="specid" update="false" insert="false" />
+		<property name="specName" length="100" update="false" insert="false" />
+		<property name="price" length="50" update="false" insert="false" />
+		<property name="remark" length="200" update="false" insert="false" />
+		<property name="recordTime" update="false" insert="false" />
+	</class>
+</hibernate-mapping>

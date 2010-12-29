@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC 
+	"-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+	"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<class name="com.gvp.po.StuffView" table="v_stuff" lazy="true" batch-size="10" dynamic-update="true">
+		<id name="stuffid" column="stuffid">
+			<generator class="native" />
+		</id>
+		<property name="stuffName" length="200" update="false" insert="false" />
+		<property name="providerid" update="false" insert="false" />
+		<property name="providerName" column="providerName" update="false" insert="false" />
+	</class>
+</hibernate-mapping>

@@ -7,11 +7,7 @@
 		<id name="listid" column="listid">
 			<generator class="native" />
 		</id>
-		<property name="stuffid" />
-		<property name="speciesid" />
-		<property name="specid" />
-		<property name="cid"/>
-		<property name="customerName" length="100" />
+		<many-to-one name="specification" column="specid" class="com.gvp.po.Specification" insert="true" update="true"></many-to-one>
 		<property name="price" length="50" />
 		<property name="remark" length="200"/>
 		<property name="recordTime" />

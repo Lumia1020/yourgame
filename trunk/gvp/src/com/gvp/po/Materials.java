@@ -13,63 +13,49 @@ import com.googlecode.jsonplugin.annotations.JSON;
  */
 @SuppressWarnings("serial")
 public class Materials implements Serializable {
-	private Integer mid;
-
-	/** 材质id */
-	private Integer stuffid;
-
-	/** 材质名称 */
-	private String stuffName;
-
-	/** 种类id */
-	private Integer speciesid;
-
-	/** 种类名称 */
-	private String speciesName;
+	private Integer			mid;
 
 	/** 规格id */
-	private Integer specid;
-
-	/** 规格名称 */
-	private String specName;
+	private Specification	specification;
 
 	/** 产品名称 */
-	private String productsName;
+	private String			productsName;
 
 	/** 材料名称 */
-	private String materialsName;
+	private String			materialsName;
 
 	/** 材料直径 */
-	private String diameter;
+	private String			diameter;
 
 	/** 材料重量 */
-	private String weight;
+	private String			weight;
 
 	/** 支数 */
-	private String count;
+	private String			count;
 
 	/** 共损耗 */
-	private String loss;
+	private String			loss;
 
 	/** 尺寸 */
-	private String size;
+	private String			size;
 
 	/** 供应商材料单价 */
-	private String materialPrice;
+	private String			materialPrice;
 
 	/** 材料单价 */
-	private String price;
+	private String			price;
 
 	/** 减沙 */
-	private String jiansha;
-	
+	private String			jiansha;
+
 	/** @Fields adjustRemark : 调节备注 */
-	private String adjustRemark;
+	private String			adjustRemark;
+	
 	/** @Fields adjustDate : 调节时间 */
-	private Date adjustDate;
+	private Date			adjustDate;
 
 	/** 关联报时记录 */
-	private Integer qid;
+	private Integer			qid;
 
 	public String getDiameter() {
 		return diameter;
@@ -159,52 +145,12 @@ public class Materials implements Serializable {
 		this.jiansha = jiansha;
 	}
 
-	public Integer getSpecid() {
-		return specid;
+	public Specification getSpecification() {
+		return specification;
 	}
 
-	public void setSpecid(Integer specid) {
-		this.specid = specid;
-	}
-
-	public String getSpecName() {
-		return specName;
-	}
-
-	public void setSpecName(String specName) {
-		this.specName = specName;
-	}
-
-	public Integer getSpeciesid() {
-		return speciesid;
-	}
-
-	public void setSpeciesid(Integer speciesid) {
-		this.speciesid = speciesid;
-	}
-
-	public String getSpeciesName() {
-		return speciesName;
-	}
-
-	public void setSpeciesName(String speciesName) {
-		this.speciesName = speciesName;
-	}
-
-	public Integer getStuffid() {
-		return stuffid;
-	}
-
-	public void setStuffid(Integer stuffid) {
-		this.stuffid = stuffid;
-	}
-
-	public String getStuffName() {
-		return stuffName;
-	}
-
-	public void setStuffName(String stuffName) {
-		this.stuffName = stuffName;
+	public void setSpecification(Specification specification) {
+		this.specification = specification;
 	}
 
 	public String getCount() {
