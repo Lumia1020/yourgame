@@ -58,6 +58,10 @@
 	<mapping resource="com/gvp/po/PriceList.hbm.xml" />
 	<mapping resource="com/gvp/po/WorkflowLog.hbm.xml" />
 	<mapping resource="com/gvp/po/OtherPrice.hbm.xml" />
+	<mapping resource="com/gvp/po/MaterialsView.hbm.xml" />
+	<mapping resource="com/gvp/po/SpeciesView.hbm.xml" />
+	<mapping resource="com/gvp/po/SpecificationView.hbm.xml" />
+	<mapping resource="com/gvp/po/StuffView.hbm.xml" />
 </session-factory>
 
 </hibernate-configuration>

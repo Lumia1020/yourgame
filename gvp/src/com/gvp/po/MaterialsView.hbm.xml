@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC 
+	"-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+	"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<class name="com.gvp.po.MaterialsView" table="v_materials" lazy="true" batch-size="10" dynamic-update="true">
+		<id name="mid" column="mid">
+			<generator class="native" />
+		</id>
+		<property name="providerid" update="false" insert="false" />
+		<property name="providerName" length="100" update="false" insert="false" />
+		<property name="stuffid" update="false" insert="false" />
+		<property name="stuffName" length="100" update="false" insert="false" />
+		<property name="speciesid" update="false" insert="false" />
+		<property name="speciesName" length="100" update="false" insert="false" />
+		<property name="specid" update="false" insert="false" />
+		<property name="specName" length="100" update="false" insert="false" />
+		<property name="productsName" length="100" update="false" insert="false" />
+		<property name="materialsName" length="100" update="false" insert="false" />
+		<property name="diameter" length="100" update="false" insert="false" />
+		<property name="weight" length="100" update="false" insert="false" />
+		<property name="count" length="100" update="false" insert="false" />
+		<property name="size" length="100" update="false" insert="false" />
+		<property name="materialPrice" length="100" update="false" insert="false" />
+		<property name="price" length="100" update="false" insert="false" />
+		<property name="jiansha" length="100" update="false" insert="false" />
+		<property name="loss" length="100" update="false" insert="false" />
+		<property name="adjustRemark" length="100" update="false" insert="false" />
+		<property name="adjustDate" update="false" insert="false" />
+		<property name="qid" update="false" insert="false" />
+	</class>
+</hibernate-mapping>

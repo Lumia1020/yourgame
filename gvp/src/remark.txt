@@ -1,25 +1,6 @@
-1.增加权限r22
-2.修改表结构t_price_list
-listid	int	11	0	0	-1	0	0	0		0					-1	0
-stuffid	int	11	0	-1	0	0	0	0		0					0	0
-speciesid	int	11	0	-1	0	0	0	0		0					0	0
-specid	int	11	0	-1	0	0	0	0		0					0	0
-price	varchar	50	0	-1	0	0	0	0		0		utf8	utf8_general_ci		0	0
-remark	varchar	200	0	-1	0	0	0	0		0		utf8	utf8_general_ci		0	0
-recordTime	datetime	0	0	-1	0	0	0	0		0					0	0
+1.t_quoteinfo t_materials 建立外键关系
+2. 增加管理员的 "供应商管理" 的菜单权限
+3。增加一个默认的供应商 建立关系 update t_stuff t set t.providerid = 1
 
 
-还需要增加
-
-能不能给最高用户[admin]有删除功能！其它用户通过权限分配，有删除权限的，在[未提交审核申请]与[退回]两种状态下可以删除，审核通过的就不能删除。
-石晶晶  14:52:03
-admin.有所在状态下的删除功能。一般都不用 admin账号，只有在特殊情况下才用。你觉得这样有没有问题
-main  14:53:14
-我就增加一个删除的权限吧.所有帐号都可以分配这个权限,不过你只给admin分配了而已,只有分配了这个权限的,在所有状态下都可以删除,否则就只有在正常情况下才可以删除
-
-
-2010-11-20
-
-增加角色 r23
-
-增加一个表t_product_code;
+启动系统后修改spirng配置文件为none

@@ -26,8 +26,10 @@ import com.gvp.po.Aids;
 import com.gvp.po.Customer;
 import com.gvp.po.Foundry;
 import com.gvp.po.Materials;
+import com.gvp.po.MaterialsView;
 import com.gvp.po.OtherQuotePrice;
 import com.gvp.po.PriceList;
+import com.gvp.po.PriceListView;
 import com.gvp.po.ProcessInfo;
 import com.gvp.po.ProductCode;
 import com.gvp.po.Provider;
@@ -36,8 +38,11 @@ import com.gvp.po.RefFiles;
 import com.gvp.po.ReferenceInfo;
 import com.gvp.po.Role;
 import com.gvp.po.Species;
+import com.gvp.po.SpeciesView;
 import com.gvp.po.Specification;
+import com.gvp.po.SpecificationView;
 import com.gvp.po.Stuff;
+import com.gvp.po.StuffView;
 import com.gvp.po.SystemLog;
 import com.gvp.po.User;
 import com.gvp.po.WorkflowLog;
@@ -57,6 +62,8 @@ public class PublicAction extends BaseAction {
 	private Provider			provider;
 
 	private Stuff				stuff;
+
+	private StuffView			stuffView;
 
 	private QuoteInfo			quoteInfo;
 
@@ -82,9 +89,15 @@ public class PublicAction extends BaseAction {
 
 	private Species				species;
 
+	private SpeciesView			speciesView;
+
 	private Specification		specification;
 
+	private SpecificationView	specificationView;
+
 	private PriceList			priceList;
+
+	private PriceListView		priceListView;
 
 	private ProductCode			productCode;
 
@@ -170,21 +183,21 @@ public class PublicAction extends BaseAction {
 
 		if (priceList != null) {
 			//材质
-			Integer stuffid = priceList.getStuffid();
+			Integer stuffid = stuff.getStuffid();
 			if (stuffid != null) {
 				sql.append(" AND tm.stuffid = ? ");
 				params.add(stuffid);
 			}
 
 			//规格
-			Integer specid = priceList.getSpecid();
+			Integer specid = specification.getSpecid();
 			if (specid != null) {
 				sql.append(" AND tm.specid = ? ");
 				params.add(specid);
 			}
 
 			//种类
-			Integer speciesid = priceList.getSpeciesid();
+			Integer speciesid = species.getSpeciesid();
 			if (speciesid != null) {
 				sql.append(" AND tm.speciesid = ? ");
 				params.add(speciesid);
@@ -368,6 +381,7 @@ public class PublicAction extends BaseAction {
 		this.success = publicService.deleteEntities(hql, null);
 		return SUCCESS;
 	}
+
 	/**
 	 * 删除客户
 	 * 
@@ -599,10 +613,12 @@ public class PublicAction extends BaseAction {
 	 */
 	@Action(description = "修改种类信息")
 	public String updateSpecies() throws IllegalAccessException, InvocationTargetException, NoSuchMethodException {
+		species.setStuff(stuff);
 		try {
 			Species c = (Species) publicService.updateEntity(species, species.getSpeciesid(), null);
 			if (c != null) {
-				this.infos.put("species", c);
+				SpeciesView v = (SpeciesView) publicService.findByNativeSql("select * from v_species v where v.speciesid = " + c.getSpeciesid(), SpeciesView.class).get(0);
+				this.infos.put("speciesView", v);
 				this.success = true;
 			}
 		} catch (RuntimeException e) {
@@ -622,10 +638,13 @@ public class PublicAction extends BaseAction {
 	 */
 	@Action(description = "修改规格信息")
 	public String updateSpecification() throws IllegalAccessException, InvocationTargetException, NoSuchMethodException {
+		specification.setSpecies(species);
 		try {
 			Specification c = (Specification) publicService.updateEntity(specification, specification.getSpecid(), null);
 			if (c != null) {
-				this.infos.put("specification", c);
+				SpecificationView v = (SpecificationView) publicService.findByNativeSql("select * from v_specification v where v.specid = " + specification.getSpecid(),
+						SpecificationView.class).get(0);
+				this.infos.put("specificationView", v);
 				this.success = true;
 			}
 		} catch (RuntimeException e) {
@@ -645,10 +664,12 @@ public class PublicAction extends BaseAction {
 	 */
 	@Action(description = "修改材质信息")
 	public String updateStuff() throws IllegalAccessException, InvocationTargetException, NoSuchMethodException {
+		stuff.setProvider(provider);
 		try {
 			Stuff c = (Stuff) publicService.updateEntity(stuff, stuff.getStuffid(), null);
 			if (c != null) {
-				this.infos.put("stuff", c);
+				StuffView v = (StuffView) publicService.findByNativeSql("select * from v_stuff v where v.stuffid = " + c.getStuffid(), StuffView.class).get(0);
+				this.infos.put("stuffView", v);
 				this.success = true;
 			}
 		} catch (RuntimeException e) {
@@ -680,7 +701,7 @@ public class PublicAction extends BaseAction {
 		}
 		return SUCCESS;
 	}
-	
+
 	/**
 	 * 更新客户
 	 * 
@@ -741,7 +762,8 @@ public class PublicAction extends BaseAction {
 			this.materials.adjust();
 			Materials c = (Materials) publicService.updateEntity(materials, materials.getMid(), materials.getQid());
 			if (c != null) {
-				this.infos.put("materials", c);
+				MaterialsView v = (MaterialsView) publicService.findByNativeSql("select v.* from v_materials v where v.mid = " + c.getMid(), MaterialsView.class).get(0);
+				this.infos.put("materials", v);
 				this.infos.put("quoteInfo", publicService.findQuoteInfoById(materials.getQid(), false).get("quoteInfo"));
 				this.success = true;
 			}
@@ -826,6 +848,7 @@ public class PublicAction extends BaseAction {
 		}
 		return SUCCESS;
 	}
+
 	/**
 	 * 保存客户信息
 	 * 
@@ -979,6 +1002,7 @@ public class PublicAction extends BaseAction {
 	public String saveMaterials() {
 		try {
 			this.materials.adjust();
+			materials.setSpecification(specification);
 			this.infos.put("materials", publicService.saveEntity(this.materials, this.materials.getQid()));
 			this.infos.put("quoteInfo", publicService.findQuoteInfoById(materials.getQid(), false).get("quoteInfo"));
 			this.success = true;
@@ -1014,25 +1038,29 @@ public class PublicAction extends BaseAction {
 	public String adjustQuoteInfos() {
 		try {
 			this.priceList.setRecordTime(new Date());
-			PriceList p = publicService.adjustQuoteInfos(priceList);
-			StringBuilder sql = new StringBuilder();
 
-			sql.append(" SELECT tst.stuffName,");
-			sql.append(" ts.speciesName,");
-			sql.append(" tsp.specName,");
-			sql.append(" tp.price,");
-			sql.append(" tp.remark,");
-			sql.append(" tp.recordTime,");
-			sql.append(" tp.listid");
-			sql.append(" FROM t_price_list    AS tp,");
-			sql.append(" t_species       AS ts,");
-			sql.append(" t_specification AS tsp,");
-			sql.append(" t_stuff         AS tst");
-			sql.append(" WHERE tp.stuffid = tst.stuffid");
-			sql.append(" AND tp.speciesid = ts.speciesid");
-			sql.append(" AND tp.specid = tsp.specid");
-			sql.append(" AND tp.listid = ? ");
-			this.infos.put("priceList", publicService.findBySpringSql(sql.toString(), new Object[] { p.getListid() }, new PriceListMapper()).get(0));
+			priceList.setSpecification(specification);
+			PriceList p = publicService.adjustQuoteInfos(priceList);
+			//			StringBuilder sql = new StringBuilder();
+
+			//			sql.append(" SELECT tst.stuffName,");
+			//			sql.append(" ts.speciesName,");
+			//			sql.append(" tsp.specName,");
+			//			sql.append(" tp.price,");
+			//			sql.append(" tp.remark,");
+			//			sql.append(" tp.recordTime,");
+			//			sql.append(" tp.listid");
+			//			sql.append(" FROM t_price_list    AS tp,");
+			//			sql.append(" t_species       AS ts,");
+			//			sql.append(" t_specification AS tsp,");
+			//			sql.append(" t_stuff         AS tst");
+			//			sql.append(" WHERE tp.stuffid = tst.stuffid");
+			//			sql.append(" AND tp.speciesid = ts.speciesid");
+			//			sql.append(" AND tp.specid = tsp.specid");
+			//			sql.append(" AND tp.listid = ? ");
+			//			this.infos.put("priceList", publicService.findBySpringSql(sql.toString(), new Object[] { p.getListid() }, new PriceListMapper()).get(0));
+			PriceListView v = (PriceListView) publicService.findByNativeSql("select * from v_price_list v where v.listid = " + p.getListid(), PriceListView.class).get(0);
+			this.infos.put("priceListView", v);
 			this.success = true;
 		} catch (RuntimeException e) {
 			this.success = false;
@@ -1048,8 +1076,12 @@ public class PublicAction extends BaseAction {
 	 */
 	@Action(description = "新增规格信息")
 	public String saveSpecification() {
+		specification.setSpecies(species);
 		try {
-			this.infos.put("specification", publicService.saveEntity(this.specification));
+			specification = (Specification) publicService.saveEntity(this.specification);
+			SpecificationView v = (SpecificationView) publicService.findByNativeSql("select * from v_specification v where v.specid = " + specification.getSpecid(),
+					SpecificationView.class).get(0);
+			this.infos.put("specificationView", v);
 			this.success = true;
 		} catch (RuntimeException e) {
 			this.success = false;
@@ -1065,8 +1097,11 @@ public class PublicAction extends BaseAction {
 	 */
 	@Action(description = "新增种类信息")
 	public String saveSpecies() {
+		species.setStuff(stuff);
 		try {
-			this.infos.put("species", publicService.saveEntity(this.species));
+			species = (Species) publicService.saveEntity(this.species);
+			SpeciesView v = (SpeciesView) publicService.findByNativeSql("select * from v_species v where v.speciesid = " + species.getSpeciesid(), SpeciesView.class).get(0);
+			this.infos.put("speciesView", v);
 			this.success = true;
 		} catch (RuntimeException e) {
 			this.success = false;
@@ -1083,7 +1118,10 @@ public class PublicAction extends BaseAction {
 	@Action(description = "新增材质信息")
 	public String saveStuff() {
 		try {
-			this.infos.put("stuff", publicService.saveEntity(this.stuff));
+			stuff.setProvider(provider);
+			stuff = (Stuff) publicService.saveEntity(this.stuff);
+			StuffView v = (StuffView) publicService.findByNativeSql("select * from v_stuff where stuffid=" + stuff.getStuffid(), StuffView.class).get(0);
+			this.infos.put("stuffView", v);
 			this.success = true;
 		} catch (RuntimeException e) {
 			this.success = false;
@@ -1771,7 +1809,7 @@ public class PublicAction extends BaseAction {
 	public String findMaterialsById() {
 		Integer qid = quoteInfo.getQid();
 		try {
-			List list = publicService.getList(Materials.class, qid);
+			List list = publicService.getList(MaterialsView.class, qid);
 			if (list != null && !list.isEmpty()) {
 				this.infos.put("materials", list.get(0));
 			}
@@ -1876,35 +1914,41 @@ public class PublicAction extends BaseAction {
 	 */
 	@Action(description = "查找供应商材料单价修改信息")
 	public String findPriceList() {
-		StringBuilder sql = new StringBuilder();
-		sql.append(" SELECT tst.stuffName,");
-		sql.append(" ts.speciesName,");
-		sql.append(" tsp.specName,");
-		sql.append(" tp.price,");
-		sql.append(" tp.remark,");
-		sql.append(" tp.recordTime,");
-		sql.append(" tp.listid");
-		sql.append(" FROM t_price_list    AS tp,");
-		sql.append(" t_species       AS ts,");
-		sql.append(" t_specification AS tsp,");
-		sql.append(" t_stuff         AS tst");
-		sql.append(" WHERE tp.stuffid = tst.stuffid");
-		sql.append(" AND tp.speciesid = ts.speciesid");
-		sql.append(" AND tp.specid = tsp.specid");
+		//		StringBuilder sql = new StringBuilder();
+		//		sql.append(" SELECT tst.stuffName,");
+		//		sql.append(" ts.speciesName,");
+		//		sql.append(" tsp.specName,");
+		//		sql.append(" tp.price,");
+		//		sql.append(" tp.remark,");
+		//		sql.append(" tp.recordTime,");
+		//		sql.append(" tp.listid");
+		//		sql.append(" FROM t_price_list    AS tp,");
+		//		sql.append(" t_species       AS ts,");
+		//		sql.append(" t_specification AS tsp,");
+		//		sql.append(" t_stuff         AS tst");
+		//		sql.append(" WHERE tp.stuffid = tst.stuffid");
+		//		sql.append(" AND tp.speciesid = ts.speciesid");
+		//		sql.append(" AND tp.specid = tsp.specid");
 
-		List<String> params = new ArrayList<String>();
-		if (priceList != null) {
-			sql.append(" AND (tp.remark like ? OR tst.stuffName like ? OR ts.speciesName like ? OR tsp.specName like ? )");
-			StringBuilder likeParam = new StringBuilder();
-			likeParam.append("%").append(priceList.getRemark()).append("%");
-			String param = likeParam.toString();
-			params.add(param);
-			params.add(param);
-			params.add(param);
-			params.add(param);
+		//		List<String> params = new ArrayList<String>();
+		//		if (priceList != null) {
+		//			sql.append(" AND (tp.remark like ? OR tst.stuffName like ? OR ts.speciesName like ? OR tsp.specName like ? )");
+		//			StringBuilder likeParam = new StringBuilder();
+		//			likeParam.append("%").append(priceList.getRemark()).append("%");
+		//			String param = likeParam.toString();
+		//			params.add(param);
+		//			params.add(param);
+		//			params.add(param);
+		//			params.add(param);
+		//		}
+		//
+		//		this.page = publicService.getResultListBySpringJDBC(page, sql.toString(), params.toArray(), new PriceListMapper());
+		DetachedCriteria dc = DetachedCriteria.forClass(PriceListView.class);
+		if (priceListView != null) {
+			dc.add(EnhancedExample.createDefault(priceListView));
 		}
-
-		this.page = publicService.getResultListBySpringJDBC(page, sql.toString(), params.toArray(), new PriceListMapper());
+		this.page.setResult(dc);
+		this.page = publicService.getResultList(page);
 		return SUCCESS;
 	}
 
@@ -1915,9 +1959,9 @@ public class PublicAction extends BaseAction {
 	 */
 	@Action(description = "查找种类信息")
 	public String findSpeciesList() {
-		DetachedCriteria dc = DetachedCriteria.forClass(Species.class);
-		if (species != null) {
-			dc.add(EnhancedExample.createDefault(species, true));
+		DetachedCriteria dc = DetachedCriteria.forClass(SpeciesView.class);
+		if (speciesView != null) {
+			dc.add(EnhancedExample.createDefault(speciesView));
 		}
 		this.page.setResult(dc);
 		this.page = publicService.getResultList(page);
@@ -1931,9 +1975,9 @@ public class PublicAction extends BaseAction {
 	 */
 	@Action(description = "查找材质信息")
 	public String findStuffList() {
-		DetachedCriteria dc = DetachedCriteria.forClass(Stuff.class);
-		if (stuff != null) {
-			dc.add(EnhancedExample.createDefault(stuff));
+		DetachedCriteria dc = DetachedCriteria.forClass(StuffView.class);
+		if (stuffView != null) {
+			dc.add(EnhancedExample.createDefault(stuffView));
 		}
 		this.page.setResult(dc);
 		this.page = publicService.getResultList(page);
@@ -1947,9 +1991,9 @@ public class PublicAction extends BaseAction {
 	 */
 	@Action(description = "查找规格信息")
 	public String findSpecificationList() {
-		DetachedCriteria dc = DetachedCriteria.forClass(Specification.class);
-		if (specification != null) {
-			dc.add(EnhancedExample.createDefault(specification, true));
+		DetachedCriteria dc = DetachedCriteria.forClass(SpecificationView.class);
+		if (specificationView != null) {
+			dc.add(EnhancedExample.createDefault(specificationView));
 		}
 		this.page.setResult(dc);
 		this.page = publicService.getResultList(page);
@@ -2213,6 +2257,38 @@ public class PublicAction extends BaseAction {
 
 	public void setLog(SystemLog log) {
 		this.log = log;
+	}
+
+	public StuffView getStuffView() {
+		return stuffView;
+	}
+
+	public void setStuffView(StuffView stuffView) {
+		this.stuffView = stuffView;
+	}
+
+	public SpecificationView getSpecificationView() {
+		return specificationView;
+	}
+
+	public void setSpecificationView(SpecificationView specificationView) {
+		this.specificationView = specificationView;
+	}
+
+	public SpeciesView getSpeciesView() {
+		return speciesView;
+	}
+
+	public void setSpeciesView(SpeciesView speciesView) {
+		this.speciesView = speciesView;
+	}
+
+	public PriceListView getPriceListView() {
+		return priceListView;
+	}
+
+	public void setPriceListView(PriceListView priceListView) {
+		this.priceListView = priceListView;
 	}
 
 	public PriceList getPriceList() {

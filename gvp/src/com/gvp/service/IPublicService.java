@@ -10,26 +10,21 @@ import org.springframework.jdbc.core.RowMapper;
 import com.gvp.core.Page;
 import com.gvp.po.PriceList;
 import com.gvp.po.QuoteInfo;
+import com.gvp.po.Specification;
 import com.gvp.po.User;
 import com.gvp.po.WorkflowLog;
 import com.gvp.service.vo.PriceListMapper;
 
 public interface IPublicService {
-	/**
-	 * 登录
-	 * 
-	 * @param user
-	 * @return
-	 */
 	public User login(User user);
 
 	public Page getResultList(Page page);
 
 	public Boolean deleteEntities(String hql, String[] names, String[] values);
 
-	public Object saveEntity(Object entity,Integer qid);
+	public Object saveEntity(Object entity, Integer qid);
 
-	public Object updateEntity(Object entity, Integer id,Integer qid) throws IllegalAccessException, InvocationTargetException, NoSuchMethodException;
+	public Object updateEntity(Object entity, Integer id, Integer qid) throws IllegalAccessException, InvocationTargetException, NoSuchMethodException;
 
 	public Object completeQuoteInfo(Map<String, Object> map) throws IllegalAccessException, InvocationTargetException, NoSuchMethodException;
 
@@ -53,6 +48,7 @@ public interface IPublicService {
 
 	/**
 	 * 调节报时表的供应商材料单价
+	 * 
 	 * @param priceList
 	 * @return
 	 */
