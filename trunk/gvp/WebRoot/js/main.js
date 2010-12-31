@@ -4770,7 +4770,7 @@ Ext.onReady(function() {
 									var index = grid.getStore().indexOf(grid.getSelectionModel().getSelected());
 									var editorStuff = getEditor('stuffid',index,grid);
 									if(editorStuff.rendered){
-										sd.setBaseParam('species.stuffid',editorStuff.hiddenField.value);
+										sd.setBaseParam('speciesView.stuffid',editorStuff.hiddenField.value);
 									}
 								}
 							}
