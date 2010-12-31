@@ -1961,7 +1961,7 @@ public class PublicAction extends BaseAction {
 	public String findSpeciesList() {
 		DetachedCriteria dc = DetachedCriteria.forClass(SpeciesView.class);
 		if (speciesView != null) {
-			dc.add(EnhancedExample.createDefault(speciesView));
+			dc.add(EnhancedExample.createDefault(speciesView,true));
 		}
 		this.page.setResult(dc);
 		this.page = publicService.getResultList(page);
@@ -1977,7 +1977,7 @@ public class PublicAction extends BaseAction {
 	public String findStuffList() {
 		DetachedCriteria dc = DetachedCriteria.forClass(StuffView.class);
 		if (stuffView != null) {
-			dc.add(EnhancedExample.createDefault(stuffView));
+			dc.add(EnhancedExample.createDefault(stuffView,true));
 		}
 		this.page.setResult(dc);
 		this.page = publicService.getResultList(page);
