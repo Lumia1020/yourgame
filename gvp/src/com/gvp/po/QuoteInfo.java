@@ -51,7 +51,18 @@ public class QuoteInfo implements Serializable {
 	
 	/**报时表状态 未提交审核申请,已提交审核申请,已审核,已退回*/
 	private String state;
+	
+	/** @Fields adjustDate : 调节日期*/
+	private Date adjustDate;
 
+	@JSON(format = "yyyy-MM-dd HH:mm:ss")
+	public Date getAdjustDate() {
+		return adjustDate;
+	}
+
+	public void setAdjustDate(Date adjustDate) {
+		this.adjustDate = adjustDate;
+	}
 
 	public String getState() {
 		return state;

@@ -47,7 +47,7 @@
 			Ext.ROLE_R28 = '<s:property value="#session.role.r28"/>' == 'true' ? true:false;
 			Ext.ROLE_R29 = '<s:property value="#session.role.r29"/>' == 'true' ? true:false;
 			Ext.ROLE_R30 = '<s:property value="#session.role.r30"/>' == 'true' ? true:false;
-			Ext.ROLE_R31 = '<s:property value="#session.role.r31"/>' == 'true' ? true:false;
+			/*Ext.ROLE_R31 = '<s:property value="#session.role.r31"/>' == 'true' ? true:false;*/
 			
 		</script>
 		<script type="text/javascript" src="../js/ext-lang-zh_CN.js"></script>

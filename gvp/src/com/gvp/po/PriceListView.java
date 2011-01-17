@@ -10,44 +10,44 @@ import com.googlecode.jsonplugin.annotations.JSON;
  * 
  * <pre>
  * SELECT
- * 	`v`.`listid` AS `listid`,
- * 	`r`.`id` AS `providerid`,
- * 	`r`.`providerName` AS `providerName`,
- * 	`f`.`stuffid` AS `stuffid`,
- * 	`f`.`stuffName` AS `stuffName`,
- * 	`p`.`speciesid` AS `speciesid`,
- * 	`p`.`speciesName` AS `speciesName`,
- * 	`s`.`specid` AS `specid`,
- * 	`s`.`specName` AS `specName`,
- * 	`v`.`price` AS `price`,
- * 	`v`.`remark` AS `remark`,
- * 	`v`.`recordTime` AS `recordTime`
- * FROM
- * 	(
- * 		(
- * 			(
- * 				(
- * 					`t_price_list` `v`
- * 					LEFT JOIN `t_specification` `s` ON(
- * 						(`s`.`specid` = `v`.`specid`)
- * 					)
- * 				)
- * 				LEFT JOIN `t_species` `p` ON(
- * 					(
- * 						`p`.`speciesid` = `s`.`speciesid`
- * 					)
- * 				)
- * 			)
- * 			LEFT JOIN `t_stuff` `f` ON(
- * 				(
- * 					`p`.`stuffid` = `f`.`stuffid`
- * 				)
- * 			)
- * 		)
- * 		LEFT JOIN `t_provider` `r` ON(
- * 			(`r`.`id` = `f`.`providerid`)
- * 		)
- * 	)
+  	`v`.`listid` AS `listid`,
+  	`r`.`id` AS `providerid`,
+  	`r`.`providerName` AS `providerName`,
+  	`f`.`stuffid` AS `stuffid`,
+  	`f`.`stuffName` AS `stuffName`,
+  	`p`.`speciesid` AS `speciesid`,
+  	`p`.`speciesName` AS `speciesName`,
+  	`s`.`specid` AS `specid`,
+  	`s`.`specName` AS `specName`,
+  	`v`.`price` AS `price`,
+  	`v`.`remark` AS `remark`,
+  	`v`.`recordTime` AS `recordTime`
+  FROM
+  	(
+  		(
+  			(
+  				(
+  					`t_price_list` `v`
+  					LEFT JOIN `t_specification` `s` ON(
+  						(`s`.`specid` = `v`.`specid`)
+  					)
+  				)
+  				LEFT JOIN `t_species` `p` ON(
+  					(
+  						`p`.`speciesid` = `s`.`speciesid`
+  					)
+  				)
+  			)
+  			LEFT JOIN `t_stuff` `f` ON(
+  				(
+  					`p`.`stuffid` = `f`.`stuffid`
+  				)
+  			)
+  		)
+  		LEFT JOIN `t_provider` `r` ON(
+  			(`r`.`id` = `f`.`providerid`)
+  		)
+  	)
  * </pre>
  * 
  * @author yourgame

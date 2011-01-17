@@ -448,6 +448,9 @@ public class PublicService implements IPublicService {
 			m.adjust();
 			this.publicDao.update(m);
 			this.process(m.getQid());
+			QuoteInfo qi = (QuoteInfo) publicDao.findByHQL("from QuoteInfo qi where qi.qid = ?",new Object[]{m.getQid()}).get(0);
+			qi.setAdjustDate(new Date());
+			publicDao.update(qi);
 		}
 		return priceList;
 	}

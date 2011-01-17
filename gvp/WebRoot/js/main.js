@@ -1977,7 +1977,8 @@ Ext.onReady(function() {
 			            border:false,
 			            items:[{
 			            	defaults:{xtype:'textfield',anchor:'90%'},
-			                items: [{
+			                items: [
+			                	/*{
 			                	fieldLabel: '供应商',
 			                	xtype:'combo',
 					            valueField:'id',
@@ -2014,19 +2015,20 @@ Ext.onReady(function() {
 										comboStuff.onTriggerClick();
 									}
 								}
-			                },{
+			                },*/{
 			                	fieldLabel: '材质',
 			                	xtype:'combo',
 					            valueField:'stuffid',
 					        	displayField:'stuffName',
-					        	queryParam:'stuffView.stuffName',
+					        	queryParam:'stuff.stuffName',
+//					        	queryParam:'stuffView.stuffName',
 						        typeAhead: true,
 								triggerAction: 'all',
 						        minChars:1,
 						        listWidth:250,
 						        selectOnFocus:true,
 						        submitValue:true,
-						        disabled:true,
+//						        disabled:true,
 						        pageSize:10,
 						        ref: '../../../../comboStuff',
 						        name:'stuffName',
@@ -2125,6 +2127,7 @@ Ext.onReady(function() {
 									listeners:{
 										'beforeload':function(sd){
 											sd.setBaseParam('specificationView.speciesid',innerWin.comboSpecies.getValue());
+											sd.setBaseParam('page.params.isAndRelation',true);
 										}
 									}
 							    }
@@ -2462,7 +2465,8 @@ Ext.onReady(function() {
 						            border:false,
 						            items:[{
 						            	defaults:{xtype:'textfield',anchor:'90%'},
-						                items: [{
+						                items: [
+						                	/*{
 						                	fieldLabel: '供应商',
 						                	xtype:'combo',
 								            valueField:'id',
@@ -2502,8 +2506,119 @@ Ext.onReady(function() {
 													comboStuff.onTriggerClick();
 												}
 											}
-						                },
+						                },*/
 						                {
+						                	fieldLabel: '材质',
+						                	xtype:'combo',
+								            valueField:'stuffid',
+								        	displayField:'stuffName',
+								        	queryParam:'stuff.stuffName',
+//								        	queryParam:'stuffView.stuffName',
+									        typeAhead: true,
+											triggerAction: 'all',
+									        minChars:1,
+									        listWidth:250,
+									        allowBlank:false,
+									        selectOnFocus:true,
+									        submitValue:true,
+									        pageSize:10,
+									        name: 'stuffid',
+								            hiddenName:'stuff.stuffid',
+									        value: materials.stuffName,
+									        hiddenValue:materials.stuffid,
+									        ref: '../../../../comboStuff',
+								        	store:{
+								        		xtype: 'store',
+												url: 'findStuffList.action',
+												paramNames:{start:'page.start',	limit:'page.limit'},
+												baseParams:{'page.start':0,'page.limit':10},
+												reader: new Ext.data.JsonReader(
+													{totalProperty: 'totalProperty',root: 'root'},
+													[{name : 'stuffid'}, {name : 'stuffName'}]
+												)
+										    },
+											listeners:{
+												'select':function(combo){
+													var comboSpecies = innerWin.comboSpecies;
+													comboSpecies.enable();
+													comboSpecies.clearValue();
+													var sd = comboSpecies.getStore();
+//													sd.setBaseParam('speciesView.stuffid',combo.getValue());
+													sd.removeAll();
+													sd.load();
+													comboSpecies.onTriggerClick();
+												}
+											}
+						                },
+						               {
+						                	xtype:'combo',
+						                	fieldLabel: '规格',
+								            valueField:'specid',
+								        	displayField:'specName',
+								        	queryParam:'specificationView.specName',
+									        typeAhead: true,
+									        disabled: materials.mid ? false:true,
+											triggerAction: 'all',
+									        minChars:1,
+									        tpl: specificationTpl,
+									        listWidth:250,
+									        selectOnFocus:true,
+									        allowBlank:false,
+									        pageSize:10,
+									        ref: '../../../../comboSpecification',
+									        id:'specification.specName',
+									        name: 'specification.specName',
+									        hiddenId:'specification.specid',
+									        hiddenName:'specification.specid',
+									        submitValue:true,
+									        value: materials.specName,
+									        hiddenValue:materials.specid,
+								        	store:{
+								        		xtype: 'store',
+												url: 'findSpecificationList.action',
+												paramNames:{start:'page.start',	limit:'page.limit'},
+												baseParams:{'page.start':0,'page.limit':10},
+												reader: new Ext.data.JsonReader(
+													{totalProperty: 'totalProperty',root: 'root'},
+													[{name : 'specid'},{name : 'specName'},{name : 'speciesid'},{name:'speciesName'},{name : 'stuffName'},{name:'price'}]
+												),
+												listeners:{
+													'beforeload':function(sd){
+														sd.setBaseParam('specificationView.speciesid',innerWin.comboSpecies.hiddenField.value);
+														sd.setBaseParam('page.params.isAndRelation',true);
+													}
+												}
+										    },
+										    listeners: {
+										    	'select':function(combo,record){
+										    		innerWin.textfieldMaterialPrice.setValue(record.data.price);
+										    	}
+										    }
+						                }
+						                ,{
+						                    fieldLabel: '产品名称',
+						                    allowBlank:false,
+						                    name: 'materials.productsName',
+						                    value:materials.productsName
+						                },{
+						                	fieldLabel: '支数',
+						                	name: 'materials.count',
+						                	xtype:'numberfield',
+						                	decimalPrecision:6,
+						                	minValue:0,
+						                	value: materials.count
+						                },{
+						                    fieldLabel: '尺寸',
+						                    name:'materials.size',
+						                    value:materials.size
+						                },{
+						                	fieldLabel:'共损耗(%)',
+						                	name:'materials.loss',
+						                	value:materials.loss
+						                }]
+						            },{
+						            	defaults:{xtype:'textfield',anchor:'93%'},
+						                items: [{
 						                	xtype:'combo',
 						                	fieldLabel: '种类',
 								            valueField:'speciesid',
@@ -2550,8 +2665,7 @@ Ext.onReady(function() {
 													comboSpecification.onTriggerClick();
 										    	}
 										    }
-						                },
-						                {
+						                }, {
 						                    fieldLabel: '供应商材料单价',
 						                    name:'materials.materialPrice',
 						                    value:materials.materialPrice,
@@ -2560,114 +2674,6 @@ Ext.onReady(function() {
 //						                    readOnly:true,
 //						                    editable:false,
 						                    ref: '../../../../textfieldMaterialPrice'
-						                }
-						                ,{
-						                    fieldLabel: '产品名称',
-						                    allowBlank:false,
-						                    name: 'materials.productsName',
-						                    value:materials.productsName
-						                },{
-						                	fieldLabel: '支数',
-						                	name: 'materials.count',
-						                	xtype:'numberfield',
-						                	decimalPrecision:6,
-						                	minValue:0,
-						                	value: materials.count
-						                },{
-						                    fieldLabel: '尺寸',
-						                    name:'materials.size',
-						                    value:materials.size
-						                },{
-						                	fieldLabel:'共损耗(%)',
-						                	name:'materials.loss',
-						                	value:materials.loss
-						                }]
-						            },{
-						            	defaults:{xtype:'textfield',anchor:'93%'},
-						                items: [{
-						                	fieldLabel: '材质',
-						                	xtype:'combo',
-								            valueField:'stuffid',
-								        	displayField:'stuffName',
-								        	queryParam:'stuffView.stuffName',
-									        typeAhead: true,
-											triggerAction: 'all',
-									        minChars:1,
-									        listWidth:250,
-									        allowBlank:false,
-									        selectOnFocus:true,
-									        submitValue:true,
-									        pageSize:10,
-									        name: 'stuffid',
-								            hiddenName:'stuff.stuffid',
-									        value: materials.stuffName,
-									        hiddenValue:materials.stuffid,
-									        ref: '../../../../comboStuff',
-								        	store:{
-								        		xtype: 'store',
-												url: 'findStuffList.action',
-												paramNames:{start:'page.start',	limit:'page.limit'},
-												baseParams:{'page.start':0,'page.limit':10},
-												reader: new Ext.data.JsonReader(
-													{totalProperty: 'totalProperty',root: 'root'},
-													[{name : 'stuffid'}, {name : 'stuffName'}]
-												)
-										    },
-											listeners:{
-												'select':function(combo){
-													var comboSpecies = innerWin.comboSpecies;
-													comboSpecies.enable();
-													comboSpecies.clearValue();
-													var sd = comboSpecies.getStore();
-//													sd.setBaseParam('speciesView.stuffid',combo.getValue());
-													sd.removeAll();
-													sd.load();
-													comboSpecies.onTriggerClick();
-												}
-											}
-						                },{
-						                	xtype:'combo',
-						                	fieldLabel: '规格',
-								            valueField:'specid',
-								        	displayField:'specName',
-								        	queryParam:'specificationView.specName',
-									        typeAhead: true,
-									        disabled: materials.mid ? false:true,
-											triggerAction: 'all',
-									        minChars:1,
-									        tpl: specificationTpl,
-									        listWidth:250,
-									        selectOnFocus:true,
-									        allowBlank:false,
-									        pageSize:10,
-									        ref: '../../../../comboSpecification',
-									        id:'specification.specName',
-									        name: 'specification.specName',
-									        hiddenId:'specification.specid',
-									        hiddenName:'specification.specid',
-									        submitValue:true,
-									        value: materials.specName,
-									        hiddenValue:materials.specid,
-								        	store:{
-								        		xtype: 'store',
-												url: 'findSpecificationList.action',
-												paramNames:{start:'page.start',	limit:'page.limit'},
-												baseParams:{'page.start':0,'page.limit':10},
-												reader: new Ext.data.JsonReader(
-													{totalProperty: 'totalProperty',root: 'root'},
-													[{name : 'specid'},{name : 'specName'},{name : 'speciesid'},{name:'speciesName'},{name : 'stuffName'},{name:'price'}]
-												),
-												listeners:{
-													'beforeload':function(sd){
-														sd.setBaseParam('specificationView.speciesid',innerWin.comboSpecies.hiddenField.value);
-													}
-												}
-										    },
-										    listeners: {
-										    	'select':function(combo,record){
-										    		innerWin.textfieldMaterialPrice.setValue(record.data.price);
-										    	}
-										    }
 						                },{
 						                    fieldLabel: '材料名称',
 						                    allowBlank:false,
@@ -2759,7 +2765,8 @@ Ext.onReady(function() {
 						}]
 					});
 					innerWin.show();
-					if(!materials.mid){innerWin.comboProvider.onTriggerClick()}
+					if(!materials.mid){innerWin.comboStuff.onTriggerClick()}
+//					if(!materials.mid){innerWin.comboProvider.onTriggerClick()}
 				}
 		   }
 		});
@@ -3250,7 +3257,8 @@ Ext.onReady(function() {
 			            border:false,
 			            items:[{
 			            	defaults:{xtype:'textfield',anchor:'90%'},
-			                items: [{
+			                items: [
+			                	/*{
 			                	fieldLabel: '供应商',
 			                	xtype:'combo',
 					            valueField:'id',
@@ -3288,12 +3296,13 @@ Ext.onReady(function() {
 										comboStuff.onTriggerClick();
 									}
 								}
-			                },{
+			                },*/{
 			                	fieldLabel: '材质',
 			                	xtype:'combo',
 					            valueField:'stuffid',
 					        	displayField:'stuffName',
-					        	queryParam:'stuffView.stuffName',
+					        	queryParam:'stuff.stuffName',
+//					        	queryParam:'stuffView.stuffName',
 						        typeAhead: true,
 								triggerAction: 'all',
 						        minChars:1,
@@ -3301,7 +3310,7 @@ Ext.onReady(function() {
 						        selectOnFocus:true,
 						        submitValue:true,
 						        pageSize:10,
-						        disabled:true,
+//						        disabled:true,
 						        name: 'stuffid',
 						        hiddenName: 'stuff.stuffid',
 						        ref: '../../../../comboStuff',
@@ -3313,12 +3322,12 @@ Ext.onReady(function() {
 									reader: new Ext.data.JsonReader(
 										{totalProperty: 'totalProperty',root: 'root'},
 										[{name : 'stuffid'}, {name : 'stuffName'}]
-									),
+									)/*,
 									listeners:{
 										'beforeload':function(sd,options){
 											sd.setBaseParam('stuffView.providerid',innerWin.comboProvider.getValue());
 										}
-									}
+									}*/
 							    },
 								listeners:{
 									'select':function(combo){
@@ -3407,6 +3416,7 @@ Ext.onReady(function() {
 									listeners:{
 										'beforeload':function(sd){
 											sd.setBaseParam('specificationView.speciesid',innerWin.comboSpecies.getValue());
+											sd.setBaseParam('page.params.isAndRelation',true);
 										}
 									}
 							    },
@@ -3862,6 +3872,7 @@ Ext.onReady(function() {
 				{name: 'recordTime',type:'date',dateFormat: "Y-m-d H:i:s"},
 				{name: 'modifyTime',type:'date',dateFormat: "Y-m-d H:i:s"},
 				{name: 'state'},
+				{name: 'adjustDate'},
 				{name: 'ownerId'}
 			]),
 			listeners:{
@@ -3993,16 +4004,56 @@ Ext.onReady(function() {
 				defaults:{menuDisabled:true},
 				defaultWidth:80,
 				columns: [sm,
-					{header: '客户名称',dataIndex:'customerName',id:expandId},
-					{header: '客户类别',dataIndex:'customerType'},
-					{header: '产品编码',dataIndex:'productCode'},
-					{header: '文件夹页码',dataIndex:'pageNo'},
-					{header: '报时人',dataIndex:'quoter'},
-					{header: 'DCC-编号',dataIndex:'dccNo'},
-					{header: '单价',dataIndex:'price',xtype:'numbercolumn',hidden:!Ext.ROLE_R06,format:'0,000.000000'}, 
+					{header: '客户名称',dataIndex:'customerName',id:expandId,renderer:function(v, m, r){
+						if(r.data.adjustDate != null){
+							return '<div style="background-color:#99CC00">' + v + '</div>';
+						}
+						return v;
+					}},
+					{header: '客户类别',dataIndex:'customerType',renderer:function(v, m, r){
+						if(r.data.adjustDate != null){
+							return '<div style="background-color:#99CC00">' + v + '</div>';
+						}
+						return v;
+					}},
+					{header: '产品编码',dataIndex:'productCode',renderer:function(v, m, r){
+						if(r.data.adjustDate != null){
+							return '<div style="background-color:#99CC00">' + v + '</div>';
+						}
+						return v;
+					}},
+					{header: '文件夹页码',dataIndex:'pageNo',renderer:function(v, m, r){
+						if(r.data.adjustDate != null){
+							return '<div style="background-color:#99CC00">' + v + '</div>';
+						}
+						return v;
+					}},
+					{header: '报时人',dataIndex:'quoter',renderer:function(v, m, r){
+						if(r.data.adjustDate != null){
+							return '<div style="background-color:#99CC00">' + v + '</div>';
+						}
+						return v;
+					}},
+					{header: 'DCC-编号',dataIndex:'dccNo',renderer:function(v, m, r){
+						if(r.data.adjustDate != null){
+							return '<div style="background-color:#99CC00">' + v + '</div>';
+						}
+						return v;
+					}},
+					{header: '单价',dataIndex:'price',xtype:'numbercolumn',hidden:!Ext.ROLE_R06,format:'0,000.000000',renderer:function(v, m, r){
+						if(r.data.adjustDate != null){
+							return '<div style="background-color:#99CC00">' + v + '</div>';
+						}
+						return v;
+					}}, 
 					{header: '填单日期',dataIndex:'recordTime',renderer:Ext.util.Format.dateRenderer('Y-m-d')},
 					{header: '更新日期',dataIndex:'modifyTime',renderer:Ext.util.Format.dateRenderer('Y-m-d')},
-					{header: '状态',dataIndex:'state',width:150},
+					{header: '状态',dataIndex:'state',width:150,renderer:function(v, m, r){
+						if(r.data.adjustDate != null){
+							return '<div style="background-color:#99CC00">' + v + '</div>';
+						}
+						return v;
+					}},
 					{header: '版本',dataIndex:'ownerId',width:60,renderer:function(value,cellmeta,record){
 						return ((value == '' || value == 0 || value == null) ? '原始':'非原始');
 					}}
@@ -4474,7 +4525,7 @@ Ext.onReady(function() {
 			reader: new Ext.data.JsonReader({totalProperty: 'totalProperty',root: 'root'},
 			[
 				{name: 'listid'},
-				{name: 'providerName'},
+//				{name: 'providerName'},
 				{name: 'stuffName'},
 				{name: 'speciesName'},
 				{name: 'specName'},
@@ -4498,7 +4549,7 @@ Ext.onReady(function() {
 				defaultSortable:true,
 				defaultWidth:120,
 				columns: [
-					{header: '供应商',dataIndex:'providerName'},
+//					{header: '供应商',dataIndex:'providerName'},
 					{header: '材质名称',dataIndex:'stuffName'},
 					{header: '种类名称',dataIndex:'speciesName'},
 					{header: '规格名称',dataIndex:'specName'},
@@ -4506,7 +4557,7 @@ Ext.onReady(function() {
 					{header: '单价',dataIndex:'price',xtype:'numbercolumn',hidden:!Ext.ROLE_R06,format:'0,000.000000'}, 
 					{header: '调整日期',dataIndex:'recordTime',renderer:Ext.util.Format.dateRenderer('Y-m-d')}
 	    	]}),
-	    	tbar:['说明',initSearchField(store,null,['priceListView.remark','priceListView.providerName','priceListView.stuffName','priceListView.specName']),'->',{
+	    	tbar:['说明',initSearchField(store,null,['priceListView.remark','priceListView.stuffName','priceListView.specName']),'->',{
 	    		text :'调节'
 	    		,iconCls:'silk-add'
 	    		,ref:'../addButton'
@@ -4533,15 +4584,15 @@ Ext.onReady(function() {
 		var store = new Ext.data.Store({
 			url: 'findSpecificationList.action',
 			paramNames:{start:'page.start',	limit:'page.limit'},
-			baseParams:{'page.start':0,'page.limit':20},
+			baseParams:{'page.start':0,'page.limit':20,'page.params.isAndRelation':false},
 			autoLoad:true,
 			reader: new Ext.data.JsonReader({totalProperty: 'totalProperty',root: 'root'},
 			[
 				{name: 'specid'},
 				{name: 'specName',allowBlank:false},
 				{name: 'price',allowBlank:false},
-				{name: 'providerid',allowBlank:false},
-				{name: 'providerName',allowBlank:false},
+//				{name: 'providerid',allowBlank:false},
+//				{name: 'providerName',allowBlank:false},
 				{name: 'stuffid',allowBlank:false},
 				{name: 'stuffName',allowBlank:false},
 				{name: 'speciesid',allowBlank:false},
@@ -4662,7 +4713,7 @@ Ext.onReady(function() {
 				defaultSortable:true,
 				defaultWidth:120,
 				columns: [sm,
-					{header: '供应商名称',dataIndex:'providerid',editor:{
+					/*{header: '供应商名称',dataIndex:'providerid',editor:{
 						xtype:'combo',
 			            valueField:'id',
 			        	displayField:'providerName',
@@ -4695,12 +4746,13 @@ Ext.onReady(function() {
 						}
 					},renderer:function(value, cellmeta, record){
 				    	return record.data.providerName;
-				    }},
+				    }},*/
 					{header: '材质',dataIndex:'stuffid',editor:{
 						xtype:'combo',
 			            valueField:'stuffid',
 			        	displayField:'stuffName',
-			        	queryParam:'stuffView.stuffName',
+			        	queryParam:'stuff.stuffName',
+//			        	queryParam:'stuffView.stuffName',
 				        typeAhead: true,
 						triggerAction: 'all',
 				        minChars:1,
@@ -4782,7 +4834,7 @@ Ext.onReady(function() {
 					{header: '供应商材料单价',dataIndex:'price',editor:{xtype:'numberfield',name:'price',allowBlank:false,decimalPrecision:6}}
 	    		]
 	    	}),
-	    	tbar:['查询条件',initSearchField(store,null,['specificationView.specName','specificationView.stuffName','specificationView.speciesName','specificationView.providerName']),'->',{
+	    	tbar:['查询条件',initSearchField(store,null,['specificationView.specName','specificationView.stuffName','specificationView.speciesName']),'->',{
 	    		text :'添加'
 	    		,iconCls:'silk-add'
 	    		,ref:'../addButton'
@@ -4830,14 +4882,14 @@ Ext.onReady(function() {
 				{name: 'speciesid'},
 				{name: 'speciesName',allowBlank:false},
 				{name: 'stuffid',allowBlank:false},
-				{name: 'stuffName'},
-				{name: 'providerid',allowBlank:false},
-				{name: 'providerName'}
+				{name: 'stuffName'}
+//				{name: 'providerid',allowBlank:false},
+//				{name: 'providerName'}
 			]),
 			listeners:{
 				'update': function(thiz, record, operation){
 					var editorStuff = getEditor('stuffid',store,grid);
-					var editorProvider = getEditor('providerid',store,grid);
+//					var editorProvider = getEditor('providerid',store,grid);
 					if(operation == Ext.data.Record.EDIT){
 						if(record.data.speciesid){	 
 							Ext.Ajax.request({
@@ -4845,8 +4897,8 @@ Ext.onReady(function() {
 							    params: {
 							    	'species.speciesid':record.data.speciesid,
 									'species.speciesName': record.data.speciesName,	
-									'stuff.stuffid': editorStuff.getValue(),
-									'provider.id': editorProvider.getValue()
+									'stuff.stuffid': editorStuff.getValue()
+//									'provider.id': editorProvider.getValue()
 								},
 							    success: function(response) {
 							    	var obj = Ext.decode(response.responseText);
@@ -4869,8 +4921,8 @@ Ext.onReady(function() {
 							    url: 'saveSpecies.action',
 							    params: {
 									'species.speciesName': record.data.speciesName,	
-									'stuff.stuffid': editorStuff.getValue(),
-									'provider.id': editorProvider.getValue()
+									'stuff.stuffid': editorStuff.getValue()
+//									'provider.id': editorProvider.getValue()
 								},
 							    success: function(response) {
 							    	var obj = Ext.decode(response.responseText);
@@ -4937,7 +4989,7 @@ Ext.onReady(function() {
 				defaultSortable:true,
 				defaultWidth:80,
 				columns: [sm,
-					{header: '供应商名称',dataIndex:'providerid',editor:{
+					/*{header: '供应商名称',dataIndex:'providerid',editor:{
 						xtype:'combo',
 			            valueField:'id',
 			        	displayField:'providerName',
@@ -4970,12 +5022,13 @@ Ext.onReady(function() {
 						}
 					},renderer:function(value, cellmeta, record){
 				    	return record.data.providerName;
-				    }},
+				    }},*/
 					{header: '材质名称',dataIndex:'stuffid',editor:{
 						xtype:'combo',
 			            valueField:'stuffid',
 			        	displayField:'stuffName',
-			        	queryParam:'stuffView.stuffName',
+			        	queryParam:'stuff.stuffName',
+//			        	queryParam:'stuffView.stuffName',
 				        emptyText:'请选择材质...',
 				        typeAhead: true,
 				        editable:false,
@@ -5000,7 +5053,7 @@ Ext.onReady(function() {
 	    		displayInfo: true,
 	    		pageSize:20
 	    	}),
-	    	tbar:['查询条件',initSearchField(store,null,['speciesView.speciesName','speciesView.stuffName','speciesView.providerName']),
+	    	tbar:['查询条件',initSearchField(store,null,['speciesView.speciesName','speciesView.stuffName']),
 	    	'->',{
 	    		text :'添加'
 	    		,iconCls:'silk-add'
@@ -5042,27 +5095,28 @@ Ext.onReady(function() {
 			reader: new Ext.data.JsonReader({totalProperty: 'totalProperty',root: 'root'},
 			[
 				{name: 'stuffid'},
-				{name: 'stuffName',allowBlank:false},
-				{name: 'providerid',allowBlank:false},
-				{name: 'providerName',allowBlank:false}
+				{name: 'stuffName',allowBlank:false}
+//				{name: 'providerid',allowBlank:false},
+//				{name: 'providerName',allowBlank:false}
 			]),
 			listeners:{
 				'update': function(thiz, record, operation){
-					var editorProvider = getEditor('providerid',store,grid);
+//					var editorProvider = getEditor('providerid',store,grid);
 					if(operation == Ext.data.Record.EDIT){
 						if(record.data.stuffid){	//有id则为更新
 							Ext.Ajax.request({
 							    url: 'updateStuff.action',
 							    params: {
 							    	'stuff.stuffid':record.data.stuffid,
-									'stuff.stuffName': record.data.stuffName,
-									'provider.id':editorProvider.getValue()
+									'stuff.stuffName': record.data.stuffName
+//									'provider.id':editorProvider.getValue()
 								},
 							    success: function(response) {
 							    	var obj = Ext.decode(response.responseText);
 							    	if(obj.success){
 							    		record.beginEdit();
-							    		record.data = obj.infos.stuffView;
+							    		record.data = obj.infos.stuff;
+//							    		record.data = obj.infos.stuffView;
 							    		record.commit();
 							    		thiz.commitChanges();
 							    	}else{
@@ -5078,14 +5132,15 @@ Ext.onReady(function() {
 							Ext.Ajax.request({
 							    url: 'saveStuff.action',
 							    params: {
-									'stuff.stuffName': record.data.stuffName,
-									'provider.id': editorProvider.getValue()
+									'stuff.stuffName': record.data.stuffName
+//									'provider.id': editorProvider.getValue()
 								},
 							    success: function(response) {
 							    	var obj = Ext.decode(response.responseText);
 							    	if(obj.success){
 							    		record.beginEdit();
-							    		record.data = obj.infos.stuffView;
+//							    		record.data = obj.infos.stuffView;
+							    		record.data = obj.infos.stuff;
 							    		record.commit();
 							    		grid.getSelectionModel().selectRow(0);
 							    		Ext.get(grid.getView().getRow(0)).frame('green',2,{duration: .3});
@@ -5149,7 +5204,7 @@ Ext.onReady(function() {
 				defaultSortable:true,
 				defaultWidth:80,
 				columns: [sm,
-					{header: '供应商名称',dataIndex:'providerid',editor:{
+					/*{header: '供应商名称',dataIndex:'providerid',editor:{
 						xtype:'combo',
 			            valueField:'id',
 			        	displayField:'providerName',
@@ -5169,7 +5224,7 @@ Ext.onReady(function() {
 					    }
 					},renderer:function(value, cellmeta, record){
 				    	return record.data.providerName;
-				    }},
+				    }},*/
 					{header: '材质名称',dataIndex:'stuffName',id:expandId,editor:{xtype:'textfield',maxLength:20,allowBlank:false}}
 	    	]}),
 	    	bbar:new Ext.PagingToolbar({
@@ -5177,7 +5232,8 @@ Ext.onReady(function() {
 	    		displayInfo: true,
 	    		pageSize:20
 	    	}),
-	    	tbar:['查询条件',initSearchField(store,null,['stuffView.stuffName','stuffView.providerName']),
+	    	tbar:['查询条件',initSearchField(store,null,['stuff.stuffName']),
+//	    	tbar:['查询条件',initSearchField(store,null,['stuffView.stuffName','stuffView.providerName']),
 	    	'->',{
 	    		text :'添加'
 	    		,iconCls:'silk-add'
@@ -5210,7 +5266,7 @@ Ext.onReady(function() {
 	/**
 	 * 初始化供应商管理
 	 */
-	function initProviderManageGrid(){
+	/*function initProviderManageGrid(){
 		var store = new Ext.data.Store({
 			url: 'findProviderList.action',
 			paramNames:{start:'page.start',	limit:'page.limit'},
@@ -5355,7 +5411,7 @@ Ext.onReady(function() {
 	    });
 	    
 	    return grid;
-	}
+	}*/
 	
 	/**
 	 * 初始化客户管理
@@ -5876,9 +5932,9 @@ Ext.onReady(function() {
 		                }},
 						{boxLabel: '显示参考信息的减沙', name: 'r30',handler:function(){
 		                	win.cankao_xinxi_de_jiansha.setValue(this.checked);
-		                }},
-						{boxLabel: '供应商信息管理', name: 'r31',handler:function(){
-		                	win.gong_ying_shang_guanli.setValue(this.checked);
+//		                }},
+//						{boxLabel: '供应商信息管理', name: 'r31',handler:function(){
+//		                	win.gong_ying_shang_guanli.setValue(this.checked);
 		                }}
 		            ]
 				},
@@ -5912,8 +5968,8 @@ Ext.onReady(function() {
 					{xtype : 'hidden',name : 'role.r27',ref:'../fuzhu_xinxi_de_jiagong_xinxi'},
 					{xtype : 'hidden',name : 'role.r28',ref:'../waifa_jiagong_de_jiagong_xinxi'},
 					{xtype : 'hidden',name : 'role.r29',ref:'../cankao_xinxi_de_yunfei'},
-					{xtype : 'hidden',name : 'role.r30',ref:'../cankao_xinxi_de_jiansha'},
-					{xtype : 'hidden',name : 'role.r31',ref:'../gong_ying_shang_guanli'}
+					{xtype : 'hidden',name : 'role.r30',ref:'../cankao_xinxi_de_jiansha'}
+//					{xtype : 'hidden',name : 'role.r31',ref:'../gong_ying_shang_guanli'}
 				],
 				listeners : {
 					render : function(){
@@ -5954,7 +6010,7 @@ Ext.onReady(function() {
 						    		win.group7.items.get(3).setValue(role.r28);
 						    		win.group8.items.get(0).setValue(role.r29);
 						    		win.group8.items.get(1).setValue(role.r30);
-						    		win.group8.items.get(2).setValue(role.r31);
+//						    		win.group8.items.get(2).setValue(role.r31);
 						    		win.rid.setValue(role.rid);
 						    	}
 						    },
@@ -6069,9 +6125,9 @@ Ext.onReady(function() {
 								}
 								
 								//供应商管理
-								if(node.id == 'gvp_provider'){
-									grid = initProviderManageGrid();
-								}
+//								if(node.id == 'gvp_provider'){
+//									grid = initProviderManageGrid();
+//								}
 								
 								//材质管理
 								if(node.id == 'gvp_stuff'){

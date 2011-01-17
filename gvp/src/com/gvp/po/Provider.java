@@ -10,6 +10,7 @@ import java.io.Serializable;
  * 
  */
 @SuppressWarnings("serial")
+@Deprecated
 public class Provider implements Serializable {
 
 	private Integer	id;
