@@ -232,7 +232,7 @@
 		<action name="findQuoteInfoAdvanced" class="publicAction" method="findQuoteInfoAdvanced">
 			<result type="json">
 				<param name="root">page</param>
-				<param name="excludeNullProperties">true</param>
+				<param name="excludeNullProperties">false</param>
 				<param name="includeProperties">root.*,totalProperty</param>
 			</result>
 		</action>
