@@ -1,6 +1,11 @@
 1.t_quoteinfo t_materials 建立外键关系
-2. 增加管理员的 "供应商管理" 的菜单权限
-3。增加一个默认的供应商 建立关系 update t_stuff t set t.providerid = 1
+t_quoteinfo增加adjustDate字段日期类型 通过Spring update自动增加
+
 
 
 启动系统后修改spirng配置文件为none
+
+
+
+
+调节后变色显示还有问题
