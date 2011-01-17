@@ -22,6 +22,7 @@ import java.io.Serializable;
  * 
  */
 @SuppressWarnings("serial")
+@Deprecated
 public class StuffView implements Serializable{
 
 	private Integer	stuffid;

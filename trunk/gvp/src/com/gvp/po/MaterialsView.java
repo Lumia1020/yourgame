@@ -3,62 +3,64 @@ package com.gvp.po;
 import java.io.Serializable;
 import java.util.Date;
 
+import javax.xml.bind.annotation.XmlAnyAttribute;
+
 import com.googlecode.jsonplugin.annotations.JSON;
 
 /**
  * 生产材料信息视图
  * 
  * <pre>
- * SELECT
- * 	`t`.`mid` AS `mid`,
- * 	`r`.`id` AS `providerid`,
- * 	`r`.`providerName` AS `providerName`,
- * 	`f`.`stuffid` AS `stuffid`,
- * 	`f`.`stuffName` AS `stuffName`,
- * 	`p`.`speciesid` AS `speciesid`,
- * 	`p`.`speciesName` AS `speciesName`,
- * 	`s`.`specid` AS `specid`,
- * 	`s`.`specName` AS `specName`,
- * 	`t`.`productsName` AS `productsName`,
- * 	`t`.`materialsName` AS `materialsName`,
- * 	`t`.`diameter` AS `diameter`,
- * 	`t`.`weight` AS `weight`,
- * 	`t`.`count` AS `count`,
- * 	`t`.`size` AS `size`,
- * 	`t`.`materialPrice` AS `materialPrice`,
- * 	`t`.`price` AS `price`,
- * 	`t`.`jiansha` AS `jiansha`,
- * 	`t`.`loss` AS `loss`,
- * 	`t`.`qid` AS `qid`,
- * 	`t`.`adjustRemark` AS `adjustRemark`,
- * 	`t`.`adjustDate` AS `adjustDate`
- * FROM
- * 	(
- * 		(
- * 			(
- * 				(
- * 					`t_materials` `t`
- * 					LEFT JOIN `t_specification` `s` ON(
- * 						(`s`.`specid` = `t`.`specid`)
- * 					)
- * 				)
- * 				LEFT JOIN `t_species` `p` ON(
- * 					(
- * 						`p`.`speciesid` = `s`.`speciesid`
- * 					)
- * 				)
- * 			)
- * 			LEFT JOIN `t_stuff` `f` ON(
- * 				(
- * 					`f`.`stuffid` = `p`.`stuffid`
- * 				)
- * 			)
- * 		)
- * 		LEFT JOIN `t_provider` `r` ON(
- * 			(`r`.`id` = `f`.`providerid`)
- * 		)
- * 	)
- * 
+  SELECT
+  	`t`.`mid` AS `mid`,
+  	`r`.`id` AS `providerid`,
+  	`r`.`providerName` AS `providerName`,
+  	`f`.`stuffid` AS `stuffid`,
+  	`f`.`stuffName` AS `stuffName`,
+  	`p`.`speciesid` AS `speciesid`,
+  	`p`.`speciesName` AS `speciesName`,
+  	`s`.`specid` AS `specid`,
+  	`s`.`specName` AS `specName`,
+  	`t`.`productsName` AS `productsName`,
+  	`t`.`materialsName` AS `materialsName`,
+  	`t`.`diameter` AS `diameter`,
+  	`t`.`weight` AS `weight`,
+  	`t`.`count` AS `count`,
+  	`t`.`size` AS `size`,
+  	`t`.`materialPrice` AS `materialPrice`,
+  	`t`.`price` AS `price`,
+  	`t`.`jiansha` AS `jiansha`,
+  	`t`.`loss` AS `loss`,
+  	`t`.`qid` AS `qid`,
+  	`t`.`adjustRemark` AS `adjustRemark`,
+  	`t`.`adjustDate` AS `adjustDate`
+  FROM
+  	(
+  		(
+  			(
+  				(
+  					`t_materials` `t`
+  					LEFT JOIN `t_specification` `s` ON(
+  						(`s`.`specid` = `t`.`specid`)
+  					)
+  				)
+  				LEFT JOIN `t_species` `p` ON(
+  					(
+  						`p`.`speciesid` = `s`.`speciesid`
+  					)
+  				)
+  			)
+  			LEFT JOIN `t_stuff` `f` ON(
+  				(
+  					`f`.`stuffid` = `p`.`stuffid`
+  				)
+  			)
+  		)
+  		LEFT JOIN `t_provider` `r` ON(
+  			(`r`.`id` = `f`.`providerid`)
+  		)
+  	)
+  
  * </pre>
  * 
  * @author yourgame
@@ -68,8 +70,10 @@ import com.googlecode.jsonplugin.annotations.JSON;
 public class MaterialsView implements Serializable {
 	private Integer	mid;
 
+	@Deprecated
 	private Integer	providerid;
 
+	@Deprecated
 	private String	providerName;
 
 	/** 材质id */
@@ -140,18 +144,22 @@ public class MaterialsView implements Serializable {
 		return materialsName;
 	}
 
+	@Deprecated
 	public Integer getProviderid() {
 		return providerid;
 	}
 
+	@Deprecated
 	public String getProviderName() {
 		return providerName;
 	}
 
+	@Deprecated
 	public void setProviderid(Integer providerid) {
 		this.providerid = providerid;
 	}
 
+	@Deprecated
 	public void setProviderName(String providerName) {
 		this.providerName = providerName;
 	}

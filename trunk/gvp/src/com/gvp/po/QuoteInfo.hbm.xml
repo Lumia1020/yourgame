@@ -19,5 +19,6 @@
 		<property name="pageNo" />
 		<property name="ownerId" />
 		<property name="state" length="50"/>
+		<property name="adjustDate"/>
 	</class>
 </hibernate-mapping>

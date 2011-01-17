@@ -7,9 +7,9 @@
 		<id name="listid" column="listid">
 			<generator class="native" />
 		</id>
-		<property name="providerid" update="false" insert="false" />
+		<!--<property name="providerid" update="false" insert="false" />
 		<property name="providerName" length="100" update="false" insert="false" />
-		<property name="stuffid" update="false" insert="false" />
+		--><property name="stuffid" update="false" insert="false" />
 		<property name="stuffName" length="100" update="false" insert="false" />
 		<property name="speciesid" update="false" insert="false" />
 		<property name="speciesName" length="100" update="false" insert="false" />

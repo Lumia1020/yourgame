@@ -47,7 +47,6 @@ import com.gvp.po.SystemLog;
 import com.gvp.po.User;
 import com.gvp.po.WorkflowLog;
 import com.gvp.service.IPublicService;
-import com.gvp.service.vo.PriceListMapper;
 import com.gvp.service.vo.QuoteInfoMapper;
 
 @SuppressWarnings("serial")
@@ -139,7 +138,7 @@ public class PublicAction extends BaseAction {
 		 * t_product_code tpc WHERE tpc.code like '%3%')
 		 */
 		StringBuilder sql = new StringBuilder("SELECT * FROM (SELECT tqi.* from t_quote_info tqi left join t_materials tm on tqi.qid = tm.qid where 1=1 ");
-		List params = new ArrayList();
+		List<Object> params = new ArrayList<Object>();
 
 		if (customer != null) {
 			//客户类型
@@ -255,7 +254,7 @@ public class PublicAction extends BaseAction {
 		if (StringUtils.isNotEmpty(sortByPageNo) || StringUtils.isNotEmpty(sortByRecordTime)) {
 			sql.append(" ORDER BY ");
 			if (StringUtils.isNotEmpty(sortByPageNo)) {
-				sql.append(" a.pageNo ");
+				sql.append(" a.pageNo + 0 ");//将字段*1或者+0可以将MySQL字符串字段按数值排序
 				if (StringUtils.isNotEmpty(sortByRecordTime)) {
 					sql.append(" , ");
 				}
@@ -664,12 +663,13 @@ public class PublicAction extends BaseAction {
 	 */
 	@Action(description = "修改材质信息")
 	public String updateStuff() throws IllegalAccessException, InvocationTargetException, NoSuchMethodException {
-		stuff.setProvider(provider);
+//		stuff.setProvider(provider);
 		try {
 			Stuff c = (Stuff) publicService.updateEntity(stuff, stuff.getStuffid(), null);
 			if (c != null) {
-				StuffView v = (StuffView) publicService.findByNativeSql("select * from v_stuff v where v.stuffid = " + c.getStuffid(), StuffView.class).get(0);
-				this.infos.put("stuffView", v);
+//				StuffView v = (StuffView) publicService.findByNativeSql("select * from v_stuff v where v.stuffid = " + c.getStuffid(), StuffView.class).get(0);
+				Stuff v = (Stuff) publicService.findByNativeSql("select * from t_stuff v where v.stuffid = " + c.getStuffid(), Stuff.class).get(0);
+				this.infos.put("stuff", v);
 				this.success = true;
 			}
 		} catch (RuntimeException e) {
@@ -688,6 +688,7 @@ public class PublicAction extends BaseAction {
 	 * @throws NoSuchMethodException
 	 */
 	@Action(description = "修改供应商信息")
+	@Deprecated
 	public String updateProvider() throws IllegalAccessException, InvocationTargetException, NoSuchMethodException {
 		try {
 			Provider c = (Provider) publicService.updateEntity(provider, provider.getId(), null);
@@ -807,7 +808,6 @@ public class PublicAction extends BaseAction {
 	 * @throws IllegalAccessException
 	 */
 	@Action(description = "修改报时单信息")
-	@SuppressWarnings("unchecked")
 	public String updateQuoteInfo() throws IllegalAccessException, InvocationTargetException, NoSuchMethodException {
 		try {
 			this.infos.put("quoteInfo", publicService.updateEntity(quoteInfo, quoteInfo.getQid(), null));
@@ -826,13 +826,14 @@ public class PublicAction extends BaseAction {
 	 * @return
 	 */
 	@Action(description = "新增供应商信息")
+	@Deprecated
 	public String saveProvider() {
 		Page p = new Page();
 		DetachedCriteria dc = DetachedCriteria.forClass(Provider.class);
 		dc.add(Example.create(new Provider(provider.getProviderName())));
 		p.setResult(dc);
 		p = publicService.getResultList(p);
-		Iterator cit = p.getRoot().iterator();
+		Iterator<?> cit = p.getRoot().iterator();
 		if (cit.hasNext()) {
 			this.infos.put("msg", "此供应商名称已经存在!");
 			this.success = false;
@@ -861,7 +862,7 @@ public class PublicAction extends BaseAction {
 		dc.add(Example.create(new Customer(customer.getCustomerName())));
 		p.setResult(dc);
 		p = publicService.getResultList(p);
-		Iterator cit = p.getRoot().iterator();
+		Iterator<?> cit = p.getRoot().iterator();
 		if (cit.hasNext()) {
 			this.infos.put("msg", "此客户名称已经存在!");
 			this.success = false;
@@ -1118,7 +1119,7 @@ public class PublicAction extends BaseAction {
 	@Action(description = "新增材质信息")
 	public String saveStuff() {
 		try {
-			stuff.setProvider(provider);
+//			stuff.setProvider(provider);
 			stuff = (Stuff) publicService.saveEntity(this.stuff);
 			StuffView v = (StuffView) publicService.findByNativeSql("select * from v_stuff where stuffid=" + stuff.getStuffid(), StuffView.class).get(0);
 			this.infos.put("stuffView", v);
@@ -1301,7 +1302,7 @@ public class PublicAction extends BaseAction {
 			dc.add(Restrictions.eq("rid", role.getRid()));
 			this.page.setResult(dc);
 			this.page = publicService.getResultList(page);
-			Iterator it = page.getRoot().iterator();
+			Iterator<?> it = page.getRoot().iterator();
 			if (it.hasNext()) {
 				this.infos.put("role", it.next());
 				this.success = true;
@@ -1317,7 +1318,7 @@ public class PublicAction extends BaseAction {
 	 */
 	public String findWorkflowByQid() {
 		if (workflow != null) {
-			List list = publicService.getList(WorkflowLog.class, workflow.getQid());
+			List<?> list = publicService.getList(WorkflowLog.class, workflow.getQid());
 			this.infos.put("workflowList", list);
 			this.success = true;
 		}
@@ -1387,12 +1388,11 @@ public class PublicAction extends BaseAction {
 	 * @return
 	 * @throws ParseException
 	 */
-	@SuppressWarnings( { "unchecked", "static-access" })
 	public String findTreeData() throws ParseException {
 		DetachedCriteria dc = DetachedCriteria.forClass(QuoteInfo.class);
 		String method = this.page.getParams().get("method");
 		String field = this.page.getParams().get("field");
-		List<TreeNode> list = new ArrayList();
+		List<TreeNode> list = new ArrayList<TreeNode>();
 
 		if ("findCustomerList".equals(method)) {
 			List l = this.publicService.getList("SELECT cid,customerName from QuoteInfo WHERE customerType = ? GROUP BY cid,customerName", new String[] { field });
@@ -1865,6 +1865,7 @@ public class PublicAction extends BaseAction {
 	 * @return
 	 */
 	@Action(description = "查找供应商信息")
+	@Deprecated
 	public String findProviderList() {
 		DetachedCriteria dc = DetachedCriteria.forClass(Provider.class);
 		if (provider != null) {
@@ -1975,9 +1976,9 @@ public class PublicAction extends BaseAction {
 	 */
 	@Action(description = "查找材质信息")
 	public String findStuffList() {
-		DetachedCriteria dc = DetachedCriteria.forClass(StuffView.class);
-		if (stuffView != null) {
-			dc.add(EnhancedExample.createDefault(stuffView,true));
+		DetachedCriteria dc = DetachedCriteria.forClass(Stuff.class);
+		if (stuff != null) {
+			dc.add(EnhancedExample.createDefault(stuff,true));
 		}
 		this.page.setResult(dc);
 		this.page = publicService.getResultList(page);
@@ -1993,7 +1994,8 @@ public class PublicAction extends BaseAction {
 	public String findSpecificationList() {
 		DetachedCriteria dc = DetachedCriteria.forClass(SpecificationView.class);
 		if (specificationView != null) {
-			dc.add(EnhancedExample.createDefault(specificationView));
+			boolean isAndRelation = Boolean.valueOf(page.getParams().get("isAndRelation"));
+			dc.add(EnhancedExample.createDefault(specificationView,isAndRelation));
 		}
 		this.page.setResult(dc);
 		this.page = publicService.getResultList(page);
@@ -2306,11 +2308,12 @@ public class PublicAction extends BaseAction {
 	public void setSpecification(Specification specification) {
 		this.specification = specification;
 	}
-
+	@Deprecated
 	public Provider getProvider() {
 		return provider;
 	}
 
+	@Deprecated
 	public void setProvider(Provider provider) {
 		this.provider = provider;
 	}
