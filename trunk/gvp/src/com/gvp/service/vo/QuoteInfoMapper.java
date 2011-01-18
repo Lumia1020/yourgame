@@ -24,6 +24,7 @@ public class QuoteInfoMapper implements RowMapper{
 		q.setQuoter(rs.getString("quoter"));
 		q.setRecordTime(rs.getDate("recordTime"));
 		q.setState(rs.getString("state"));
+		q.setAdjustDate(rs.getDate("adjustDate"));
 		return q;
 	}
 

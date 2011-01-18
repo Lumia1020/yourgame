@@ -2031,7 +2031,8 @@ Ext.onReady(function() {
 //						        disabled:true,
 						        pageSize:10,
 						        ref: '../../../../comboStuff',
-						        name:'stuffName',
+						        name:'stuff.stuffName',
+						        hiddenName:'stuff.stuffid',
 					        	store:{
 					        		xtype: 'store',
 									url: 'findStuffList.action',
@@ -2045,7 +2046,7 @@ Ext.onReady(function() {
 								listeners:{
 									'select':function(combo){
 										var comboSpecies = innerWin.comboSpecies;
-										comboSpecies.enable();
+//										comboSpecies.enable();
 										comboSpecies.clearValue();
 										var sd = comboSpecies.getStore();
 //										sd.setBaseParam('speciesView.stuffid',combo.getValue());
@@ -2061,7 +2062,7 @@ Ext.onReady(function() {
 					        	displayField:'speciesName',
 					        	queryParam:'speciesView.speciesName',
 						        typeAhead: true,
-						        disabled:true,
+//						        disabled:true,
 								triggerAction: 'all',
 						        minChars:1,
 						        tpl: resultTpl,
@@ -2069,7 +2070,8 @@ Ext.onReady(function() {
 						        selectOnFocus:true,
 						        pageSize:10,
 						        ref: '../../../../comboSpecies',
-						        name:'speciesName',
+						        name:'species.speciesName',
+						        hiddenName:'species.speciesid',
 						        submitValue:true,
 					        	store:{
 					        		xtype: 'store',
@@ -2089,7 +2091,7 @@ Ext.onReady(function() {
 							    listeners:{
 							    	'select':function(){
 							    		var comboSpecification = innerWin.comboSpecification;
-										comboSpecification.enable();
+//										comboSpecification.enable();
 										comboSpecification.clearValue();
 										var sd = comboSpecification.getStore();
 										sd.removeAll();
@@ -2104,14 +2106,15 @@ Ext.onReady(function() {
 					        	displayField:'specName',
 					        	queryParam:'specificationView.specName',
 						        typeAhead: true,
-						        disabled:true,
+//						        disabled:true,
 								triggerAction: 'all',
 						        minChars:1,
 						        tpl: specificationTpl,
 						        listWidth:250,
 						        selectOnFocus:true,
 						        allowBlank:false,
-						        name:'specName',
+						        name:'specification.specName',
+						        hiddenName:'specification.specid',
 						        pageSize:10,
 						        ref: '../../../../comboSpecification',
 						        submitValue:true,
@@ -3872,7 +3875,7 @@ Ext.onReady(function() {
 				{name: 'recordTime',type:'date',dateFormat: "Y-m-d H:i:s"},
 				{name: 'modifyTime',type:'date',dateFormat: "Y-m-d H:i:s"},
 				{name: 'state'},
-				{name: 'adjustDate'},
+				{name: 'adjustDate',type:'date',dateFormat: "Y-m-d H:i:s"},
 				{name: 'ownerId'}
 			]),
 			listeners:{

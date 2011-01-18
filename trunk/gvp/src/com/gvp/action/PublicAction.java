@@ -180,21 +180,25 @@ public class PublicAction extends BaseAction {
 			}
 		}
 
-		if (priceList != null) {
+		if (stuff != null) {
 			//材质
 			Integer stuffid = stuff.getStuffid();
 			if (stuffid != null) {
 				sql.append(" AND tm.stuffid = ? ");
 				params.add(stuffid);
 			}
-
+		}
+		
+		if( specification != null){
 			//规格
 			Integer specid = specification.getSpecid();
 			if (specid != null) {
 				sql.append(" AND tm.specid = ? ");
 				params.add(specid);
 			}
+		}
 
+		if(species != null){
 			//种类
 			Integer speciesid = species.getSpeciesid();
 			if (speciesid != null) {
@@ -202,7 +206,7 @@ public class PublicAction extends BaseAction {
 				params.add(speciesid);
 			}
 		}
-
+		
 		if (quoteInfo != null) {
 			Integer qid = quoteInfo.getQid();
 			if (qid != null) {
