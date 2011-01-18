@@ -10,8 +10,6 @@ import java.io.Serializable;
 	`s`.`speciesName` AS `speciesName`,
 	`t`.`stuffid` AS `stuffid`,
 	`t`.`stuffName` AS `stuffName`,
-	`p`.`id` AS `providerid`,
-	`p`.`providerName` AS `providerName`
 FROM
 	(
 		(
@@ -21,9 +19,6 @@ FROM
 					`t`.`stuffid` = `s`.`stuffid`
 				)
 			)
-		)
-		LEFT JOIN `t_provider` `p` ON(
-			(`p`.`id` = `t`.`providerid`)
 		)
 	)
  * </pre>

@@ -11,8 +11,6 @@ import com.googlecode.jsonplugin.annotations.JSON;
  * <pre>
  * SELECT
   	`v`.`listid` AS `listid`,
-  	`r`.`id` AS `providerid`,
-  	`r`.`providerName` AS `providerName`,
   	`f`.`stuffid` AS `stuffid`,
   	`f`.`stuffName` AS `stuffName`,
   	`p`.`speciesid` AS `speciesid`,
@@ -43,9 +41,6 @@ import com.googlecode.jsonplugin.annotations.JSON;
   					`p`.`stuffid` = `f`.`stuffid`
   				)
   			)
-  		)
-  		LEFT JOIN `t_provider` `r` ON(
-  			(`r`.`id` = `f`.`providerid`)
   		)
   	)
  * </pre>
