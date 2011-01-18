@@ -13,8 +13,6 @@ import com.googlecode.jsonplugin.annotations.JSON;
  * <pre>
   SELECT
   	`t`.`mid` AS `mid`,
-  	`r`.`id` AS `providerid`,
-  	`r`.`providerName` AS `providerName`,
   	`f`.`stuffid` AS `stuffid`,
   	`f`.`stuffName` AS `stuffName`,
   	`p`.`speciesid` AS `speciesid`,
@@ -55,9 +53,6 @@ import com.googlecode.jsonplugin.annotations.JSON;
   					`f`.`stuffid` = `p`.`stuffid`
   				)
   			)
-  		)
-  		LEFT JOIN `t_provider` `r` ON(
-  			(`r`.`id` = `f`.`providerid`)
   		)
   	)
   
