@@ -4604,7 +4604,6 @@ Ext.onReady(function() {
 			listeners:{
 				'update': function(thiz, record, operation){
 					var editorSpecies = getEditor('speciesid',store,grid);
-					
 					if(operation == Ext.data.Record.EDIT){
 						if(record.data.specid){
 							Ext.Ajax.request({
@@ -4613,7 +4612,7 @@ Ext.onReady(function() {
 									'specification.specid': record.data.specid,		
 									'specification.specName': record.data.specName,
 									'specification.price': record.data.price,
-							    	'species.speciesid':editorSpecies.getValue()
+							    	'species.speciesid':editorSpecies.hiddenField.value
 								},
 							    success: function(response) {
 							    	var obj = Ext.decode(response.responseText);
@@ -4806,9 +4805,7 @@ Ext.onReady(function() {
 				        selectOnFocus:true,
 				        allowBlank:false,
 				        pageSize:10,
-				        id:'species.speciesName',
 				        name:'species.speciesName',
-				        hiddenId:'species.speciesid',
 				        hiddenName:'species.speciesid',
 				        submitValue:true,
 			        	store:{
