@@ -32,7 +32,6 @@ import com.gvp.po.PriceList;
 import com.gvp.po.PriceListView;
 import com.gvp.po.ProcessInfo;
 import com.gvp.po.ProductCode;
-import com.gvp.po.Provider;
 import com.gvp.po.QuoteInfo;
 import com.gvp.po.RefFiles;
 import com.gvp.po.ReferenceInfo;
@@ -42,7 +41,6 @@ import com.gvp.po.SpeciesView;
 import com.gvp.po.Specification;
 import com.gvp.po.SpecificationView;
 import com.gvp.po.Stuff;
-import com.gvp.po.StuffView;
 import com.gvp.po.SystemLog;
 import com.gvp.po.User;
 import com.gvp.po.WorkflowLog;
@@ -58,11 +56,7 @@ public class PublicAction extends BaseAction {
 
 	private Customer			customer;
 
-	private Provider			provider;
-
 	private Stuff				stuff;
-
-	private StuffView			stuffView;
 
 	private QuoteInfo			quoteInfo;
 
@@ -683,29 +677,6 @@ public class PublicAction extends BaseAction {
 		return SUCCESS;
 	}
 
-	/**
-	 * 更新客户
-	 * 
-	 * @return
-	 * @throws IllegalAccessException
-	 * @throws InvocationTargetException
-	 * @throws NoSuchMethodException
-	 */
-	@Action(description = "修改供应商信息")
-	@Deprecated
-	public String updateProvider() throws IllegalAccessException, InvocationTargetException, NoSuchMethodException {
-		try {
-			Provider c = (Provider) publicService.updateEntity(provider, provider.getId(), null);
-			if (c != null) {
-				this.infos.put("provider", c);
-				this.success = true;
-			}
-		} catch (RuntimeException e) {
-			this.infos.put("msg", MyUtils.getExceptionMessages(e));
-			e.printStackTrace();
-		}
-		return SUCCESS;
-	}
 
 	/**
 	 * 更新客户
@@ -824,35 +795,6 @@ public class PublicAction extends BaseAction {
 		return SUCCESS;
 	}
 
-	/**
-	 * 保存供应商信息
-	 * 
-	 * @return
-	 */
-	@Action(description = "新增供应商信息")
-	@Deprecated
-	public String saveProvider() {
-		Page p = new Page();
-		DetachedCriteria dc = DetachedCriteria.forClass(Provider.class);
-		dc.add(Example.create(new Provider(provider.getProviderName())));
-		p.setResult(dc);
-		p = publicService.getResultList(p);
-		Iterator<?> cit = p.getRoot().iterator();
-		if (cit.hasNext()) {
-			this.infos.put("msg", "此供应商名称已经存在!");
-			this.success = false;
-		} else {
-			try {
-				this.infos.put("provider", publicService.saveEntity(this.provider));
-				this.success = true;
-			} catch (RuntimeException e) {
-				this.success = false;
-				this.infos.put("msg", MyUtils.getExceptionMessages(e));
-				e.printStackTrace();
-			}
-		}
-		return SUCCESS;
-	}
 
 	/**
 	 * 保存客户信息
@@ -1045,7 +987,7 @@ public class PublicAction extends BaseAction {
 			this.priceList.setRecordTime(new Date());
 
 			priceList.setSpecification(specification);
-			PriceList p = publicService.adjustQuoteInfos(priceList);
+			PriceList p = publicService.adjustQuoteInfos(priceList,quoteInfo.getCid());
 			//			StringBuilder sql = new StringBuilder();
 
 			//			sql.append(" SELECT tst.stuffName,");
@@ -1123,10 +1065,9 @@ public class PublicAction extends BaseAction {
 	@Action(description = "新增材质信息")
 	public String saveStuff() {
 		try {
-//			stuff.setProvider(provider);
 			stuff = (Stuff) publicService.saveEntity(this.stuff);
-			StuffView v = (StuffView) publicService.findByNativeSql("select * from v_stuff where stuffid=" + stuff.getStuffid(), StuffView.class).get(0);
-			this.infos.put("stuffView", v);
+			Stuff v = (Stuff) publicService.findByNativeSql("select * from t_stuff where stuffid=" + stuff.getStuffid(), Stuff.class).get(0);
+			this.infos.put("stuff", v);
 			this.success = true;
 		} catch (RuntimeException e) {
 			this.success = false;
@@ -1864,23 +1805,6 @@ public class PublicAction extends BaseAction {
 	}
 
 	/**
-	 * 获得供应商列表
-	 * 
-	 * @return
-	 */
-	@Action(description = "查找供应商信息")
-	@Deprecated
-	public String findProviderList() {
-		DetachedCriteria dc = DetachedCriteria.forClass(Provider.class);
-		if (provider != null) {
-			dc.add(EnhancedExample.createDefault(provider));
-		}
-		this.page.setResult(dc);
-		this.page = publicService.getResultList(page);
-		return SUCCESS;
-	}
-
-	/**
 	 * 获得客户列表
 	 * 
 	 * @return
@@ -2265,13 +2189,6 @@ public class PublicAction extends BaseAction {
 		this.log = log;
 	}
 
-	public StuffView getStuffView() {
-		return stuffView;
-	}
-
-	public void setStuffView(StuffView stuffView) {
-		this.stuffView = stuffView;
-	}
 
 	public SpecificationView getSpecificationView() {
 		return specificationView;
@@ -2311,14 +2228,5 @@ public class PublicAction extends BaseAction {
 
 	public void setSpecification(Specification specification) {
 		this.specification = specification;
-	}
-	@Deprecated
-	public Provider getProvider() {
-		return provider;
-	}
-
-	@Deprecated
-	public void setProvider(Provider provider) {
-		this.provider = provider;
 	}
 }

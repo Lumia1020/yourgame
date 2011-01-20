@@ -10,7 +10,5 @@
 		<property name="speciesName" length="200" update="false" insert="false" />
 		<property name="stuffid" update="false" insert="false" />
 		<property name="stuffName" length="200" update="false" insert="false" />
-		<!--<property name="providerid" update="false" insert="false"/>
-		<property name="providerName" length="200" update="false" insert="false" />-->
 	</class>
 </hibernate-mapping>

@@ -41,9 +41,6 @@ public class SpecificationView implements Serializable {
 	/** 供应商材料单价 */
 	private String	price;
 
-//	private Integer	providerid;
-//
-//	private String	providerName;
 	private Integer	specid;
 
 	/** 所属种类 */
@@ -65,13 +62,6 @@ public class SpecificationView implements Serializable {
 		return price;
 	}
 
-//	public Integer getProviderid() {
-//		return providerid;
-//	}
-//
-//	public String getProviderName() {
-//		return providerName;
-//	}
 
 	public Integer getSpecid() {
 		return specid;
@@ -101,13 +91,6 @@ public class SpecificationView implements Serializable {
 		this.price = price;
 	}
 
-//	public void setProviderid(Integer providerid) {
-//		this.providerid = providerid;
-//	}
-//
-//	public void setProviderName(String providerName) {
-//		this.providerName = providerName;
-//	}
 
 	public void setSpecid(Integer specid) {
 		this.specid = specid;

@@ -40,25 +40,6 @@ public class SpeciesView implements Serializable {
 
 	private String	stuffName;
 
-//	private Integer	providerid;
-//
-//	private String	providerName;
-
-//	public Integer getProviderid() {
-//		return providerid;
-//	}
-//
-//	public String getProviderName() {
-//		return providerName;
-//	}
-//
-//	public void setProviderid(Integer providerid) {
-//		this.providerid = providerid;
-//	}
-//
-//	public void setProviderName(String providerName) {
-//		this.providerName = providerName;
-//	}
 
 	public Integer getSpeciesid() {
 		return speciesid;

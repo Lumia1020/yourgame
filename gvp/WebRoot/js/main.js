@@ -3261,45 +3261,28 @@ Ext.onReady(function() {
 			            items:[{
 			            	defaults:{xtype:'textfield',anchor:'90%'},
 			                items: [
-			                	/*{
-			                	fieldLabel: '供应商',
-			                	xtype:'combo',
-					            valueField:'id',
-					        	displayField:'providerName',
-					        	queryParam:'provider.providerName',
-						        typeAhead: true,
-								triggerAction: 'all',
-						        minChars:1,
-						        listWidth:250,
-						        selectOnFocus:true,
-						        submitValue:true,
-						        pageSize:10,
-						       	name: 'id',
-						       	hiddenName: 'provider.id',
-						        ref: '../../../../comboProvider',
-					        	store:{
-					        		xtype: 'store',
-									url: 'findProviderList.action',
+			                	{
+								xtype:'combo',
+								fieldLabel:'客户名称',
+								name: 'quoteInfo.cid',
+						        hiddenName:'quoteInfo.cid',
+				            	valueField:'cid',
+				            	displayField:'customerName',
+						        triggerAction: 'all',
+					        	typeAhead: true,
+						        forceSelection: true,
+						        selectOnFocus:false,
+				            	store:{
+				            		xtype: 'store',
+									url: 'findCustomerList.action',
 									paramNames:{start:'page.start',	limit:'page.limit'},
-									baseParams:{'page.start':0,'page.limit':10},
+									baseParams:{'page.start':0,'page.limit':0},
 									reader: new Ext.data.JsonReader(
 										{totalProperty: 'totalProperty',root: 'root'},
-										[{name : 'id'}, {name : 'providerName'}]
+										[{name:'cid'},{name:'customerName'},{name:'customerCode'},{name:'customerType'}]
 									)
-							    },
-								listeners:{
-									'select':function(combo){
-										var comboStuff = innerWin.comboStuff;
-										comboStuff.enable();
-										comboStuff.clearValue();
-										var sd = comboStuff.getStore();
-//										sd.setBaseParam('stuffView.providerid',combo.getValue());
-										sd.removeAll();
-										sd.load();
-										comboStuff.onTriggerClick();
-									}
-								}
-			                },*/{
+							    }
+							},{
 			                	fieldLabel: '材质',
 			                	xtype:'combo',
 					            valueField:'stuffid',
@@ -4594,8 +4577,6 @@ Ext.onReady(function() {
 				{name: 'specid'},
 				{name: 'specName',allowBlank:false},
 				{name: 'price',allowBlank:false},
-//				{name: 'providerid',allowBlank:false},
-//				{name: 'providerName',allowBlank:false},
 				{name: 'stuffid',allowBlank:false},
 				{name: 'stuffName',allowBlank:false},
 				{name: 'speciesid',allowBlank:false},
@@ -4637,7 +4618,7 @@ Ext.onReady(function() {
 							    	'specification.speciesid':editorSpecies.getValue(),
 									'specification.specName': record.data.specName,
 									'specification.price': record.data.price,
-									'species.speciesid':editorSpecies.getValue()
+									'species.speciesid':editorSpecies.hiddenField.value
 								},
 							    success: function(response) {
 							    	var obj = Ext.decode(response.responseText);
@@ -4715,46 +4696,11 @@ Ext.onReady(function() {
 				defaultSortable:true,
 				defaultWidth:120,
 				columns: [sm,
-					/*{header: '供应商名称',dataIndex:'providerid',editor:{
-						xtype:'combo',
-			            valueField:'id',
-			        	displayField:'providerName',
-				        emptyText:'请选择供应商...',
-				        typeAhead: true,
-				        editable:false,
-				        allowBlank:false,
-						triggerAction: 'all',
-			        	store:{
-			        		xtype: 'store',
-							url: 'findProviderList.action',
-							baseParams:{'page.start':0,'page.limit':0},
-							reader: new Ext.data.JsonReader(
-								{totalProperty: 'totalProperty',root: 'root'},
-								[{name : 'id'},{name:'providerName'}]
-							)
-					    },
-					    listeners:{
-							'select':function(combo){
-								var index = grid.getStore().indexOf(grid.getSelectionModel().getSelected());
-								var editorStuff = getEditor('stuffid',index,grid);
-								editorStuff.enable();
-								editorStuff.clearValue();
-								var sd = editorStuff.getStore();
-								sd.setBaseParam('stuffView.providerid',combo.getValue());
-								sd.removeAll();
-								sd.load();
-								editorStuff.onTriggerClick();
-							}
-						}
-					},renderer:function(value, cellmeta, record){
-				    	return record.data.providerName;
-				    }},*/
 					{header: '材质',dataIndex:'stuffid',editor:{
 						xtype:'combo',
 			            valueField:'stuffid',
 			        	displayField:'stuffName',
 			        	queryParam:'stuff.stuffName',
-//			        	queryParam:'stuffView.stuffName',
 				        typeAhead: true,
 						triggerAction: 'all',
 				        minChars:1,
@@ -4889,6 +4835,7 @@ Ext.onReady(function() {
 			listeners:{
 				'update': function(thiz, record, operation){
 					var editorStuff = getEditor('stuffid',store,grid);
+					console.log(editorStuff);
 //					var editorProvider = getEditor('providerid',store,grid);
 					if(operation == Ext.data.Record.EDIT){
 						if(record.data.speciesid){	 
@@ -4897,7 +4844,7 @@ Ext.onReady(function() {
 							    params: {
 							    	'species.speciesid':record.data.speciesid,
 									'species.speciesName': record.data.speciesName,	
-									'stuff.stuffid': editorStuff.getValue()
+									'stuff.stuffid': editorStuff.hiddenField.value
 //									'provider.id': editorProvider.getValue()
 								},
 							    success: function(response) {
@@ -4949,17 +4896,7 @@ Ext.onReady(function() {
 	    
 	    var expandId = Ext.id();
 	    
-	    var sm = new Ext.grid.CheckboxSelectionModel({
-	        listeners: {
-	            selectionchange: function(sm) {
-	                if (sm.getCount()) {
-	                    grid.removeButton.enable();
-	                } else {
-	                    grid.removeButton.disable();
-	                }
-	            }
-	        }
-	    });
+	    var sm = new Ext.grid.CheckboxSelectionModel();
 	    
 	    var editor = initEditor(null,null,2);
 	    editor.on('invalid',function(record,sd){
@@ -4973,6 +4910,11 @@ Ext.onReady(function() {
 			    	sd.remove(record);
 			    }
 			});
+	    });
+	    editor.on('beforeedit',function(rowEditor,rowIndex){
+	    	setTimeout(function(){
+	    		$(getEditor('stuffid',store,grid).el.dom).prev().val(store.getAt(rowIndex).data.stuffid);
+	    	},1000);
 	    });
 	    
 	    
@@ -4989,58 +4931,29 @@ Ext.onReady(function() {
 				defaultSortable:true,
 				defaultWidth:80,
 				columns: [sm,
-					/*{header: '供应商名称',dataIndex:'providerid',editor:{
-						xtype:'combo',
-			            valueField:'id',
-			        	displayField:'providerName',
-				        emptyText:'请选择供应商...',
-				        typeAhead: true,
-				        editable:false,
-				        allowBlank:false,
-						triggerAction: 'all',
-			        	store:{
-			        		xtype: 'store',
-							url: 'findProviderList.action',
-							baseParams:{'page.start':0,'page.limit':0},
-							reader: new Ext.data.JsonReader(
-								{totalProperty: 'totalProperty',root: 'root'},
-								[{name : 'id'},{name:'providerName'}]
-							)
-					    },
-					    listeners:{
-							'select':function(combo){
-								var index = grid.getStore().indexOf(grid.getSelectionModel().getSelected());
-								var editorStuff = getEditor('stuffid',index,grid);
-								editorStuff.enable();
-								editorStuff.clearValue();
-								var sd = editorStuff.getStore();
-								sd.setBaseParam('stuffView.providerid',combo.getValue());
-								sd.removeAll();
-								sd.load();
-								editorStuff.onTriggerClick();
-							}
-						}
-					},renderer:function(value, cellmeta, record){
-				    	return record.data.providerName;
-				    }},*/
-					{header: '材质名称',dataIndex:'stuffid',editor:{
+					{header: '材质',dataIndex:'stuffid',editor:{
 						xtype:'combo',
 			            valueField:'stuffid',
 			        	displayField:'stuffName',
 			        	queryParam:'stuff.stuffName',
-//			        	queryParam:'stuffView.stuffName',
-				        emptyText:'请选择材质...',
 				        typeAhead: true,
-				        editable:false,
-				        allowBlank:false,
 						triggerAction: 'all',
+				        minChars:1,
+				        listWidth:250,
+				        allowBlank:false,
+				        selectOnFocus:true,
+				        name:'stuff.stuffName',
+				        hiddenName:'stuff.stuffid',
+				        submitValue:true,
+				        pageSize:10,
 			        	store:{
 			        		xtype: 'store',
 							url: 'findStuffList.action',
-							baseParams:{'page.start':0,'page.limit':0},
+							paramNames:{start:'page.start',	limit:'page.limit'},
+							baseParams:{'page.start':0,'page.limit':10},
 							reader: new Ext.data.JsonReader(
 								{totalProperty: 'totalProperty',root: 'root'},
-								[{name : 'stuffid'},{name:'stuffName'}]
+								[{name : 'stuffid'}, {name : 'stuffName'}]
 							)
 					    }
 					},renderer:function(value, cellmeta, record){
@@ -5068,16 +4981,7 @@ Ext.onReady(function() {
 			        grid.store.insert(0, species);
 			        editor.startEditing(0);
 	    		}
-	    	},{
-				text : '删除',
-				disabled:true,
-				iconCls : 'silk-delete',
-				ref: '../removeButton',
-				handler:function(){
-					editor.stopEditing(false);
-					deleteRecords('deleteSpecies.action','page.params.ids','speciesid',grid,store);
-				}
-			}]
+	    	}]
 	    });
 	    
 	    return grid;
@@ -5164,17 +5068,6 @@ Ext.onReady(function() {
 	    
 	    var expandId = Ext.id();
 	    
-	    var sm = new Ext.grid.CheckboxSelectionModel({
-	        listeners: {
-	            selectionchange: function(sm) {
-	                if (sm.getCount()) {
-	                    grid.removeButton.enable();
-	                } else {
-	                    grid.removeButton.disable();
-	                }
-	            }
-	        }
-	    });
 	    
 	    var editor = initEditor(null,null,2);
 	    editor.on('invalid',function(record,sd){
@@ -5190,6 +5083,7 @@ Ext.onReady(function() {
 			});
 	    });
 	    
+	    var sm = new Ext.grid.CheckboxSelectionModel();
 	    
 	    var grid = new Ext.grid.GridPanel({
 	    	region:'center',
@@ -5204,27 +5098,6 @@ Ext.onReady(function() {
 				defaultSortable:true,
 				defaultWidth:80,
 				columns: [sm,
-					/*{header: '供应商名称',dataIndex:'providerid',editor:{
-						xtype:'combo',
-			            valueField:'id',
-			        	displayField:'providerName',
-				        emptyText:'请选择供应商...',
-				        typeAhead: true,
-				        editable:false,
-				        allowBlank:false,
-						triggerAction: 'all',
-			        	store:{
-			        		xtype: 'store',
-							url: 'findProviderList.action',
-							baseParams:{'page.start':0,'page.limit':0},
-							reader: new Ext.data.JsonReader(
-								{totalProperty: 'totalProperty',root: 'root'},
-								[{name : 'id'},{name:'providerName'}]
-							)
-					    }
-					},renderer:function(value, cellmeta, record){
-				    	return record.data.providerName;
-				    }},*/
 					{header: '材质名称',dataIndex:'stuffName',id:expandId,editor:{xtype:'textfield',maxLength:20,allowBlank:false}}
 	    	]}),
 	    	bbar:new Ext.PagingToolbar({
@@ -5246,7 +5119,7 @@ Ext.onReady(function() {
 			        grid.store.insert(0, sutff);
 			        editor.startEditing(0);
 	    		}
-	    	},{
+	    	}/*,{
 				text : '删除',
 				disabled:true,
 				iconCls : 'silk-delete',
@@ -5255,7 +5128,7 @@ Ext.onReady(function() {
 					editor.stopEditing(false);
 					deleteRecords('deleteStuff.action','page.params.ids','stuffid',grid,store);
 				}
-			}]
+			}*/]
 	    });
 	    
 	    return grid;

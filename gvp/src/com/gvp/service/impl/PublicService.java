@@ -428,16 +428,20 @@ public class PublicService implements IPublicService {
 	}
 
 	@SuppressWarnings("unchecked")
-	public PriceList adjustQuoteInfos(PriceList priceList) {
+	public PriceList adjustQuoteInfos(PriceList priceList,Integer cid) {
 		this.publicDao.saveEntity(priceList);
 		Integer specid = priceList.getSpecification().getSpecid();
 		List params = new ArrayList();
 		List<Type> types = new ArrayList<Type>();
 
-		String hql = "select tm.* from t_materials tm where tm.qid in (select t.qid from t_quote_info t"
-				+ " where t.ownerId is not null and t.qid in (select m.qid from t_materials m where m.specid in (?)))";
+		String hql = "SELECT a.* FROM ( SELECT tm.* FROM t_materials tm WHERE tm.qid IN( SELECT t.qid FROM t_quote_info t WHERE t.ownerId IS NOT NULL AND t.qid IN( SELECT m.qid FROM t_materials m WHERE m.specid IN(?) ) ) )AS a left join t_quote_info tqi on tqi.qid = a.qid where 1=1";
 		params.add(specid);
 		types.add(new IntegerType());
+		if(cid != null){
+			hql += " and tqi.cid = ? ";
+			params.add(cid);
+			types.add(new IntegerType());
+		}
 		List<Materials> materialsList = this.publicDao.findByNativeSql(hql, Materials.class, params.toArray(), types.toArray(new Type[]{}));
 
 		for (Iterator<Materials> it = materialsList.iterator(); it.hasNext();) {

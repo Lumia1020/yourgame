@@ -52,7 +52,7 @@ public interface IPublicService {
 	 * @param priceList
 	 * @return
 	 */
-	public PriceList adjustQuoteInfos(PriceList priceList);
+	public PriceList adjustQuoteInfos(PriceList priceList,Integer cid);
 
 	public WorkflowLog saveWorkflowLog(WorkflowLog workflow);
 
