@@ -3,8 +3,6 @@ package com.gvp.po;
 import java.io.Serializable;
 import java.util.Date;
 
-import javax.xml.bind.annotation.XmlAnyAttribute;
-
 import com.googlecode.jsonplugin.annotations.JSON;
 
 /**
@@ -65,11 +63,6 @@ import com.googlecode.jsonplugin.annotations.JSON;
 public class MaterialsView implements Serializable {
 	private Integer	mid;
 
-	@Deprecated
-	private Integer	providerid;
-
-	@Deprecated
-	private String	providerName;
 
 	/** 材质id */
 	private Integer	stuffid;
@@ -139,25 +132,6 @@ public class MaterialsView implements Serializable {
 		return materialsName;
 	}
 
-	@Deprecated
-	public Integer getProviderid() {
-		return providerid;
-	}
-
-	@Deprecated
-	public String getProviderName() {
-		return providerName;
-	}
-
-	@Deprecated
-	public void setProviderid(Integer providerid) {
-		this.providerid = providerid;
-	}
-
-	@Deprecated
-	public void setProviderName(String providerName) {
-		this.providerName = providerName;
-	}
 
 	public void setMaterialsName(String materialsName) {
 		this.materialsName = materialsName;
