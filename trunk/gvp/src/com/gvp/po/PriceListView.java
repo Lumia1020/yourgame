@@ -53,10 +53,6 @@ public class PriceListView implements Serializable {
 
 	private Integer	listid;
 
-	private Integer	providerid;
-
-	private String	providerName;
-
 	private Integer	stuffid;
 
 	private String	stuffName;
@@ -79,13 +75,6 @@ public class PriceListView implements Serializable {
 	/** 说明 */
 	private String	remark;
 
-	public Integer getProviderid() {
-		return providerid;
-	}
-
-	public String getProviderName() {
-		return providerName;
-	}
 
 	public Integer getStuffid() {
 		return stuffid;
@@ -108,13 +97,6 @@ public class PriceListView implements Serializable {
 		return speciesName;
 	}
 
-	public void setProviderid(Integer providerid) {
-		this.providerid = providerid;
-	}
-
-	public void setProviderName(String providerName) {
-		this.providerName = providerName;
-	}
 
 	public void setStuffid(Integer stuffid) {
 		this.stuffid = stuffid;
