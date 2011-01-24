@@ -736,6 +736,7 @@ public class PublicAction extends BaseAction {
 	public String updateMaterials() throws IllegalAccessException, InvocationTargetException, NoSuchMethodException {
 		try {
 			this.materials.adjust();
+			this.materials.setSpecification(specification);
 			Materials c = (Materials) publicService.updateEntity(materials, materials.getMid(), materials.getQid());
 			if (c != null) {
 				MaterialsView v = (MaterialsView) publicService.findByNativeSql("select v.* from v_materials v where v.mid = " + c.getMid(), MaterialsView.class).get(0);
