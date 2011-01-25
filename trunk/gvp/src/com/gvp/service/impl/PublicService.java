@@ -230,13 +230,13 @@ public class PublicService implements IPublicService {
 	@SuppressWarnings("unchecked")
 	public boolean deleteQuoteInfo(String ids) {
 		List classes = new ArrayList();
-		classes.add(QuoteInfo.class.getName());
 		classes.add(Aids.class.getName());
 		classes.add(Foundry.class.getName());
 		classes.add(ProcessInfo.class.getName());
 		classes.add(ReferenceInfo.class.getName());
 		classes.add(Materials.class.getName());
 		classes.add(RefFiles.class.getName());
+		classes.add(QuoteInfo.class.getName());
 
 		boolean flag = false;
 		try {
