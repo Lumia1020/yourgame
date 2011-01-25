@@ -4835,7 +4835,6 @@ Ext.onReady(function() {
 			listeners:{
 				'update': function(thiz, record, operation){
 					var editorStuff = getEditor('stuffid',store,grid);
-					console.log(editorStuff);
 //					var editorProvider = getEditor('providerid',store,grid);
 					if(operation == Ext.data.Record.EDIT){
 						if(record.data.speciesid){	 
