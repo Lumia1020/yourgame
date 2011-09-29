@@ -14,6 +14,7 @@ import java.util.Map;
 import org.apache.commons.lang.StringUtils;
 import org.hibernate.criterion.DetachedCriteria;
 import org.hibernate.criterion.Example;
+import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Restrictions;
 
 import com.gvp.core.Action;
@@ -1832,6 +1833,7 @@ public class PublicAction extends BaseAction {
 		if (log != null) {
 			dc.add(EnhancedExample.createDefault(log, false));
 		}
+		dc.addOrder(Order.desc("recordTime"));
 		this.page.setResult(dc);
 		this.page = publicService.getResultList(page);
 		return SUCCESS;
@@ -1875,7 +1877,7 @@ public class PublicAction extends BaseAction {
 		//		this.page = publicService.getResultListBySpringJDBC(page, sql.toString(), params.toArray(), new PriceListMapper());
 		DetachedCriteria dc = DetachedCriteria.forClass(PriceListView.class);
 		if (priceListView != null) {
-			dc.add(EnhancedExample.createDefault(priceListView));
+			dc.add(EnhancedExample.createDefault(priceListView,false));
 		}
 		this.page.setResult(dc);
 		this.page = publicService.getResultList(page);
@@ -1891,7 +1893,7 @@ public class PublicAction extends BaseAction {
 	public String findSpeciesList() {
 		DetachedCriteria dc = DetachedCriteria.forClass(SpeciesView.class);
 		if (speciesView != null) {
-			dc.add(EnhancedExample.createDefault(speciesView,true));
+			dc.add(EnhancedExample.createDefault(speciesView,false));
 		}
 		this.page.setResult(dc);
 		this.page = publicService.getResultList(page);

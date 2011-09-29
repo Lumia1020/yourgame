@@ -390,6 +390,22 @@ public class PublicService implements IPublicService {
 			}
 		}
 		my.put("refFiles", rflist);
+		
+		List otherPriceList = this.getList(OtherQuotePrice.class,qq.getQid());
+		List opList = new ArrayList();
+		if(otherPriceList != null && !otherPriceList.isEmpty()){
+			for(Iterator<OtherQuotePrice> oit = otherPriceList.iterator();oit.hasNext();){
+				OtherQuotePrice oqp = oit.next();
+				OtherQuotePrice _oqp = new OtherQuotePrice();
+				MyUtils.copyProperties(_oqp, oqp);
+				
+				_oqp.setQid(q.getQid());
+				_oqp.setOid(null);
+				_oqp = (OtherQuotePrice) publicDao.saveEntity(_oqp);
+				opList.add(_oqp);
+			}
+		}
+		my.put("otherPrice", opList);
 
 		return my;
 	}
