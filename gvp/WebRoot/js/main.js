@@ -3214,6 +3214,8 @@ Ext.onReady(function() {
 					innerWin.get(0).getForm().submit({
 						 waitTitle : '请稍候',
 						 waitMsg : '正在提交表单数据,请稍候...',
+						 timeout: 180000,
+						 autoAbort:false,
 						 success: function(form, action) {
 					     	innerWin.close();
 					     	var store = grid.getStore();
@@ -4492,7 +4494,13 @@ Ext.onReady(function() {
 	    	bbar:new Ext.PagingToolbar({
 	    		store: store,
 	    		displayInfo: true,
-	    		pageSize:20
+	    		pageSize:20,
+	    		listeners:{
+	    			'render':function(thiz){
+	    				thiz.items.get(4).setWidth(50);
+	    				
+	    			}
+	    		}
 	    	})
 	    });
 	    
@@ -4543,7 +4551,7 @@ Ext.onReady(function() {
 					{header: '单价',dataIndex:'price',xtype:'numbercolumn',hidden:!Ext.ROLE_R06,format:'0,000.000000'}, 
 					{header: '调整日期',dataIndex:'recordTime',renderer:Ext.util.Format.dateRenderer('Y-m-d')}
 	    	]}),
-	    	tbar:['说明',initSearchField(store,null,['priceListView.remark','priceListView.stuffName','priceListView.specName']),'->',{
+	    	tbar:['说明',initSearchField(store,null,['priceListView.remark','priceListView.stuffName','priceListView.specName','priceListView.speciesName']),'->',{
 	    		text :'调节'
 	    		,iconCls:'silk-add'
 	    		,ref:'../addButton'
