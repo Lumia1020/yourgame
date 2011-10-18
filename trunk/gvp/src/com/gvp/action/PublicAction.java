@@ -1891,9 +1891,14 @@ public class PublicAction extends BaseAction {
 	 */
 	@Action(description = "查找种类信息")
 	public String findSpeciesList() {
+		String isAndRelation = page.getParams().get("isAndRelation");
+		boolean relation = false;
+		if("true".equals(isAndRelation)){
+			relation = true;
+		}
 		DetachedCriteria dc = DetachedCriteria.forClass(SpeciesView.class);
 		if (speciesView != null) {
-			dc.add(EnhancedExample.createDefault(speciesView,false));
+			dc.add(EnhancedExample.createDefault(speciesView,relation));
 		}
 		this.page.setResult(dc);
 		this.page = publicService.getResultList(page);
