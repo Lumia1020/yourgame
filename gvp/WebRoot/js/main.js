@@ -2077,7 +2077,7 @@ Ext.onReady(function() {
 					        		xtype: 'store',
 									url: 'findSpeciesList.action',
 									paramNames:{start:'page.start',	limit:'page.limit'},
-									baseParams:{'page.start':0,'page.limit':10},
+									baseParams:{'page.start':0,'page.limit':10,'page.params.isAndRelation':'true'},
 									reader: new Ext.data.JsonReader(
 										{totalProperty: 'totalProperty',root: 'root'},
 										[{name : 'speciesid'},{name:'speciesName'},{name : 'stuffName'}]
@@ -3351,7 +3351,7 @@ Ext.onReady(function() {
 					        		xtype: 'store',
 									url: 'findSpeciesList.action',
 									paramNames:{start:'page.start',	limit:'page.limit'},
-									baseParams:{'page.start':0,'page.limit':10},
+									baseParams:{'page.start':0,'page.limit':10,'page.params.isAndRelation':'true'},
 									reader: new Ext.data.JsonReader(
 										{totalProperty: 'totalProperty',root: 'root'},
 										[{name : 'speciesid'},{name:'speciesName'},{name : 'stuffName'}]
